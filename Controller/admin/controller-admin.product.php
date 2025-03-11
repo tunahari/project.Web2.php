@@ -189,11 +189,25 @@ if (isset($_POST['fetchProduct']) &&  $_POST['fetchProduct'] === 'fetch-product'
 
  }
 
-if (isset($_POST['createProduct']) &&  $_POST['createProduct'] === 'create-product') {
+ if (isset($_POST['createProduct']) &&  $_POST['createProduct'] === 'create-product') {
+    //insert product
     if ($ProductClass->insertProduct()) {
-        echo 'create-success';
+         //get product id last record
+        $ConnectDataBase = new ConnectDataBase;
+        $sql = "SELECT SP_IDSanPham FROM product ORDER BY SP_IDSanPham DESC LIMIT 1 ";
+        $stmt = $ConnectDataBase->connectDB()->prepare($sql);
+        $stmt->execute();
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        if (count($result) > 0) {
+            $productId = $result[0]['SP_IDSanPham'];
+        } else {
+             $productId = null;
+        }
+        // echo 'create-success';
+         echo $productId ? json_encode(['status' => 'success', 'productId' => $productId]) : json_encode(['status' => 'failed']);
     } else {
-        echo 'create-failed';
+        echo json_encode(['status' => 'failed']);
+        // echo 'create-failed';
     }
 }
 

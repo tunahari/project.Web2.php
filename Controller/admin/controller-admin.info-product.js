@@ -101,7 +101,7 @@ $(document).ready(function () {
                     $('.loading__box').show()
                     setTimeout(function() {
                         $('.loading__box').hide()
-                        alertSuccess ('Cập nhật thông tin sản phẩm thành công!')
+                        alertSuccess ('Lên là lên là lên là lên 👌!')
                     },2500)
                 } else {
                     $('.loading__box').show()

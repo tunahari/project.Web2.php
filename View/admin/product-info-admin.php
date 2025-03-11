@@ -200,12 +200,12 @@
                                 <div class="Product__Info__Content__2__Input__Error">Input invalid, please check again</div>
                             </div>
                             <div class="Product__Info__Content__2__Input">
-                                <label for="Admin__Input__SP_GiaBanSanPham">Giá bán (VND):</label>
+                                <label for="Admin__Input__SP_GiaBanSanPham">Giá bán (VND) (*):</label>
                                 <input class="Admin__Input__SP" id="Admin__Input__SP_GiaBanSanPham" type="number" value="<?php echo $SP_GiaBanSanPham  ?>" >
                                 <div class="Product__Info__Content__2__Input__Error">Input invalid, please check again</div>
                             </div>
                             <div class="Product__Info__Content__2__Input">
-                                <label for="Admin__Input__SP_GiaNhapSanPham">Giá nhập (VND):</label>
+                                <label for="Admin__Input__SP_GiaNhapSanPham">Giá nhập (VND) (*):</label>
                                 <input class="Admin__Input__SP" id="Admin__Input__SP_GiaNhapSanPham" type="number" value="<?php echo $SP_GiaNhapSanPham  ?>">
                                 <div class="Product__Info__Content__2__Input__Error">Input invalid, please check again</div>
                             </div>
@@ -217,28 +217,28 @@
                                 <div class="Product__Info__Content__2__Input__Error">Input invalid, please check again</div>
                             </div>
                             <div class="Product__Info__Content__2__Input">
-                                <label for="Admin__Input__SP_ThoiGianTaoSanPham">Thời gian tạo (*):</label>
+                                <label for="Admin__Input__SP_ThoiGianTaoSanPham">Thời gian tạo:</label>
                                 <input class="Admin__Input__SP_Readonly" id="Admin__Input__SP_ThoiGianTaoSanPham" type="text" readonly value="<?php echo $SP_ThoiGianTaoSanPham  ?>">
                             </div>
                             <div class="Product__Info__Content__2__Input">
-                                <label for="Admin__Input__SP_MaChiNhanhSanPham">Mã chi nhánh:</label>
+                                <label for="Admin__Input__SP_MaChiNhanhSanPham">Mã chi nhánh: (CN*)</label>
                                 <input class="Admin__Input__SP" id="Admin__Input__SP_MaChiNhanhSanPham" type="text" value="<?php echo $SP_MaChiNhanhSanPham  ?>">
                                 <div class="Product__Info__Content__2__Input__Error">Input invalid, please check again</div>
                             </div>
                             <div class="Product__Info__Content__2__Input">
-                                <label for="Admin__Input__SP_TonKhoSanPham">Tồn kho (*):</label>
+                                <label for="Admin__Input__SP_TonKhoSanPham">Tồn kho:</label>
                                 <input class="Admin__Input__SP_Readonly" id="Admin__Input__SP_TonKhoSanPham" type="text" readonly value="<?php echo $SP_TonKhoSanPham  ?>">
                                 <div class="Product__Info__Content__2__Input__Error">Input invalid, please check again</div>
                             </div>
                         </div>
                         <div class="Product__Info__Content__2__Input__Box">
                             <div class="Product__Info__Content__2__Input">
-                                <label for="Admin__Input__SP_TongNhapSanPham">Tổng nhập (*):</label>
+                                <label for="Admin__Input__SP_TongNhapSanPham">Tổng nhập:</label>
                                 <input class="Admin__Input__SP_Readonly" id="Admin__Input__SP_TongNhapSanPham" type="text" readonly value="<?php echo $SP_TongNhapSanPham  ?>">
                                 <div class="Product__Info__Content__2__Input__Error">Input invalid, please check again</div>
                             </div>
                             <div class="Product__Info__Content__2__Input">
-                                <label for="Admin__Input__SP_TongBanSanPham">Tổng bán (*):</label>
+                                <label for="Admin__Input__SP_TongBanSanPham">Tổng bán:</label>
                                 <input class="Admin__Input__SP_Readonly" id="Admin__Input__SP_TongBanSanPham" type="text" readonly value="<?php echo $SP_TongBanSanPham  ?>">
                             </div>
                             <div class="Product__Info__Content__2__Input">
@@ -325,12 +325,12 @@
                                 <div class="Product__Info__Content__2__Input__Error">Input invalid, please check again</div>
                             </div>
                             <div class="Product__Info__Content__2__Input">
-                                <label for="Admin__Input__SP_RAMSanPham">RAM:</label>
+                                <label for="Admin__Input__SP_RAMSanPham">RAM (*):</label>
                                 <input class="Admin__Input__SP" id="Admin__Input__SP_RAMSanPham" type="number" value="<?php echo $SP_RAMSanPham  ?>">
                                 <div class="Product__Info__Content__2__Input__Error">Input invalid, please check again</div>
                             </div>
                             <div class="Product__Info__Content__2__Input">
-                                <label for="Admin__Input__SP_ROMSanPham">ROM:</label>
+                                <label for="Admin__Input__SP_ROMSanPham">ROM (*)    :</label>
                                 <input class="Admin__Input__SP" id="Admin__Input__SP_ROMSanPham" type="number" value="<?php echo $SP_ROMSanPham  ?>">
                                 <div class="Product__Info__Content__2__Input__Error">Input invalid, please check again</div>
                             </div>
@@ -467,7 +467,7 @@
                                 <div class="Product__Info__Content__2__Input__Error">Input invalid, please check again</div>
                             </div>
                             <div class="Product__Info__Content__2__Input">
-                                <label for="Admin__Input__SP_ThoiDiemRaMatSanPham">Thời điểm ra mắt:</label>
+                                <label for="Admin__Input__SP_ThoiDiemRaMatSanPham">Thời điểm ra mắt (*):</label>
                                 <input class="Admin__Input__SP" id="Admin__Input__SP_ThoiDiemRaMatSanPham" type="date" value="<?php echo date($SP_ThoiDiemRaMatSanPham) ?>">
                                 <div class="Product__Info__Content__2__Input__Error">Input invalid, please check again</div>
                             </div>
@@ -482,7 +482,7 @@
                         </div>
                     </div>
                     <div class="Product__Info__Content__3 Product__Info__Content">
-                        <div class="Product__Info__Save">Lưu Chỉnh Sửa</div>
+                        <div class="Product__Info__Save">Upload </div>
                     </div>
                 </div>
             </div>

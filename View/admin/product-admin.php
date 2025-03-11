@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -9,10 +10,11 @@
     <link rel="stylesheet" href="./style-admin.css">
     <link rel="stylesheet" href="./product-admin.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/js/all.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 </head>
+
 <body>
     <div class="main">
         <?php include './include.header.php'; ?>
@@ -37,40 +39,40 @@
                     </div>
                     <div class="search__product">
                         <input type="text" placeholder="Tìm kiếm..." id="search__product__input">
-                       <div class="search__product__button">
-                        <i class='bx bx-search-alt-2'></i>
-                       </div>
+                        <div class="search__product__button">
+                            <i class='bx bx-search-alt-2'></i>
+                        </div>
                     </div>
                 </div>
                 <div class="Chat__Left__Create__Product">
-                    <i class="fa-solid fa-circle-plus"></i> Thêmm 
+                    <i class="fa-solid fa-circle-plus"></i> Thêm
                 </div>
                 <div class="table__product--container">
-                   <div class="table__product__thead">
-                       <div class="table__product__thead__tr">
-                           <div class="table__product__thead__tr__th" id="sort__product__id" value="DESC">
-                               ID<i class="fa-solid fa-arrows-up-down"></i>
+                    <div class="table__product__thead">
+                        <div class="table__product__thead__tr">
+                            <div class="table__product__thead__tr__th" id="sort__product__id" value="DESC">
+                                ID<i class="fa-solid fa-arrows-up-down"></i>
                             </div>
-                           <div class="table__product__thead__tr__th">Tên Sản Phẩm</div>
-                           <div class="table__product__thead__tr__th" id="sort__product__price" value="ASC">
-                               Giá Bán<i class="fa-solid fa-arrows-up-down"></i>
+                            <div class="table__product__thead__tr__th">Tên Sản Phẩm</div>
+                            <div class="table__product__thead__tr__th" id="sort__product__price" value="ASC">
+                                Giá Bán<i class="fa-solid fa-arrows-up-down"></i>
                             </div>
-                           <div class="table__product__thead__tr__th">Giảm Giá</div>
-                           <div class="table__product__thead__tr__th">Tồn Kho</div>
-                           <div class="table__product__thead__tr__th">Tổng Nhập</div>
-                           <div class="table__product__thead__tr__th">Tổng Bán</div>
-                           <div class="table__product__thead__tr__th" id="sort__product__date" value="ASC">
-                               Ngày Tạo<i class="fa-solid fa-arrows-up-down"></i>
+                            <div class="table__product__thead__tr__th">Giảm Giá</div>
+                            <div class="table__product__thead__tr__th">Tồn Kho</div>
+                            <div class="table__product__thead__tr__th">Tổng Nhập</div>
+                            <div class="table__product__thead__tr__th">Tổng Bán</div>
+                            <div class="table__product__thead__tr__th" id="sort__product__date" value="ASC">
+                                Ngày Tạo<i class="fa-solid fa-arrows-up-down"></i>
                             </div>
-                           <div class="table__product__thead__tr__th">Xóa</div>
-                       </div>
+                            <div class="table__product__thead__tr__th">Xóa</div>
+                        </div>
                     </div>
                     <div class="table__product__tbody"></div>
                 </div>
 
                 <!-- PAGINATION -->
                 <div class="pagination__product">
-                    <div class="pagination__product__item pagination__product__prev"><i class='bx bx-left-arrow-alt' ></i></div>
+                    <div class="pagination__product__item pagination__product__prev"><i class='bx bx-left-arrow-alt'></i></div>
                     <div class="pagination__product__item active">1</div>
                     <div class="pagination__product__item">2</div>
                     <div class="pagination__product__item">3</div>
@@ -140,11 +142,69 @@
     </div>
 
 
-    <script src="./script-admin.js"></script>
-    <script src="./test-admin.js"></script>
-    <script src="./customer-admin.js"></script>
-    <script src="../../Controller/class/controller.function.js"></script>
-    <script src="../../Controller/class/controller.validate.js"></script>
-    <script src="../../Controller/admin/controller-admin.product.js"></script>
+
 </body>
+
 </html>
+<script src="./script-admin.js"></script>
+<script src="./test-admin.js"></script>
+<script src="./customer-admin.js"></script>
+<script src="../../Controller/class/controller.function.js"></script>
+<script src="../../Controller/class/controller.validate.js"></script>
+<script src="../../Controller/admin/controller-admin.product.js"></script>
+<script>
+$(document).ready(function () {
+    const ClassFuction = new HandlingFunctions(); // You must init ClassFuction
+    $('.Chat__Left__Create__Product').click(function (e) {
+        e.preventDefault();
+        $.ajax({
+            type: "POST",
+            url: "../../Controller/admin/controller-admin.product.php",
+            data: { createProduct: 'create-product' },
+            dataType: "json",
+            beforeSend: function () {
+                // Show loading box before the request
+                $('.loading__box').show();
+            },
+            success: function (response) {
+                console.log(response);
+                if (response.status === 'success' && response.productId) {
+                    // Hide loading box
+                    $('.loading__box').hide();
+                    // Chuyển hướng đến trang chỉnh sửa sản phẩm
+                    window.location.href = "./product-info-admin.php?id-product=" + response.productId + "&menu=product";
+                } else {
+                    // Hide loading box
+                    $('.loading__box').hide();
+                    // Xử lý lỗi (ví dụ: hiển thị thông báo)
+                    $(".alert__notify__box__failed").css('transform', 'scale(1)')
+                    $(".alert__notify__box__failed__right__content").html('Tạo sản phẩm thất bại');
+                    $(".alert__notify__box__failed__progress").css('animation', 'progress-out 2.5s linear forwards')
+                    setTimeout(() => {
+                        $(".alert__notify__box__failed").css('transform', 'scale(0)');
+                        $(".alert__notify__box__failed__progress").css('animation', '')
+                    }, 3000)
+                }
+            },
+            error: function (xhr, status, error) {
+                // Hide loading box
+                $('.loading__box').hide();
+                console.error("AJAX Error:", xhr, status, error);
+                $(".alert__notify__box__failed").css('transform', 'scale(1)')
+                $(".alert__notify__box__failed__right__content").html('Tạo sản phẩm thất bại');
+                $(".alert__notify__box__failed__progress").css('animation', 'progress-out 2.5s linear forwards')
+                setTimeout(() => {
+                    $(".alert__notify__box__failed").css('transform', 'scale(0)');
+                    $(".alert__notify__box__failed__progress").css('animation', '')
+                }, 3000)
+            },
+            complete: function () {
+              // Hide loading box
+              $('.loading__box').hide();
+            }
+        });
+    });
+});
+
+
+</script>
