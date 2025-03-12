@@ -11,6 +11,7 @@ if (!$conn) {
     die();
 }
 
+
 if (isset($_POST['id']) && isset($_POST['lock_status'])) {
     $id = (int)$_POST['id'];
     $lock_status = $_POST['lock_status']; // Nhận giá trị là 0 hoặc 1
@@ -40,12 +41,14 @@ if (isset($_POST['id']) && isset($_POST['lock_status'])) {
 
     if ($result_update_lock_status) {
         echo $lock_status == '1' ? "Đã khóa tài khoản thành công!" : "Đã mở khóa tài khoản thành công!";
+    
     } else {
         echo "Có lỗi xảy ra: " . mysqli_error($conn);
     }
 } else {
     echo "Dữ liệu không hợp lệ!";
 }
+
 
 mysqli_close($conn);
 ?>

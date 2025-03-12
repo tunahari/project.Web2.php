@@ -8,10 +8,10 @@
 .table__order__tbody__tr__td:nth-child(8), .table__order__thead__tr__th:nth-child(8) {justify-content: center; align-items: center; flex-basis: 10% ;}
 .order__status {width: 90px;}
 .table__order__tbody__tr {align-items: baseline;}
-.handled {background-color: #fff200;}
-.success {background-color: #32ff7e;}
-.cancel {background-color: #ff3838;}
-.wait {background-color: #7d5fff;}
+.handled {background-color: #cac010e3;}
+.success {background-color: #00d54f;}
+.cancel {background-color: #e63131;}
+.wait {background-color: #6a4dec;}
 
 .loading__box {
     position: fixed;

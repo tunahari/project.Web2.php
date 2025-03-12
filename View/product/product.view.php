@@ -1,8 +1,16 @@
 <?php
-session_start();
+@session_start(); // Bắt đầu session nếu chưa có
+require_once '../../Model/utils.php'; // Đường dẫn đến file utils.php
+require_once '../../Model/database/connectDataBase.php'; // File kết nối database của bạn
+$conn = mysqli_connect('localhost','root','','projectweb2'); // Kết nối database
+// ... phần code còn lại của product.view.php ...
+checkAccountStatusAndRedirect($conn); // Gọi hàm kiểm tra trạng thái
+
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
+
 
 <head>
     <meta charset="UTF-8">
@@ -17,6 +25,7 @@ session_start();
     <link rel="stylesheet" href="./product.view.css">
     <title>Product Page</title>
 </head>
+
 <style>
     /* Highlight selected filter items */
     .selected-filter {
@@ -224,7 +233,7 @@ session_start();
                         </div>
                     </div>
                     <div class="Product__Page__Content__Left__Filter__Apply__Reset">
-                        <div class="Product__Page__Content__Left__Filter__Reset"><a href="./product.view.php">ĐẶT LẠI</a></div>
+                        <button class="Product__Page__Content__Left__Filter__Reset">ĐẶT LẠI</button> <!--Thay <a> bằng <button>-->
                         <button class="Product__Page__Content__Left__Filter__Apply">LỌC</button>
                     </div>
                 </div>
@@ -354,7 +363,7 @@ session_start();
                         }
 
                         if (!empty($branch)) {
-                            $conditions[] = "SP_IDChiNhanh = '" . mysqli_real_escape_string($conn, $branch) . "'";
+                            $conditions[] = "SP_MaChiNhanhSanPham = '" . mysqli_real_escape_string($conn, $branch) . "'";
                         }
 
                         if ($minPrice > 0) {
@@ -448,6 +457,11 @@ session_start();
                                 $params['camera'] = $_GET['camera'];
                             }
 
+                            foreach ($_GET as $key => $value) {
+                                if ($key !== 'page') {
+                                    $params[$key] = $value;
+                                }
+                            }
                             return './product.view.php?' . http_build_query($params);
                         }
 
@@ -505,24 +519,31 @@ session_start();
                         // Nút "Trang trước"
                         if ($page > 1) {
                             $prev_page = $page - 1;
-                            $str_paging .= "<a href='./product.view.php?page={$prev_page}' class='Product__Page__Content__Right__Product__Paging__Item Paging__Prev'><i class='fa-solid fa-arrow-left'></i></a>";
+                            // Sử dụng buildUrlWithParams để tạo link
+                            $prev_url = buildUrlWithParams($prev_page);
+                            $str_paging .= "<a href='{$prev_url}' class='Product__Page__Content__Right__Product__Paging__Item Paging__Prev'><i class='fa-solid fa-arrow-left'></i></a>";
                         }
 
                         // Hiển thị số trang
                         for ($i = 1; $i <= $num_page; $i++) {
                             $active_class = ($i == $page) ? 'active' : '';
-                            $str_paging .= "<a href='./product.view.php?page={$i}' class='Product__Page__Content__Right__Product__Paging__Item {$active_class}'>{$i}</a>";
+                            // Sử dụng buildUrlWithParams để tạo link
+                            $page_url = buildUrlWithParams($i);
+                            $str_paging .= "<a href='{$page_url}' class='Product__Page__Content__Right__Product__Paging__Item {$active_class}'>{$i}</a>";
                         }
 
                         // Nút "Trang tiếp"
                         if ($page < $num_page) {
                             $next_page = $page + 1;
-                            $str_paging .= "<a href='./product.view.php?page={$next_page}' class='Product__Page__Content__Right__Product__Paging__Item Paging__Next'><i class='fa-solid fa-arrow-right'></i></a>";
+                            // Sử dụng buildUrlWithParams để tạo link
+                            $next_url = buildUrlWithParams($next_page);
+                            $str_paging .= "<a href='{$next_url}' class='Product__Page__Content__Right__Product__Paging__Item Paging__Next'><i class='fa-solid fa-arrow-right'></i></a>";
                         }
 
                         $str_paging .= "</div>";
                         return $str_paging;
                     }
+
 
                     // Hiển thị phân trang
                     echo get_paging($num_page, $page);
@@ -1075,15 +1096,28 @@ session_start();
                     minPrice: '',
                     maxPrice: ''
                 };
+                // Đặt lại giá trị cho ô nhập giá
+                document.getElementById('minPrice').value = '';
+                document.getElementById('maxPrice').value = '';
+
+                //xóa keyword nếu có
+                const urlParams = new URLSearchParams(window.location.search);
+                const keyword = urlParams.get('keyword');
+                if (keyword) {
+                    urlParams.delete('keyword')
+
+                }
+                const newUrl = window.location.pathname + '?' + urlParams.toString();
+                window.history.replaceState({}, document.title, newUrl);
 
                 // Chuyển hướng đến trang không có bộ lọc
                 let url = './product.view.php';
 
-                // Giữ lại tham số tìm kiếm nếu có
-                const keyword = urlParams.get('keyword');
-                if (keyword) {
-                    url += `?keyword=${encodeURIComponent(keyword)}`;
-                }
+                // // Giữ lại tham số tìm kiếm nếu có
+                // const keyword = urlParams.get('keyword');
+                // if (keyword) {
+                //     url += `?keyword=${encodeURIComponent(keyword)}`;
+                // }
 
                 window.location.href = url;
             });

@@ -1,8 +1,15 @@
 <?php 
-session_start(); 
+@session_start(); 
 if (!isset($_GET['id-product']) || empty($_GET['id-product'])) {
     ///header('location: ./product.view.php');
 } 
+
+require_once '../../Model/utils.php'; // Đường dẫn đến file utils.php
+require_once '../../Model/database/connectDataBase.php'; // File kết nối database của bạn
+$conn = mysqli_connect('localhost','root','','projectweb2'); // Kết nối database
+// ... phần code còn lại của product.view.php ...
+checkAccountStatusAndRedirect($conn); // Gọi hàm kiểm tra trạng thái
+
 ?>
 <!DOCTYPE html>
 <html lang="en">

@@ -740,24 +740,24 @@ border-radius: 2px;
 }
 
 .status-cancel {
-    background-color: #ff3838;
+    background-color: #de1d1d;
 }
 
 .status-wait {
-    background-color: #7d5fff;
+    background-color: #6344eb;
 }
 
 .status-handled {
-    background-color: #fff200;
+    background-color: #cac010e3
 }
 
 .status-success {
-    background-color: #32ff7e;
+    background-color: #00d54f;
 }
 
 div#CancelBill {
     padding: 7px 10px;
-    background-color: #ff3838;
+    background-color: #ea1c1c;
     font-size: 13px;
     font-weight: 600;
     color: #fff;

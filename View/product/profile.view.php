@@ -1,8 +1,17 @@
 <?php
+@session_start(); // Bắt đầu session nếu chưa có
+require_once '../../Model/utils.php'; // Đường dẫn đến file utils.php
+require_once '../../Model/database/connectDataBase.php'; // File kết nối database của bạn
+$conn = mysqli_connect('localhost','root','','projectweb2'); // Kết nối database
+// ... phần code còn lại của product.view.php ...
+checkAccountStatusAndRedirect($conn); // Gọi hàm kiểm tra trạng thái
+
+?>
+
+<?php
 require_once '../../Model/database/connectDataBase.php';
 require_once '../../Model/product/model-product.cart.php';
 require_once '../../Model/admin/model-amin.customer.php';
-    session_start();
     if (!isset($_SESSION['email'])) {
         header('Location: ./login.view.php');
     } else {

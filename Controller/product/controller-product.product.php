@@ -1,5 +1,5 @@
 <?php
-session_start();
+@session_start();
 require_once '../../Model/admin/model-admin.info-product.php';
 require_once '../../Model/product/model-product.cart.php';
 require_once '../../Model/admin/model-amin.customer.php';
@@ -11,7 +11,8 @@ $ProductClass = new Product;
 $CartClass = new Cart;
 $ValidateData = new ValidateData;
 
-function fetchProduct ($limitProduct, $startProduct, $queryProduct) {
+function fetchProduct($limitProduct, $startProduct, $queryProduct)
+{
     $ProductClass = new Product;
     $CustomerClass = new Customer;
     $listProduct = $ProductClass->selectProductPage($limitProduct, $startProduct, $queryProduct);
@@ -21,189 +22,156 @@ function fetchProduct ($limitProduct, $startProduct, $queryProduct) {
             $oldPrice = intval($listProduct[$i]['SP_GiaBanSanPham']);
             $newPrice = intval($listProduct[$i]['SP_GiaBanSanPham']);
             $salePrice = intval($listProduct[$i]['SP_GiamGiaSanPham']);
-            if ($salePrice === 0) {
-                $htmlSalePrice = '';
-            } 
-       
         }
         return $output;
     }
 }
 
-
-
-////////////////////////////////////
-
-// if (isset($_POST['fetchProduct']) &&  $_POST['fetchProduct'] === 'fetch-product') {
-//     isset($_POST['limitProduct']) ?  $limitProduct = $_POST['limitProduct'] : $limitProduct = '9';
-//     if (isset($_POST['pageProduct']) && $_POST['pageProduct'] > 1) {
-//         $pageProduct = $_POST['pageProduct'];
-//         $startProduct = ((intval($pageProduct) - 1) * intval($limitProduct));
-//     } else {
-//         $pageProduct = 1;
-//         $startProduct = 0;
-//     }
-    
-//     if (isset($_POST['queryProduct'])) {$queryProduct = $_POST['queryProduct'];}
-
-//     $dataProduct = fetchProduct ($ValidateData->standardizeString($limitProduct),$ValidateData->standardizeString($startProduct), $queryProduct);
-
-//     $totalRecords = $ProductClass->countProductPage($queryProduct);
-//     $totalButton = ceil($totalRecords / intval($limitProduct));
-//     $prevButton = "";
-//     $nextButton = "";
-//     $pageButton = "";
-//     $arrayButton = array();
-
-//     if ($totalButton > 8) {
-//         if ($pageProduct < 5) {
-//             for($i = 1; $i <= 5; $i++) {
-//                 $arrayButton[] = $i;
-//             }
-//             $arrayButton[] = '...';
-//             $arrayButton[] = $totalButton;
-//         } else {
-//             $endLimit = $totalButton - 5;
-//             if ($pageProduct > $endLimit) {
-//                 $arrayButton[] = 1;
-//                 $arrayButton[] = '...';
-//                 for($i = $endLimit; $i <= $totalButton; $i++) {
-//                   $arrayButton[] = $i;
-//                 }
-//             } else {
-//                 $arrayButton[] = 1;
-//                 $arrayButton[] = '...';
-//                 for($i = $pageProduct - 1; $i <= $pageProduct + 1; $i++)
-//                 {
-//                   $arrayButton[] = $i;
-//                 }
-//                 $arrayButton[] = '...';
-//                 $arrayButton[] = $totalButton;
-//             }
-//         }
-//     } else {
-//         for($i = 1; $i <= $totalButton; $i++)
-//         {
-//             $arrayButton[] = $i;
-//         }
-//     }
-
-//     for($i = 0; $i < count($arrayButton); $i++) {
-//         if(intval($pageProduct) == $arrayButton[$i]) {
-//             $pageButton .= '<div class="Product__Page__Content__Right__Product__Paging__Item active" value="'.$arrayButton[$i].'" >'.$arrayButton[$i].'</div>';
-//             $prevID = $arrayButton[$i] - 1;
-//             if($prevID > 0) {
-//                 $prevButton = ' <div class="Product__Page__Content__Right__Product__Paging__Item Paging__Prev" value="'.$prevID.'">
-//                                     <i class="fa-solid fa-arrow-left"></i>
-//                                 </div>';
-//             } else {
-//                 $prevButton = ' <div class="Product__Page__Content__Right__Product__Paging__Item Paging__Prev" value="1">
-//                                     <i class="fa-solid fa-arrow-left"></i>
-//                                 </div>';;
-//             }
-//             $nextID = $arrayButton[$i] + 1;
-//             if($nextID > $totalButton) {
-//                 $nextButton = ' <div class="Product__Page__Content__Right__Product__Paging__Item Paging__Next" value="'.$totalButton.'">
-//                                     <i class="fa-solid fa-arrow-right"></i>
-//                                 </div>';
-//             } else {
-//                 $nextButton = ' <div class="Product__Page__Content__Right__Product__Paging__Item Paging__Next" value="'.$nextID.'">
-//                                     <i class="fa-solid fa-arrow-right"></i>
-//                                 </div>';
-//             }
-//         } else {
-//             if($arrayButton[$i] == '...') {
-//                 $pageButton .= '<div class="Product__Page__Content__Right__Product__Paging__Item Paging__Dots">...</div>';
-//             } else {
-//                 $pageButton .= '<div class="Product__Page__Content__Right__Product__Paging__Item" value="'.$arrayButton[$i].'">'.$arrayButton[$i].'</div>';
-//             }
-//         }
-//     }
-        
-//     $paginationButton = $prevButton . $pageButton . $nextButton;
-//     $dataResponse = [$paginationButton, $dataProduct];
-//     print_r(json_encode($dataResponse));
-
-//  }
- //////////////////////
- function fetchCart () {
-    $CustomerClass = new Customer;
-    $ProductClass = new Product;
-    $CartClass = new Cart;
+//////////////////////
+// Hàm hiển thị danh sách sản phẩm trong giỏ hàng
+function fetchCart() {
+    global $CustomerClass;
     $CustomerClass->setKH_EmailKhachHang($_SESSION['email']);
-    $idCustomer = $CustomerClass->selectCustomerByEmail()['KH_IDKhachHang'];
-    $CartClass->setGH_IDKhachHang($idCustomer);
-    $listCart = $CartClass->selectAllCart();
+    $customerID = $CustomerClass->selectCustomerByEmail()['KH_IDKhachHang'];
+    $cartItems = getCartItems($customerID);
+    
     $output = '';
-    for ($i = 0; $i < count($listCart); $i++) {
-        $ProductClass->setSP_IDSanPham($listCart[$i]['GH_IDSanPham']);
-        $oldPrice = intval($ProductClass->selectProductByID()['SP_GiaBanSanPham']);
-        $newPrice = intval($ProductClass->selectProductByID()['SP_GiaBanSanPham']);
-        $salePrice = intval($ProductClass->selectProductByID()['SP_GiamGiaSanPham']);
-        if ($salePrice === 0) {
-            $htmlSalePrice = '';
-        } else {
-            $newPrice = $oldPrice - ($newPrice * $salePrice) / 100;
-            $htmlSalePrice =  '<span class="regular-price">'.number_format($oldPrice).'</span>';
+    $output .= '
+    <ul class="order-lists">
+        <li class="li-sanpham">Sản Phẩm</li>
+        <li class="li-dongia">Đơn Giá</li>
+        <li class="li-tongdongia">Tổng Đơn Giá</li>
+        <li class="li-soluong">Số Lượng</li>
+        <li class="li-xoa">Acction</li>
+    </ul>
+    <div class="summary-border"></div>';
+    
+    if (!empty($cartItems)) {
+        global $ProductClass;
+        foreach ($cartItems as $item) {
+            $output .= renderCartItem($item, $ProductClass);
         }
+    } else {
+        $output .= '<div class="order-row">Giỏ hàng trống</div>';
+    }
+    
+    return $output;
+}
+// Hàm lấy thông tin giỏ hàng để hiển thị
+function getCartItems($customerID) {
+    global $CartClass;
+    $CartClass->setGH_IDKhachHang($customerID);
+    return $CartClass->selectAllCart();
+}
+//hàm cập nhật lại tổng tiền của từng sản phẩm
+function calculateItemTotalPrice($productID, $quantity) {
+    global $ProductClass;
+    $ProductClass->setSP_IDSanPham($productID);
+    $product = $ProductClass->selectProductByID();
+    $oldPrice = intval($product['SP_GiaBanSanPham']);
+    $salePrice = intval($product['SP_GiamGiaSanPham']);
+    $newPrice = $oldPrice - ($oldPrice * $salePrice) / 100;
+    $newTotalPrice = $quantity * $newPrice;
+    return $newTotalPrice;
+}
 
-        $output .= '
-        <div class="order-row">
-            <div class="order-row-left">
-                <div class="order-row-img">
-                    <img src="../../Controller/admin/'.$ProductClass->selectProductByID()['SP_Image1SanPham'].'" alt="">
-                </div>
-                <div class="order-row-details">
-                    <h4>'.$ProductClass->selectProductByID()['SP_TenSanPham'].'</h4>
-                    <div class="row-details-items">
-                        <span class="row-items-tittle">Hãng: </span>
-                        <span>'.$ProductClass->selectProductByID()['SP_HangSanPham'].'</span>
-                    </div>
-                    <div class="row-details-items">
-                        <span class="row-items-tittle">Dung lượng:</span>
-                        <span>'.$ProductClass->selectProductByID()['SP_RAMSanPham'].'GB/'.$ProductClass->selectProductByID()['SP_ROMSanPham'].'GB</span>
-                    </div>
-                    <div class="row-details-items-price">
-                        <span class="row-details-items-sale-price">'.number_format($newPrice).'</span>
-                        '.$htmlSalePrice.'
-                    </div>
-                    <div class="row-details-items-quantity-details">
-                        <input type="number" id="quantityCartLeft" value="'.$listCart[$i]['GH_SLSanPhamGioHang'].'"
-                        data-productID="'.$ProductClass->selectProductByID()['SP_IDSanPham'].'">
-                        <div class="quantity-navigation">
-                            <div class="quantity-inc" id="increaseQuantityLeft"><i class="bx bx-chevron-up"></i></div>
-                            <div class="quantity-dec" id="decreaseQuantityLeft"><i class="bx bx-chevron-down"></i></div>
-                        </div>
-                    </div>
-                </div>
+// Hàm render HTML cho từng sản phẩm trong giỏ hàng
+function renderCartItem($item, $ProductClass) {
+    $ProductClass->setSP_IDSanPham($item['GH_IDSanPham']);
+    $product = $ProductClass->selectProductByID();
+    $oldPrice = intval($product['SP_GiaBanSanPham']);
+    $salePrice = intval($product['SP_GiamGiaSanPham']);
+    $newPrice = $oldPrice - ($oldPrice * $salePrice) / 100;
+    $totalPrice = calculateItemTotalPrice($item['GH_IDSanPham'], $item['GH_SLSanPhamGioHang']);
+
+    $htmlSalePrice = '<span class="regular-price">' . number_format($oldPrice) . '</span>';
+    $htmltotalPrice = '<span class="total-price" data-product-id="' . $item['GH_IDSanPham'] . '">' . number_format($totalPrice) . '</span>';
+
+    $output = '
+    <div class="order-row">
+        <div class="order-row-left">
+            <div class="order-row-img">
+                <img src="../../Controller/admin/' . $product['SP_Image1SanPham'] . '" alt="">
             </div>
-            <div class="order-row-right">
-                <div class="order-right-price">
-                    <span class="sale-price">'.number_format($newPrice).'</span>
-                    '.$htmlSalePrice.'
+            <div class="order-row-details">
+                <h4>' . $product['SP_TenSanPham'] . '</h4>
+                <div class="row-details-items">
+                    <span class="row-items-tittle">Hãng: </span>
+                    <span>' . $product['SP_HangSanPham'] . '</span>
                 </div>
-                <div class="order-right-quantity">
-                    <span>SL</span>
-                    <div class="quantity-details">
-                        <input type="number" min="1" id="quantityCartRight" value="'.$listCart[$i]['GH_SLSanPhamGioHang'].'"
-                        data-productID="'.$ProductClass->selectProductByID()['SP_IDSanPham'].'">
-                        <div class="quantity-navigation">
-                            <div class="quantity-inc" id="increaseQuantityRight"><i class="bx bx-chevron-up"></i></div>
-                            <div class="quantity-dec" id="decreaseQuantityRight"><i class="bx bx-chevron-down"></i></div>
-                        </div>
+                <div class="row-details-items">
+                    <span class="row-items-tittle">Dung lượng:</span>
+                    <span>' . $product['SP_RAMSanPham'] . 'GB/' . $product['SP_ROMSanPham'] . 'GB</span>
+                </div>
+                <div class="row-details-items-price">
+                    <span class="row-details-items-sale-price">' . number_format($newPrice) . '</span>
+                    ' . $htmltotalPrice . '
+                </div>
+                <div class="row-details-items-quantity-details">
+                    <input type="number" id="quantityCartLeft" value="' . $item['GH_SLSanPhamGioHang'] . '"
+                    data-productID="' . $product['SP_IDSanPham'] . '">
+                    <div class="quantity-navigation">
+                        <div class="quantity-inc" id="increaseQuantityLeft"><i class="bx bx-chevron-up"></i></div>
+                        <div class="quantity-dec" id="decreaseQuantityLeft"><i class="bx bx-chevron-down"></i></div>
                     </div>
-                </div>
-                <div class="order-right-remove" id="deleteCart" value="'.$ProductClass->selectProductByID()['SP_IDSanPham'].'">
-                    <i class="bx bx-x"></i>
                 </div>
             </div>
         </div>
-        ';
-    }
-    return $output;
- }
+        <div class="order-row-right">
+            <div class="order-right-price">
+                <span class="sale-price">' . number_format($newPrice) . '</span>
+                ' . $htmltotalPrice . '
+            </div>
+            <div class="order-right-quantity">
+                <span>SL</span>
+                <div class="quantity-details">
+                    <input type="number" min="1" id="quantityCartRight" value="' . $item['GH_SLSanPhamGioHang'] . '"
+                    data-productID="' . $product['SP_IDSanPham'] . '">
+                    <div class="quantity-navigation">
+                        <div class="quantity-inc" id="increaseQuantityRight"><i class="bx bx-chevron-up"></i></div>
+                        <div class="quantity-dec" id="decreaseQuantityRight"><i class="bx bx-chevron-down"></i></div>
+                    </div>
+                </div>
+            </div>
+            <div class="order-right-remove" id="deleteCart" value="' . $product['SP_IDSanPham'] . '">
+                <i class="bx bx-x"></i>
+            </div>
+        </div>
+    </div>
+    ';
 
- function fetchCartBill () {
+    return $output;
+}
+
+
+// Hàm trả về thông tin cập nhật số lượng và giá sản phẩm
+function updateItem($productID, $newQuantity, $customerID) {
+    global $CartClass;
+    $CartClass->setGH_IDSanPham($productID);
+    $CartClass->setGH_IDKhachHang($customerID);
+    $CartClass->setGH_SLSanPhamGioHang($newQuantity);
+    
+    if ($CartClass->updateQuantityCart()) {
+        $newTotalPrice = calculateItemTotalPrice($productID, $newQuantity);
+        return json_encode(['newTotalPrice' => number_format($newTotalPrice)]);
+    } else {
+        return json_encode(['status' => 'error', 'message' => 'Cập nhật thất bại']);
+    }
+}
+
+if (isset($_POST['updateItem'])) {
+    $productID = $_POST['productID'];
+    $newQuantity = $_POST['newQuantity'];
+    $CustomerClass = new Customer;
+    $CustomerClass->setKH_EmailKhachHang($_SESSION['email']);
+    $customerID = $CustomerClass->selectCustomerByEmail()['KH_IDKhachHang'];
+    echo updateItem($productID, $newQuantity, $customerID);
+    exit;
+}
+
+// ... (code hiện có) ...
+function fetchCartBill()
+{
     $CustomerClass = new Customer;
     $ProductClass = new Product;
     $CartClass = new Cart;
@@ -212,78 +180,90 @@ function fetchProduct ($limitProduct, $startProduct, $queryProduct) {
     $CartClass->setGH_IDKhachHang($idCustomer);
     $listCart = $CartClass->selectAllCart();
     $output = '';
+    $output .= '
+    <ul class="order-lists">
+    <li class="li-sanpham">Sản Phẩm</li>
+    <li class="li-dongia">Đơn Giá</li>
+    <li class="li-tongdongia">Tổng Đơn Giá</li>
+    <li class="li-soluong">Số Lượng</li>
+    <li class="li-xoa">Acction</li>
+    </ul>
+    <div class="summary-border"></div>';
     for ($i = 0; $i < count($listCart); $i++) {
         $ProductClass->setSP_IDSanPham($listCart[$i]['GH_IDSanPham']);
         $oldPrice = intval($ProductClass->selectProductByID()['SP_GiaBanSanPham']);
         $newPrice = intval($ProductClass->selectProductByID()['SP_GiaBanSanPham']);
         $salePrice = intval($ProductClass->selectProductByID()['SP_GiamGiaSanPham']);
-        if ($salePrice === 0) {
-            $htmlSalePrice = '';
-        } else {
-            $newPrice = $oldPrice - ($newPrice * $salePrice) / 100;
-            $htmlSalePrice =  '<span class="regular-price">'.number_format($oldPrice).'</span>';
-        }
+        $newPrice = $oldPrice - ($newPrice * $salePrice) / 100;
+        $htmlSalePrice =  '<span class="regular-price">' . number_format($oldPrice) . '</span>';
+
+        $totalPrice = $listCart[$i]['GH_SLSanPhamGioHang'] * $newPrice;
+        $htmltotalPrice =  '<span class="total-price" data-product-id='.$listCart[$i]['GH_IDSanPham'].'>' .    number_format($totalPrice) . '</span>';
+
 
         $output .= '
+    
         <div class="order-row">
             <div class="order-row-left">
                 <div class="order-row-img">
-                    <img src="../../Controller/admin/'.$ProductClass->selectProductByID()['SP_Image1SanPham'].'" alt="">
+                    <img src="../../Controller/admin/' . $ProductClass->selectProductByID()['SP_Image1SanPham'] . '" alt="">
                 </div>
                 <div class="order-row-details">
-                    <h4>'.$ProductClass->selectProductByID()['SP_TenSanPham'].'</h4>
+                    <h4>' . $ProductClass->selectProductByID()['SP_TenSanPham'] . '</h4>
                     <div class="row-details-items">
                         <span class="row-items-tittle">Hãng: </span>
-                        <span>'.$ProductClass->selectProductByID()['SP_HangSanPham'].'</span>
+                        <span>' . $ProductClass->selectProductByID()['SP_HangSanPham'] . '</span>
                     </div>
                     <div class="row-details-items">
                         <span class="row-items-tittle">Dung lượng:</span>
-                        <span>'.$ProductClass->selectProductByID()['SP_RAMSanPham'].'GB/'.$ProductClass->selectProductByID()['SP_ROMSanPham'].'GB</span>
+                        <span>' . $ProductClass->selectProductByID()['SP_RAMSanPham'] . 'GB/' . $ProductClass->selectProductByID()['SP_ROMSanPham'] . 'GB</span>
                     </div>
                     <div class="row-details-items-price">
-                        <span class="row-details-items-sale-price">'.number_format($newPrice).'</span>
-                        '.$htmlSalePrice.'
+                        <span class="row-details-items-sale-price">' . number_format($newPrice) . '</span>
+                        ' . $htmltotalPrice . '
                     </div>
                     <div class="row-details-items-quantity-details">
                         <span>SL: </span>
-                        '.$listCart[$i]['GH_SLSanPhamGioHang'].'
+                        ' . $listCart[$i]['GH_SLSanPhamGioHang'] . '
                     </div>
                 </div>
             </div>
             <div class="order-row-right">
                 <div class="order-right-price">
-                    <span class="sale-price">'.number_format($newPrice).'</span>
-                    '.$htmlSalePrice.'
+                    <span class="sale-price">' . number_format($newPrice) . '</span>
+                    ' . $htmltotalPrice . '
                 </div>
                 <div class="order-right-quantity">
                     <span>SL:</span>
-                    <div class="quantity-details">'.$listCart[$i]['GH_SLSanPhamGioHang'].'</div>
+                    <div class="quantity-details">' . $listCart[$i]['GH_SLSanPhamGioHang'] . '</div>
                 </div>
             </div>
         </div>
         ';
     }
     return $output;
- }
+}
 
 if (isset($_POST['addCart']) && $_POST['addCart'] === 'add-cart') {
     if (isset($_POST['idProduct']) && isset($_POST['idCustomer'])) {
-         $error = '';
-         $idProduct = $_POST['idProduct'];
-         $idCustomer = $_POST['idCustomer'];
-         $CartClass->setGH_IDSanPham($idProduct);
-         $CartClass->setGH_IDKhachHang($idCustomer);
-        if ($CartClass->checkDuplicate()) {
-            $CartClass->setGH_SLSanPhamGioHang("1");
-            if (!$CartClass->insertCart()) {
-                $error = 'errorInsert';
-            } 
-        } else {
+        $error = '';
+        $idProduct = $_POST['idProduct'];
+        $idCustomer = $_POST['idCustomer'];
+        $CartClass->setGH_IDSanPham($idProduct);
+        $CartClass->setGH_IDKhachHang($idCustomer);
+        if (!$CartClass->checkDuplicate()) {
+            // Sản phẩm đã có trong giỏ hàng, tăng số lượng lên 1
             $quantity = $CartClass->getQuantityByID()['GH_SLSanPhamGioHang'];
             $CartClass->setGH_SLSanPhamGioHang(intval($quantity) + 1);
             if (!$CartClass->updateQuantityCart()) {
                 $error = 'errorUpdate';
-            } 
+            }
+        } else {
+            // Sản phẩm chưa có trong giỏ hàng, thêm mới với số lượng 1
+            $CartClass->setGH_SLSanPhamGioHang("1");
+            if (!$CartClass->insertCart()) {
+                $error = 'errorInsert';
+            }
         }
         if ($error === '') {
             echo 'success';
@@ -301,29 +281,31 @@ if (isset($_POST['addCartDetals']) && $_POST['addCartDetals'] === 'add-cart-deta
         $_POST['quantityCartDetals'] === '' ? $quantityCart = 1 : $quantityCart = $_POST['quantityCartDetals'];
         $CartClass->setGH_IDSanPham($idProduct);
         $CartClass->setGH_IDKhachHang($idCustomer);
-       if ($CartClass->checkDuplicate()) {
-           $CartClass->setGH_SLSanPhamGioHang($quantityCart);
-           if (!$CartClass->insertCart()) {
-               $error = 'errorInsert';
-           } 
-       } else {
-           $quantity = $CartClass->getQuantityByID()['GH_SLSanPhamGioHang'];
-           $CartClass->setGH_SLSanPhamGioHang(intval($quantity) + intval($quantityCart));
-           if (!$CartClass->updateQuantityCart()) {
-               $error = 'errorUpdate';
-           } 
-       }
-       if ($error === '') {
-           echo 'success';
-       } else {
-           echo $error;
-       }
-   }
+        if (!$CartClass->checkDuplicate()) {
+            // Sản phẩm đã có trong giỏ hàng, cập nhật số lượng mới
+            $quantity = $CartClass->getQuantityByID()['GH_SLSanPhamGioHang'];
+            $CartClass->setGH_SLSanPhamGioHang(intval($quantity) + intval($quantityCart));
+            if (!$CartClass->updateQuantityCart()) {
+                $error = 'errorUpdate';
+            }
+        } else {
+            // Sản phẩm chưa có trong giỏ hàng, thêm mới với số lượng quantityCart
+            $CartClass->setGH_SLSanPhamGioHang($quantityCart);
+            if (!$CartClass->insertCart()) {
+                $error = 'errorInsert';
+            }
+        }
+        if ($error === '') {
+            echo 'success';
+        } else {
+            echo $error;
+        }
+    }
 }
 
 
 if (isset($_POST['fetchCart']) && $_POST['fetchCart'] === 'fetch-cart') {
-        echo fetchCart ();
+    echo fetchCart();
 }
 
 if (isset($_POST['fetchQuantityCart']) && $_POST['fetchQuantityCart'] === 'fetch-quantity-cart') {
@@ -371,7 +353,8 @@ if (isset($_POST['flagUpdateQuantity']) && $_POST['flagUpdateQuantity'] === 'upd
     }
 }
 
-function fetchPhoneAddress () {
+function fetchPhoneAddress()
+{
     $CustomerClass = new Customer;
     $CustomerClass->setKH_EmailKhachHang($_SESSION['email']);
     $KH_IDKhachHang = $CustomerClass->selectCustomerByEmail()['KH_IDKhachHang'];
@@ -390,15 +373,15 @@ function fetchPhoneAddress () {
                 <div class="content-address-details">
                     <div class="Update__Info__Input__Box">
                         <label for="updateAddressCart">Địa chỉ:</label>
-                        <input type="text" value="'.$KH_DiaChiKhachHang.'" id="updateAddressCart">
+                        <input type="text" value="' . $KH_DiaChiKhachHang . '" id="updateAddressCart">
                         <div class="Update__Info__Error">Địa chỉ phải trên 4 ký tự</div>
                     </div> 
                     <div class="Update__Info__Input__Box">
                         <label for="updatePhoneCart">Số điện thoại:</label>
-                        <input type="text" value="'.$KH_SDTKhachHang.'" id="updatePhoneCart">
+                        <input type="text" value="' . $KH_SDTKhachHang . '" id="updatePhoneCart">
                         <div class="Update__Info__Error">Số điện thoại không hợp lệ</div>
                     </div> 
-                    <div id="updateInfoCartSubmit" value="'.$KH_IDKhachHang.'">Cập Nhật</div>
+                    <div id="updateInfoCartSubmit" value="' . $KH_IDKhachHang . '">Cập Nhật</div>
                 </div>
             </div>
         </div>
@@ -406,10 +389,10 @@ function fetchPhoneAddress () {
     } else {
         return '';
     }
-
 }
 
-function getPriceBill () {
+function getPriceBill()
+{
     $CustomerClass = new Customer;
     $ProductClass = new Product;
     $CartClass = new Cart;
@@ -423,21 +406,28 @@ function getPriceBill () {
     $totalSalePrice = 0;
     $VAT = 0.1;
     for ($i = 0; $i < count($listCart); $i++) {
+        
         $ProductClass->setSP_IDSanPham($listCart[$i]['GH_IDSanPham']);
-        $salePrice = intval($ProductClass->selectProductByID()['SP_GiaBanSanPham']) - 
-        (intval($ProductClass->selectProductByID()['SP_GiaBanSanPham']) * intval($ProductClass->selectProductByID()['SP_GiamGiaSanPham']) / 100);
+        $salePrice = intval($ProductClass->selectProductByID()['SP_GiaBanSanPham']) -
+            (intval($ProductClass->selectProductByID()['SP_GiaBanSanPham']) * intval($ProductClass->selectProductByID()['SP_GiamGiaSanPham']) / 100);
         $priceBill += $salePrice *  intval($listCart[$i]['GH_SLSanPhamGioHang']);
         $quantityProduct += $listCart[$i]['GH_SLSanPhamGioHang'];
-        $totalSalePrice += (intval($ProductClass->selectProductByID()['SP_GiaBanSanPham']) * intval($listCart[$i]['GH_SLSanPhamGioHang'])) 
-        - ($salePrice * intval($listCart[$i]['GH_SLSanPhamGioHang']));
-    }  
+        $totalSalePrice += (intval($ProductClass->selectProductByID()['SP_GiaBanSanPham']) * intval($listCart[$i]['GH_SLSanPhamGioHang']))
+            - ($salePrice * intval($listCart[$i]['GH_SLSanPhamGioHang']));
+    }
     $totalPriceBill = $priceBill + ($priceBill * $VAT);
     return [$priceBill, $totalSalePrice, count($listCart), $quantityProduct, $totalPriceBill];
 }
 
 if (isset($_POST['createBill']) && $_POST['createBill'] === 'create-bill') {
-    $arrayResponse = [fetchCartBill(), number_format(getPriceBill ()[0]), number_format( getPriceBill ()[1]), getPriceBill ()[2], getPriceBill ()[3], 
-    number_format(getPriceBill ()[4])  , fetchPhoneAddress ()];
+    $arrayResponse = [
+        fetchCartBill(),
+        number_format(getPriceBill()[0]),
+        number_format(getPriceBill()[1]),
+        getPriceBill()[2],
+        getPriceBill()[3],
+        number_format(getPriceBill()[4]),
+        fetchPhoneAddress()
+    ];
     print_r(json_encode($arrayResponse));
 }
-?>
