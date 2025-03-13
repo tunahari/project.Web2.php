@@ -170,33 +170,33 @@ $(document).ready(function() {
             },300)
         })
     }
-    
-    /* Tạo mới một sản phẩm */
-    $('.Chat__Left__Create__Product').click(function() {
-        var limitProduct =$('.select__product__option__selected').text().trim()
-        var pageProduct = $('.pagination__product__item.active').attr('value')
-        var queryProduct = $('#search__product__input').val().trim()
-        var sortIDProduct = $('#sort__product__id').attr('value').trim()
-        var sortDateProduct = $('#sort__product__date').attr('value').trim()
-        var sortPriceProduct =  $('#sort__product__price').attr('value').trim()
-        ClassFuction.getAjaxPost('../../Controller/admin/controller-admin.product.php', {createProduct: 'create-product'}).done(function(response){
-            response = response.trim()
-            if (response !== '' && response === 'create-success') {
-                $('.loading__box').show()
-                setTimeout(function() {
-                    $('.loading__box').hide()
-                    fetchProduct ('fetch-product', limitProduct, pageProduct, queryProduct, sortIDProduct, sortDateProduct, sortPriceProduct)
-                    alertSuccess ('Thêm mới sản phẩm thành công!')
-                },2500)
-            } else {
-                $('.loading__box').show()
-                setTimeout(function() {
-                    $('.loading__box').hide()
-                    alertFailed ('Thêm mới sản phẩm thất bại!')
-                },2500)
-            }
-        })
-    })
+
+    // /* Tạo mới một sản phẩm */
+    // $('.Chat__Left__Create__Product').click(function() {
+    //     var limitProduct =$('.select__product__option__selected').text().trim()
+    //     var pageProduct = $('.pagination__product__item.active').attr('value')
+    //     var queryProduct = $('#search__product__input').val().trim()
+    //     var sortIDProduct = $('#sort__product__id').attr('value').trim()
+    //     var sortDateProduct = $('#sort__product__date').attr('value').trim()
+    //     var sortPriceProduct =  $('#sort__product__price').attr('value').trim()
+    //     ClassFuction.getAjaxPost('../../Controller/admin/controller-admin.product.php', {createProduct: 'create-product'}).done(function(response){
+    //         response = response.trim()
+    //         if (response !== '' && response === 'create-success') {
+    //             $('.loading__box').show()
+    //             setTimeout(function() {
+    //                 $('.loading__box').hide()
+    //                 fetchProduct ('fetch-product', limitProduct, pageProduct, queryProduct, sortIDProduct, sortDateProduct, sortPriceProduct)
+    //                 alertSuccess ('Thêm mới sản phẩm thành công!')
+    //             },2500)
+    //         } else {
+    //             $('.loading__box').show()
+    //             setTimeout(function() {
+    //                 $('.loading__box').hide()
+    //                 alertFailed ('Thêm mới sản phẩm thất bại!')
+    //             },2500)
+    //         }
+    //     })
+    // })
 
     // /* Xóa bớt một chi nhánh */
     $(document).on('click', '.product__action__delete__button', function(e) {

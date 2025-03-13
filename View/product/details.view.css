@@ -784,14 +784,17 @@ img#main-img {
 
 .Details__Page__Content__2__Title {
     width: 100%;
-    padding: 20px;
-    justify-content: space-between;
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    /* justify-content: space-between; */
     font-size: 20px;
     font-weight: 500;
 }
 
 .SpecialTrend__Swipper__Navigation {
     gap: 10px;
+    padding: 10px;
 }
 
 .SpecialTrend__Swipper__Prev,
@@ -889,11 +892,13 @@ img#main-img {
 
 .Details__Page__Content__2__SpecialTrend__Item__Name {
     width: 100%;
+    justify-content: center;
     font-size: 15px;
     font-weight: 500;
 }
 
 .Details__Page__Content__2__SpecialTrend__Item__Star {
+    justify-content: center;
     font-size: 15px;
     gap: 5px;
     color: #ffd840;
@@ -901,6 +906,7 @@ img#main-img {
 }
 
 .Details__Page__Content__2__SpecialTrend__Item__Price__Box {
+    justify-content: center;
     width: 100%;
     gap: 10px;
 }
@@ -920,6 +926,7 @@ img#main-img {
 }
 
 .Details__Page__Content__2__SpecialTrend__Item__Time {
+    justify-content: center;
     font-size: 14px;
     border: 0.5px solid #80808040;
     padding: 7px 15px;

@@ -610,23 +610,7 @@ checkAccountStatusAndRedirect($conn); // Gọi hàm kiểm tra trạng thái
                                         <div class="Details__Page__Content__2__SpecialTrend__Item__NewPrice">'.number_format($newPrice).'</div>
                                         '.$htmlSalePrice.'
                                     </div>
-                                    <div class="Details__Page__Content__2__SpecialTrend__Item__Time">
-                                        <div class="Details__Page__Content__2__SpecialTrend__Item__Time__Icon">
-                                            <i class="fa-solid fa-clock-rotate-left"></i>
-                                        </div>
-                                        <div class="Details__Page__Content__2__SpecialTrend__Item__Time__Date">
-                                            -32:
-                                        </div>
-                                        <div class="Details__Page__Content__2__SpecialTrend__Item__Time__Hour">
-                                            -18:
-                                        </div>
-                                        <div class="Details__Page__Content__2__SpecialTrend__Item__Time__Minute">
-                                            -30:
-                                        </div>
-                                        <div class="Details__Page__Content__2__SpecialTrend__Item__Time__Second">
-                                            -54
-                                        </div>
-                                    </div>
+                                   
                                 </div>
                             </a>
                         ';

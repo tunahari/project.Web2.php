@@ -52,6 +52,7 @@ checkAccountStatusAndRedirect($conn); // Gọi hàm kiểm tra trạng thái
                     <div class="content-order">
                         <div class="order-tittle">
                             <h4>Giỏ Hàng (<?= $CartClass->countProductCart() ?>) </h4>
+                          
                             <div class="createBillBox"></div>
                         </div>
                         <div class="order-details"></div>
@@ -91,11 +92,11 @@ checkAccountStatusAndRedirect($conn); // Gọi hàm kiểm tra trạng thái
                                 </div>
                                 <div class="summary-price-items">
                                     <span class="summary-price-tittle">Thuế VAT, GTGT...</span>
-                                    <span class="summary-price-service" style="color:rgb(164, 156, 8)">10%</span>
+                                    <span class="summary-price-service" style="color:rgb(255, 0, 0)">10%</span>
                                 </div>
                                 <div class="summary-price-items">
                                     <span class="summary-price-tittle">tổng cộng</span>
-                                    <span class="summary-price-details" style="color:rgb(9, 141, 58)" id="totalPriceBill">0 VND</span>
+                                    <span class="summary-price-details" style="color:rgb(0, 25, 250)" id="totalPriceBill">0 VND</span>
                                 </div>
                             </div>
                             <div class="summary-border"></div>
@@ -114,12 +115,14 @@ checkAccountStatusAndRedirect($conn); // Gọi hàm kiểm tra trạng thái
                                 </div>
                             </div>
                             <div class="summary-save"></div>
+                           
                         </div>
                     </div>
 
                 </div>
                 <div class="content-last" id="fetchCheckout"></div>
             </div>
+           
         </div>
 
         <!-- LOADING -->

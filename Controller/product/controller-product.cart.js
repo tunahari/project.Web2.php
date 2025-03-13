@@ -227,6 +227,7 @@ $(document).ready(function () {
       updateQuantityCart(quantityCart + 1, idProduct);
       $($(this).parent().parent().children().get(0)).val(quantityCart + 1); //cập nhật giao diện
   });
+  
 
   // Sự kiện khi giảm số lượng
   $(document).on("click", "#decreaseQuantityRight, #decreaseQuantityLeft", function () {

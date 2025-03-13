@@ -29,12 +29,13 @@ function fetchProduct($limitProduct, $startProduct, $queryProduct)
 
 //////////////////////
 // Hàm hiển thị danh sách sản phẩm trong giỏ hàng
-function fetchCart() {
+function fetchCart()
+{
     global $CustomerClass;
     $CustomerClass->setKH_EmailKhachHang($_SESSION['email']);
     $customerID = $CustomerClass->selectCustomerByEmail()['KH_IDKhachHang'];
     $cartItems = getCartItems($customerID);
-    
+
     $output = '';
     $output .= '
     <ul class="order-lists">
@@ -45,7 +46,7 @@ function fetchCart() {
         <li class="li-xoa">Acction</li>
     </ul>
     <div class="summary-border"></div>';
-    
+
     if (!empty($cartItems)) {
         global $ProductClass;
         foreach ($cartItems as $item) {
@@ -54,17 +55,19 @@ function fetchCart() {
     } else {
         $output .= '<div class="order-row">Giỏ hàng trống</div>';
     }
-    
+
     return $output;
 }
 // Hàm lấy thông tin giỏ hàng để hiển thị
-function getCartItems($customerID) {
+function getCartItems($customerID)
+{
     global $CartClass;
     $CartClass->setGH_IDKhachHang($customerID);
     return $CartClass->selectAllCart();
 }
 //hàm cập nhật lại tổng tiền của từng sản phẩm
-function calculateItemTotalPrice($productID, $quantity) {
+function calculateItemTotalPrice($productID, $quantity)
+{
     global $ProductClass;
     $ProductClass->setSP_IDSanPham($productID);
     $product = $ProductClass->selectProductByID();
@@ -76,7 +79,8 @@ function calculateItemTotalPrice($productID, $quantity) {
 }
 
 // Hàm render HTML cho từng sản phẩm trong giỏ hàng
-function renderCartItem($item, $ProductClass) {
+function renderCartItem($item, $ProductClass)
+{
     $ProductClass->setSP_IDSanPham($item['GH_IDSanPham']);
     $product = $ProductClass->selectProductByID();
     $oldPrice = intval($product['SP_GiaBanSanPham']);
@@ -90,11 +94,15 @@ function renderCartItem($item, $ProductClass) {
     $output = '
     <div class="order-row">
         <div class="order-row-left">
-            <div class="order-row-img">
+        <a class="order-row-img"  href="../../View/product/details.view.php?id-product=' . $product['SP_IDSanPham'] . '">
+            <div class="order-row-img" >
                 <img src="../../Controller/admin/' . $product['SP_Image1SanPham'] . '" alt="">
             </div>
+         </a>
             <div class="order-row-details">
+            <a href="../../View/product/details.view.php?id-product=' . $product['SP_IDSanPham'] . '">
                 <h4>' . $product['SP_TenSanPham'] . '</h4>
+                </a>
                 <div class="row-details-items">
                     <span class="row-items-tittle">Hãng: </span>
                     <span>' . $product['SP_HangSanPham'] . '</span>
@@ -145,12 +153,13 @@ function renderCartItem($item, $ProductClass) {
 
 
 // Hàm trả về thông tin cập nhật số lượng và giá sản phẩm
-function updateItem($productID, $newQuantity, $customerID) {
+function updateItem($productID, $newQuantity, $customerID)
+{
     global $CartClass;
     $CartClass->setGH_IDSanPham($productID);
     $CartClass->setGH_IDKhachHang($customerID);
     $CartClass->setGH_SLSanPhamGioHang($newQuantity);
-    
+
     if ($CartClass->updateQuantityCart()) {
         $newTotalPrice = calculateItemTotalPrice($productID, $newQuantity);
         return json_encode(['newTotalPrice' => number_format($newTotalPrice)]);
@@ -169,7 +178,9 @@ if (isset($_POST['updateItem'])) {
     exit;
 }
 
-// ... (code hiện có) ...
+
+
+
 function fetchCartBill()
 {
     $CustomerClass = new Customer;
@@ -198,7 +209,7 @@ function fetchCartBill()
         $htmlSalePrice =  '<span class="regular-price">' . number_format($oldPrice) . '</span>';
 
         $totalPrice = $listCart[$i]['GH_SLSanPhamGioHang'] * $newPrice;
-        $htmltotalPrice =  '<span class="total-price" data-product-id='.$listCart[$i]['GH_IDSanPham'].'>' .    number_format($totalPrice) . '</span>';
+        $htmltotalPrice =  '<span class="total-price" data-product-id=' . $listCart[$i]['GH_IDSanPham'] . '>' .    number_format($totalPrice) . '</span>';
 
 
         $output .= '
@@ -406,7 +417,7 @@ function getPriceBill()
     $totalSalePrice = 0;
     $VAT = 0.1;
     for ($i = 0; $i < count($listCart); $i++) {
-        
+
         $ProductClass->setSP_IDSanPham($listCart[$i]['GH_IDSanPham']);
         $salePrice = intval($ProductClass->selectProductByID()['SP_GiaBanSanPham']) -
             (intval($ProductClass->selectProductByID()['SP_GiaBanSanPham']) * intval($ProductClass->selectProductByID()['SP_GiamGiaSanPham']) / 100);

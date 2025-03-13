@@ -63,66 +63,59 @@ $(document).ready(function () {
     });
   });
 
-  // $("#updateInfoCustomerForm").on("submit", function (e) {
-  //   // e.preventDefault();
 
-  //   // Lấy giá trị từ các trường input
-  //   const PhoneCustomer = $("#KH_SDTKhachHang").val();
-  //   const AddressCustomer = $("#KH_DiaChiKhachHang").val();
-  //   const EmailCustomer = $("#KH_EmailKhachHang").val();
-  //   const NameCustomer = $("#KH_TenKhachHang").val();
 
-  //   // Kiểm tra ràng buộc dữ liệu
-  //   if (PhoneCustomer == "") {
-  //     alertFailed("Số điện thoại không được để trống");
-  //     return;
-  //   }
-  //   if (AddressCustomer == "") {
-  //     alertFailed("Địa chỉ khách hàng không được để trống");
-  //     return;
-  //   }
-  //   if (EmailCustomer == "") {
-  //     alertFailed("Email khách hàng không được để trống");
-  //     return;
-  //   }
-  //   if (NameCustomer == "") {
-  //     alertFailed("Tên khách hàng không được để trống");
-  //     return;
-  //   }
-
-  //   // Gửi AJAX request
+//////////////Đây là cập nhật có reload trang, ko có ajax
+  // $("#updateInfoCustomerForm").on("submit", function(e) {
+  //   e.preventDefault();
   //   $.ajax({
   //     method: "POST",
   //     url: "../../controller/admin/controller-admin.info-customer.php",
-  //     data: {
-  //       KH_SDTKhachHang: PhoneCustomer,
-  //       KH_DiaChiKhachHang: AddressCustomer,
-  //       KH_EmailKhachHang: EmailCustomer,
-  //       KH_TenKhachHang: NameCustomer,
-  //       // KH_IDKhachHang: $id_customer,
-  //       updateInfoCustomer: true,
-  //     },
-  //     dataType: "json", // Đổi về json nếu server trả json
-  //     success: function (response) {
-  //       console.log(response);
+  //     data: $(this).serialize() + "&updateInfoCustomer=true", //Gửi toàn bộ dữ liệu form
+  //     dataType: "json",
+  //     success: function(response) {
   //       if (response.success) {
-  //         // Gán lại thông tin từ phản hồi
-  //         $("#KH_SDTKhachHang").val(response.data.KH_SDTKhachHang);
-  //         $("#KH_DiaChiKhachHang").val(response.data.KH_DiaChiKhachHang);
-  //         $("#KH_EmailKhachHang").val(response.data.KH_EmailKhachHang);
-  //         $("#KH_TenKhachHang").val(response.data.KH_TenKhachHang);
-  //         console.log(response.data.KH_SDTKhachHang);
-  //         alertSuccess("Cập nhật thông tin khách hàng thành công!");
+  //         alertSuccess(response.message);
+  //         setTimeout(function() {
+  //           location.reload();
+  //         }, 2000);
   //       } else {
-  //         alertFailed("Đã có lỗi xảy ra!");
+  //         alertFailed(response.message);
   //       }
-  //       console.log(error);  
   //     },
-  //     error: function (xhr, status, error) {
-  //       alertFailed("Cập nhật thông tin khách hàng thất bại!");
-       
-  //     },
- 
+  //     error: function(xhr, status, error) {
+  //       alertFailed("Đã xảy ra lỗi khi cập nhật thông tin khách hàng!");
+  //     }
   //   });
   // });
+
+
+
+  //////////Xử lý ajax cập nhật thống tin khách hàng
+  $("#updateInfoCustomerForm").on("submit", function(e) {
+    e.preventDefault();
+    $.ajax({
+        method: "POST",
+        url: "../../controller/admin/controller-admin.info-customer.php",
+        data: $(this).serialize() + "&updateInfoCustomer=true",
+        dataType: "json",
+        success: function(response) {
+            if (response.success) {
+                alertSuccess(response.message);
+                // Cập nhật thông tin trên trang
+                $("#KH_TenKhachHang").val(response.data.KH_TenKhachHang); //Ví dụ cập nhật tên
+                $("#KH_SDTKhachHang").val(response.data.KH_SDTKhachHang); //Ví dụ cập nhật số điện thoại
+                $("#KH_DiaChiKhachHang").val(response.data.KH_DiaChiKhachHang); //Ví dụ cập nhật địa chỉ
+                $("#KH_EmailKhachHang").val(response.data.KH_EmailKhachHang); //Ví dụ cập nhật email
+                //Thêm cập nhật cho các trường khác nếu cần thiết
+            } else {
+                alertFailed(response.message);
+            }
+        },
+        error: function(xhr, status, error) {
+            alertFailed("Đã xảy ra lỗi khi cập nhật thông tin khách hàng!");
+        }
+    });
+});
+
 });
