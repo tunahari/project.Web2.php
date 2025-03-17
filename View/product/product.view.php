@@ -1,11 +1,5 @@
 <?php
-@session_start(); // Bắt đầu session nếu chưa có
-require_once '../../Model/utils.php'; // Đường dẫn đến file utils.php
-require_once '../../Model/database/connectDataBase.php'; // File kết nối database của bạn
-$conn = mysqli_connect('localhost','root','','projectweb2'); // Kết nối database
-// ... phần code còn lại của product.view.php ...
-checkAccountStatusAndRedirect($conn); // Gọi hàm kiểm tra trạng thái
-
+@session_start(); // Make sure sessions are started
 ?>
 
 <!DOCTYPE html>
@@ -25,7 +19,7 @@ checkAccountStatusAndRedirect($conn); // Gọi hàm kiểm tra trạng thái
     <link rel="stylesheet" href="./product.view.css">
     <title>Product Page</title>
 </head>
-
+<!-- 
 <style>
     /* Highlight selected filter items */
     .selected-filter {
@@ -85,7 +79,7 @@ checkAccountStatusAndRedirect($conn); // Gọi hàm kiểm tra trạng thái
     .Product__Page__Content__Left__Filter__Reset:hover {
         background-color: #e0e0e0;
     }
-</style>
+</style> -->
 
 <body>
     <div class="BackGround__Body"></div>
@@ -302,21 +296,8 @@ checkAccountStatusAndRedirect($conn); // Gọi hàm kiểm tra trạng thái
                             <div class="swiper-slide">
                                 <img src="../image/slide.jpg" alt="">
                             </div>
-                            <div class="swiper-slide">
-                                <img src="../image/slide.jpg" alt="">
-                            </div>
-                            <div class="swiper-slide">
-                                <img src="../image/slide.jpg" alt="">
-                            </div>
-                            <div class="swiper-slide">
-                                <img src="../image/slide.jpg" alt="">
-                            </div>
-                            <div class="swiper-slide">
-                                <img src="../image/slide.jpg" alt="">
-                            </div>
+                        
                         </div>
-                        <div class="swiper-button-prev"><i class="fa-solid fa-arrow-left"></i></div>
-                        <div class="swiper-button-next"><i class="fa-solid fa-arrow-right"></i></div>
                     </div>
                     <div class="swiper-pagination"></div>
                 </div>
@@ -565,77 +546,7 @@ checkAccountStatusAndRedirect($conn); // Gọi hàm kiểm tra trạng thái
         </div>
 
         <div class="Product__Page__Content__2">
-            <div class="Product__Page__Content__2__Title">
-                SẢN PHẨM KHUYẾN MÃI
-                <div class="SpecialTrend__Swipper__Navigation">
-                    <div class="SpecialTrend__Swipper__Prev"><i class="fa-solid fa-arrow-left"></i></div>
-                    <div class="SpecialTrend__Swipper__Next"><i class="fa-solid fa-arrow-right"></i></div>
-                </div>
-            </div>
-            <div class="Product__Page__Content__2__SpecialTrend">
-                <div class="Product__Page__Content__2__SpecialTrend__Image">
-                    <img src="../image/Special_Trend_Banner-265x384.jpg" alt="">
-                </div>
-                <div class="Product__Page__Content__2__SpecialTrend__Slide">
-                    <div class="swiper Product__Page__Content__2__SpecialTrend__Swipper">
-                        <div class="swiper-wrapper">
-                            <?php
-                            $saleProducts = $ProductClass->selectSaleProducts();
-                            for ($i = 0; $i < count($saleProducts); $i++) {
-                                $oldPrice = intval($saleProducts[$i]['SP_GiaBanSanPham']);
-                                $newPrice = intval($saleProducts[$i]['SP_GiaBanSanPham']);
-                                $salePrice = intval($saleProducts[$i]['SP_GiamGiaSanPham']);
-                                if ($salePrice === 0) {
-                                    $htmlSalePrice = '';
-                                } else {
-                                    $newPrice = $oldPrice - ($newPrice * $salePrice) / 100;
-                                    $htmlSalePrice =  '<div class="Product__Page__Content__2__SpecialTrend__Item__OldPrice">' . number_format($oldPrice) . '</div>';
-                                }
-                                echo '
-                                    <a href="./details.view.php?id-product=' . $saleProducts[$i]['SP_IDSanPham'] . '" class="swiper-slide SpecialTrend__Swipper__Slide">
-                                        <div class="Product__Page__Content__2__SpecialTrend__Item">
-                                            <div class="Product__Page__Content__2__SpecialTrend__Item__Image">
-                                                <img class="Product__SpecialTrend__Item__Image__1" src="../../Controller/admin/' . $saleProducts[$i]['SP_Image1SanPham'] . '" alt="">
-                                                <img class="Product__SpecialTrend__Item__Image__2" src="../../Controller/admin/' . $saleProducts[$i]['SP_Image1SanPham'] . '" alt="">
-                                            </div>
-                                            <div class="Product__Page__Content__2__SpecialTrend__Item__Name">' . $saleProducts[$i]['SP_TenSanPham'] . '</div>
-                                            <div class="Product__Page__Content__2__SpecialTrend__Item__Star">
-                                                <i class="fas fa-star"></i>
-                                                <i class="fas fa-star"></i>
-                                                <i class="fas fa-star"></i>
-                                                <i class="fas fa-star"></i>
-                                                <i class="fas fa-star"></i>
-                                            </div>
-                                            <div class="Product__Page__Content__2__SpecialTrend__Item__Price__Box">
-                                                <div class="Product__Page__Content__2__SpecialTrend__Item__NewPrice">' . number_format($newPrice) . '</div>
-                                                ' . $htmlSalePrice . '
-                                            </div>
-                                            <div class="Product__Page__Content__2__SpecialTrend__Item__Time">
-                                                <div class="Product__Page__Content__2__SpecialTrend__Item__Time__Icon">
-                                                    <i class="fa-solid fa-clock-rotate-left"></i>
-                                                </div>
-                                                <div class="Product__Page__Content__2__SpecialTrend__Item__Time__Date">
-                                                    -32:
-                                                </div>
-                                                <div class="Product__Page__Content__2__SpecialTrend__Item__Time__Hour">
-                                                    -18:
-                                                </div>
-                                                <div class="Product__Page__Content__2__SpecialTrend__Item__Time__Minute">
-                                                    -30:
-                                                </div>
-                                                <div class="Product__Page__Content__2__SpecialTrend__Item__Time__Second">
-                                                    -54
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </a>
-                                    ';
-                            }
-                            ?>
-                        </div>
-                    </div>
-                </div>
-            </div>
+       
 
             <div class="Product__Page__Content__2__ShopNow">
                 <?php
@@ -797,10 +708,10 @@ checkAccountStatusAndRedirect($conn); // Gọi hàm kiểm tra trạng thái
 
         <!-- LOADING -->
         <div class="loading__bg"></div>
-        <div class="loading__box">
+        <!-- <div class="loading__box">
             <p>Đang Thực Hiện...</p>
             <div class="loading"></div>
-        </div>
+        </div> -->
         <!-- ALERT NOTIFY SUCCESS -->
         <div class="alert__notify__box__success">
             <div class="alert__notify__box__success__close"><i class="fa-solid fa-xmark"></i></div>
@@ -1126,7 +1037,6 @@ checkAccountStatusAndRedirect($conn); // Gọi hàm kiểm tra trạng thái
 </body>
 
 </html>
-<script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
 <script src="./product.view.js"></script>
 <script src="../../Controller/class/controller.function.js"></script>
 <script src="../../Controller/class/controller.validate.js"></script>

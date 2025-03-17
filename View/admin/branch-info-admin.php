@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -13,25 +14,26 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <title>Thông Tin Chi Nhánh</title>
 </head>
+
 <body>
     <div class="main">
         <?php include './include.header.php'; ?>
         <div class="containers">
             <?php include './include.menu.php'; ?>
             <?php
-                if (isset($_GET['id-branch'])) {
-                    include '../../Model/admin/model-admin.branch.php';
-                    $BranchClass = new Branch;
-                    $BranchClass->setCN_IDChiNhanh($_GET['id-branch']);
-                    $CN_IDChiNhanh = $BranchClass->selectBranchByID()['CN_IDChiNhanh'];
-                    $CN_TenChiNhanh = $BranchClass->selectBranchByID()['CN_TenChiNhanh'];
-                    $CN_DiaChiChiNhanh = $BranchClass->selectBranchByID()['CN_DiaChiChiNhanh'];
-                    $CN_HotLineChiNhanh = $BranchClass->selectBranchByID()['CN_HotLineChiNhanh'];
-                    $CN_NgayThanhLapChiNhanh = $BranchClass->selectBranchByID()['CN_NgayThanhLapChiNhanh'];
-                    $CN_IDQuanLyChiNhanh = "NV" . $BranchClass->selectBranchByID()['CN_IDQuanLyChiNhanh'];
-                    $CN_NgayTaoChiNhanh = $BranchClass->selectBranchByID()['CN_NgayTaoChiNhanh'];
-                    $CN_GhiChuChiNhanh = $BranchClass->selectBranchByID()['CN_GhiChuChiNhanh'];
-                }
+            if (isset($_GET['id-branch'])) {
+                include '../../Model/admin/model-admin.branch.php';
+                $BranchClass = new Branch;
+                $BranchClass->setCN_IDChiNhanh($_GET['id-branch']);
+                $CN_IDChiNhanh = $BranchClass->selectBranchByID()['CN_IDChiNhanh'];
+                $CN_TenChiNhanh = $BranchClass->selectBranchByID()['CN_TenChiNhanh'];
+                $CN_DiaChiChiNhanh = $BranchClass->selectBranchByID()['CN_DiaChiChiNhanh'];
+                $CN_HotLineChiNhanh = $BranchClass->selectBranchByID()['CN_HotLineChiNhanh'];
+                $CN_NgayThanhLapChiNhanh = $BranchClass->selectBranchByID()['CN_NgayThanhLapChiNhanh'];
+                $CN_IDQuanLyChiNhanh = "NV" . $BranchClass->selectBranchByID()['CN_IDQuanLyChiNhanh'];
+                $CN_NgayTaoChiNhanh = $BranchClass->selectBranchByID()['CN_NgayTaoChiNhanh'];
+                $CN_GhiChuChiNhanh = $BranchClass->selectBranchByID()['CN_GhiChuChiNhanh'];
+            }
             ?>
             <div class="Branch__Info__Container">
                 <div class="Branch__Info__Form">
@@ -60,12 +62,68 @@
                             <div class="Branch__Info__Error">Input invalid, please check again</div>
                         </div>
                         <div class="Branch__Info__Form__Row__Item">
-                            <label for="CN_IDQuanLyChiNhanh__Input">ID Quản Lý Chi Nhánh:</label>
-                            <input class="ChiNhanh__Input__Class" id="CN_IDQuanLyChiNhanh__Input" type="text" value="<?php echo $CN_IDQuanLyChiNhanh; ?>">
+                            <style>
+                                select#CN_IDQuanLyChiNhanh__Input {
+                                    display: block !important;
+                                    /* Đảm bảo nó hiển thị */
+                                }
+
+                                select,
+                                input {
+                                    width: 100%;
+                                    /* Độ rộng bằng nhau */
+                                    height: 40px;
+                                    /* Chiều cao đồng nhất */
+                                    border: -1px solid #00FA9A;
+                                    /* Viền xanh lá */
+                                    border-radius: 5px;
+                                    /* Bo góc */
+                                    background-color: #060818;
+                                    /* Nền đen (theo ảnh) */
+                                    color: white;
+                                    /* Chữ trắng */
+                                    padding: 5px;
+                                    /* Khoảng cách bên trong */
+                                    cursor: pointer;
+                                }
+
+                                /* Căn chỉnh option */
+                                option {
+                                    background-color: white;
+                                    color: black;
+                                }
+                            </style>
+
+                            <label for="CN_IDQuanLyChiNhanh__Input">NV Quản lý chi nhánh</label>
+                            <select class="ChiNhanh__Input__Class" id="CN_IDQuanLyChiNhanh__Input">
+                                <option disabled selected>Chọn Nhân Viên</option>
+                                <?php
+                                // Kết nối database
+                                $conn = mysqli_connect('localhost', 'root', '', 'projectweb2');
+                                if (!$conn) {
+                                    die("Kết nối không thành công: " . mysqli_connect_error());
+                                }
+
+                                // Truy vấn danh sách nhân viên
+                                $sql = "SELECT * FROM employee";
+                                $result = mysqli_query($conn, $sql);
+
+                                while ($row = mysqli_fetch_assoc($result)) {
+                                    $employee_code_show = "NV" . $row['NV_IDNhanVien'] . " - ".$row['NV_TenNhanVien'] ;
+                                    $employee_code = "NV" . $row['NV_IDNhanVien'] ; // Tạo mã nhân viên NV1, NV2...
+                                    $selected = ($CN_IDQuanLyChiNhanh == $employee_code) ? 'selected' : '';
+                                    echo "<option value='$employee_code' $selected>$employee_code_show</option>";
+                                }
+
+                                // Đóng kết nối
+                                mysqli_close($conn);
+                                ?>
+                            </select>
+
                             <div class="Branch__Info__Error">Input invalid, please check again</div>
                         </div>
                         <div class="Branch__Info__Form__Row__Item">
-                            <label for="CN_HotLineChiNhanh__Input">Số Điện Thoại:</label>
+                            <label for="CN_HotLineChiNhanh__Input">HotLine Chi nhánh: </label>
                             <input class="ChiNhanh__Input__Class" id="CN_HotLineChiNhanh__Input" type="text" value="<?php echo $CN_HotLineChiNhanh; ?>">
                             <div class="Branch__Info__Error">Input invalid, please check again</div>
                         </div>
@@ -117,8 +175,8 @@
                 </div>
             </div>
         </div>
-    </div>                
-    
+    </div>
+
     <!-- LOADING -->
     <div class="loading__box">
         <p>Đang Thực Hiện...</p>
@@ -126,33 +184,34 @@
     </div>
     <!-- ALERT NOTIFY SUCCESS -->
     <div class="alert__notify__box__success">
-            <div class="alert__notify__box__success__close"><i class="fa-solid fa-xmark"></i></div>
-            <div class="alert__notify__box__success__left">
-                <div class="alert__notify__box__success__left__icon">
-                    <i class="fa-solid fa-circle-check"></i>
-                </div>
+        <div class="alert__notify__box__success__close"><i class="fa-solid fa-xmark"></i></div>
+        <div class="alert__notify__box__success__left">
+            <div class="alert__notify__box__success__left__icon">
+                <i class="fa-solid fa-circle-check"></i>
             </div>
-            <div class="alert__notify__box__success__right">
-                <div class="alert__notify__box__success__right__title">Thành Công</div>
-                <div class="alert__notify__box__success__right__content"></div>
-            </div>
-            <div class="alert__notify__box__success__progress"></div>
         </div>
-        <!-- ALERT NOTIFY Failed -->
-        <div class="alert__notify__box__failed">
-            <div class="alert__notify__box__failed__close"><i class="fa-solid fa-xmark"></i></div>
-            <div class="alert__notify__box__failed__left">
-                <div class="alert__notify__box__failed__left__icon">
-                    <i class="fa-solid fa-circle-xmark"></i>
-                </div>
-            </div>
-            <div class="alert__notify__box__failed__right">
-                <div class="alert__notify__box__failed__right__title">Thất Bại</div>
-                <div class="alert__notify__box__failed__right__content"></div>
-            </div>
-            <div class="alert__notify__box__failed__progress"></div>
+        <div class="alert__notify__box__success__right">
+            <div class="alert__notify__box__success__right__title">Thành Công</div>
+            <div class="alert__notify__box__success__right__content"></div>
         </div>
+        <div class="alert__notify__box__success__progress"></div>
+    </div>
+    <!-- ALERT NOTIFY Failed -->
+    <div class="alert__notify__box__failed">
+        <div class="alert__notify__box__failed__close"><i class="fa-solid fa-xmark"></i></div>
+        <div class="alert__notify__box__failed__left">
+            <div class="alert__notify__box__failed__left__icon">
+                <i class="fa-solid fa-circle-xmark"></i>
+            </div>
+        </div>
+        <div class="alert__notify__box__failed__right">
+            <div class="alert__notify__box__failed__right__title">Thất Bại</div>
+            <div class="alert__notify__box__failed__right__content"></div>
+        </div>
+        <div class="alert__notify__box__failed__progress"></div>
+    </div>
 </body>
+
 </html>
 <script src="../../Controller/class/controller.function.js"></script>
 <script src="../../Controller/class/controller.validate.js"></script>
@@ -162,19 +221,20 @@
 <script>
     $(document).ready(function() {
         const Fuction = new HandlingFunctions();
-        function checkPower () {
+
+        function checkPower() {
             Fuction.getAjaxPost('../../Controller/admin/controller-admin.checkpower.php', {
                 checkPower: 'check-power'
-            }).done(function(response){
-               if (response.trim() === '-1' || response.trim() === '0' || response.trim() === '1') {
+            }).done(function(response) {
+                if (response.trim() === '-1' || response.trim() === '0' || response.trim() === '1') {
                     Fuction.getAjaxPost('../../Controller/admin/controller-admin.logout.php', {
                         logoutAdmin: 'log-out-admin'
-                    }).done(function(response){
+                    }).done(function(response) {
                         if (response.trim() === 'logout-success') {
                             window.location = './login-admin.php'
                         }
                     });
-               }
+                }
             });
         }
         checkPower()

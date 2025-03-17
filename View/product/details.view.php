@@ -3,14 +3,8 @@
 if (!isset($_GET['id-product']) || empty($_GET['id-product'])) {
     ///header('location: ./product.view.php');
 } 
-
-require_once '../../Model/utils.php'; // Đường dẫn đến file utils.php
-require_once '../../Model/database/connectDataBase.php'; // File kết nối database của bạn
-$conn = mysqli_connect('localhost','root','','projectweb2'); // Kết nối database
-// ... phần code còn lại của product.view.php ...
-checkAccountStatusAndRedirect($conn); // Gọi hàm kiểm tra trạng thái
-
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -43,7 +37,7 @@ checkAccountStatusAndRedirect($conn); // Gọi hàm kiểm tra trạng thái
             $SP_GiaNhapSanPham = $ProductClass->selectProductByID ()['SP_GiaNhapSanPham'];
             $SP_GiamGiaSanPham = $ProductClass->selectProductByID ()['SP_GiamGiaSanPham'];
             $SP_ThoiGianTaoSanPham = $ProductClass->selectProductByID ()['SP_ThoiGianTaoSanPham'];
-            $SP_TonKhoSanPham = $ProductClass->selectProductByID ()['SP_TonKhoSanPham'];
+
             $SP_TongNhapSanPham = $ProductClass->selectProductByID ()['SP_TongNhapSanPham'];
             $SP_TongBanSanPham = $ProductClass->selectProductByID ()['SP_TongBanSanPham'];
             $SP_BaoHanhSanPham = $ProductClass->selectProductByID ()['SP_BaoHanhSanPham'];
@@ -104,245 +98,7 @@ checkAccountStatusAndRedirect($conn); // Gọi hàm kiểm tra trạng thái
                 <span>Đóng</span>
             </div>
             <div class="quickview-blur"></div>
-            <div class="quickview-wrapper">
-                <div class="quickview-details">
-                    <div class="quickview-tittle">THÔNG TIN KỸ THUẬT</div>
-                    <div class="quickview-details-img">
-                        <img src="./img/cautruc-ip12.png" alt="">
-                    </div>
-                    <div class="quickview-details-info">
-                        <div class="quickview-info-items">
-                            <div class="quickview-info-tittle">
-                                <span>Màn hình</span>
-                            </div>
-                            <div class="quickview-info-import">
-                                <div class="quickview-import-items">
-                                    <span class="import-content-left">Công nghệ màn hình :</span>
-                                    <div class="import-content-right"><?php echo $SP_CongNgheManHinhSanPham ?></div>
-                                </div>
-                                <div class="quickview-import-items">
-                                    <span class="import-content-left">Độ phân giải:</span>
-                                    <div class="import-content-right"><?php echo $SP_DoPhanGiaiSanPham ?></div>
-                                </div>
-                                <div class="quickview-import-items">
-                                    <span class="import-content-left">Màn hình rộng:</span>
-                                    <div class="import-content-right"><?php echo $SP_KichThuocManHinhSanPham ?></div>
-                                </div>
-                                <div class="quickview-import-items">
-                                    <span class="import-content-left">Độ sáng tối đa:</span>
-                                    <div class="import-content-right"><?php echo $SP_DoSangToiDaSanPham ?></div>
-                                </div>
-                                <div class="quickview-import-items">
-                                    <span class="import-content-left">Mặt kính cảm ứng:</span>
-                                    <div class="import-content-right"><?php echo $SP_MatKinhCamUngManHinhSanPham ?></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="quickview-info-items">
-                            <div class="quickview-info-tittle">
-                                <span>Camera Sau</span>
-                            </div>
-                            <div class="quickview-info-import">
-                                <div class="quickview-import-items">
-                                    <span class="import-content-left">Độ phân giải :</span>
-                                    <div class="import-content-right"><?php echo $SP_DoPhanGiaiCMRTruocSanPham ?></div>
-                                </div>
-                                <div class="quickview-import-items">
-                                    <span class="import-content-left">Đèn Flash:</span>
-                                    <div class="import-content-right"><?php echo $SP_DenFlashSanPham ?></div>
-                                </div>
-                                <div class="quickview-import-items">
-                                    <span class="import-content-left">Mặt kính cảm ứng:</span>
-                                    <div class="import-content-right"><?php echo $SP_MatKinhCamUngCMRSauSanPham ?></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="quickview-info-items">
-                            <div class="quickview-info-tittle">
-                                <span>Camera trước</span>
-                            </div>
-                            <div class="quickview-info-import">
-                                <div class="quickview-import-items">
-                                    <span class="import-content-left">Độ phân giải :</span>
-                                    <div class="import-content-right"><?php echo $SP_DoPhanGiaiCMRSauSanPham ?></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="quickview-info-items">
-                            <div class="quickview-info-tittle">
-                                <span>Hệ điều hành & CPU</span>
-                            </div>
-                            <div class="quickview-info-import">
-                                <div class="quickview-import-items">
-                                    <span class="import-content-left">Hệ điều hành:</span>
-                                    <div class="import-content-right"><?php echo $SP_HeDieuHanhSanPham ?></div>
-                                </div>
-                                <div class="quickview-import-items">
-                                    <span class="import-content-left">Chip xử lý (CPU):</span>
-                                    <div class="import-content-right"><?php echo $SP_CPUSanPham ?></div>
-                                </div>
-                                <div class="quickview-import-items">
-                                    <span class="import-content-left">Tốc độ CPU:</span>
-                                    <div class="import-content-right"><?php echo $SP_TocDoCPUSanPham ?></div>
-                                </div>
-                                <div class="quickview-import-items">
-                                    <span class="import-content-left">Chip đồ họa (GPU):</span>
-                                    <div class="import-content-right"><?php echo $SP_GPUSanPham ?></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="quickview-info-items">
-                            <div class="quickview-info-tittle">
-                                <span>Bộ nhớ & Lưu trữ</span>
-                            </div>
-                            <div class="quickview-info-import">
-                                <div class="quickview-import-items">
-                                    <span class="import-content-left">RAM:</span>
-                                    <div class="import-content-right"><?php echo $SP_RAMSanPham ?>GB</div>
-                                </div>
-                                <div class="quickview-import-items">
-                                    <span class="import-content-left">ROM:</span>
-                                    <div class="import-content-right"><?php echo $SP_ROMSanPham ?>GB</div>
-                                </div>
-                                <div class="quickview-import-items">
-                                    <span class="import-content-left">Bộ nhớ còn lại (khả dụng):</span>
-                                    <div class="import-content-right"><?php 
-                                    if ($SP_BoNhoKhaDungSanPham === 'Chưa cập nhật') {
-                                        echo 'Chưa cập nhật';
-                                    } else {
-                                        echo 'Khoảng ' . $SP_BoNhoKhaDungSanPham . ' GB';
-                                    }
-                                    ?></div>
-                                </div>
-                                <div class="quickview-import-items">
-                                    <span class="import-content-left">Danh bạ:</span>
-                                    <div class="import-content-right"><?php echo $SP_DanhBaSanPham ?></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="quickview-info-items">
-                            <div class="quickview-info-tittle">
-                                <span>Kết nối</span>
-                            </div>
-                            <div class="quickview-info-import">
-                                <div class="quickview-import-items">
-                                    <span class="import-content-left">Mạng di động:</span>
-                                    <div class="import-content-right"><?php echo $SP_MangDiDongSanPham ?></div>
-                                </div>
-                                <div class="quickview-import-items">
-                                    <span class="import-content-left">SIM:</span>
-                                    <div class="import-content-right"><?php echo $SP_SIMSanPham ?></div>
-                                </div>
-                                <div class="quickview-import-items">
-                                    <span class="import-content-left">Wifi:</span>
-                                    <div class="import-content-right"><?php echo $SP_WifiSanPham ?></div>
-                                </div>
-                                <div class="quickview-import-items">
-                                    <span class="import-content-left">GPS:</span>
-                                    <div class="import-content-right"><?php echo $SP_GPSSanPham ?></div>
-                                </div>
-                                <div class="quickview-import-items">
-                                    <span class="import-content-left">Bluetooth:</span>
-                                    <div class="import-content-right"><?php echo $SP_BluetoothSanPham ?></div>
-                                </div>
-                                <div class="quickview-import-items">
-                                    <span class="import-content-left">Cổng kết nối/sạc:</span>
-                                    <div class="import-content-right"><?php echo $SP_CongKetNoiSanPham ?></div>
-                                </div>
-                                <div class="quickview-import-items">
-                                    <span class="import-content-left">Jack tai nghe:</span>
-                                    <div class="import-content-right"><?php echo $SP_JackTaiNgheSanPham ?></div>
-                                </div>
-                                <div class="quickview-import-items">
-                                    <span class="import-content-left">Kết nối khác:</span>
-                                    <div class="import-content-right"><?php echo $SP_KetNoiKhacSanPham ?></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="quickview-info-items">
-                            <div class="quickview-info-tittle">
-                                <span>Pin & Sạc</span>
-                            </div>
-                            <div class="quickview-info-import">
-                                <div class="quickview-import-items">
-                                    <span class="import-content-left">Dung lượng pin:</span>
-                                    <div class="import-content-right"><?php echo $SP_DungLuongPinSanPham ?></div>
-                                </div>
-                                <div class="quickview-import-items">
-                                    <span class="import-content-left">Loại pin:</span>
-                                    <div class="import-content-right"><?php echo $SP_LoaiPinSanPham ?></div>
-                                </div>
-                                <div class="quickview-import-items">
-                                    <span class="import-content-left">Hỗ trợ sạc tối đa:</span>
-                                    <div class="import-content-right"><?php echo $SP_HoTroSacToiDaSanPham ?></div>
-                                </div>
-                                <div class="quickview-import-items">
-                                    <span class="import-content-left">Công nghệ pin:</span>
-                                    <div class="import-content-right"><?php echo $SP_CongNghePinSanPham ?></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="quickview-info-items">
-                            <div class="quickview-info-tittle">
-                                <span>Tiện ích</span>
-                            </div>
-                            <div class="quickview-info-import">
-                                <div class="quickview-import-items">
-                                    <span class="import-content-left">Bảo mật nâng cao:</span>
-                                    <div class="import-content-right"><?php echo $SP_BaoMatNangCaoSanPham ?></div>
-                                </div>
-                                <div class="quickview-import-items">
-                                    <span class="import-content-left">Tính năng đặc biệt:</span>
-                                    <div class="import-content-right"><?php echo $SP_TinhNangDacBietSanPham ?></div>
-                                </div>
-                                <div class="quickview-import-items">
-                                    <span class="import-content-left">Kháng nước, bụi:</span>
-                                    <div class="import-content-right"><?php echo $SP_KhangNuocBuiSanPham ?></div>
-                                </div>
-                                <div class="quickview-import-items">
-                                    <span class="import-content-left">Xem phim:</span>
-                                    <div class="import-content-right"><?php echo $SP_XemPhimSanPham ?></div>
-                                </div>
-                                <div class="quickview-import-items">
-                                    <span class="import-content-left">Ghi âm:</span>
-                                    <div class="import-content-right"><?php echo $SP_GhiAmSanPham ?></div>
-                                </div>
-                                <div class="quickview-import-items">
-                                    <span class="import-content-left">Nghe nhạc:</span>
-                                    <div class="import-content-right"><?php echo $SP_NgheNhacSanPham ?></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="quickview-info-items">
-                            <div class="quickview-info-tittle">
-                                <span>Thông tin chung</span>
-                            </div>
-                            <div class="quickview-info-import">
-                                <div class="quickview-import-items">
-                                    <span class="import-content-left">Thiết kế:</span>
-                                    <div class="import-content-right"><?php echo $SP_ThietKeSanPham ?></div>
-                                </div>
-                                <div class="quickview-import-items">
-                                    <span class="import-content-left">Chất liệu:</span>
-                                    <div class="import-content-right"><?php echo $SP_ChatLieuSanPham ?></div>
-                                </div>
-                                <div class="quickview-import-items">
-                                    <span class="import-content-left">Kích thước:</span>
-                                    <div class="import-content-right"><?php echo $SP_KichThuocManHinhSanPham ?></div>
-                                </div>
-                                <div class="quickview-import-items">
-                                    <span class="import-content-left">Khối lượng:</span>
-                                    <div class="import-content-right"><?php echo $SP_KhoiLuongSanPham ?></div>
-                                </div>
-                                <div class="quickview-import-items">
-                                    <span class="import-content-left">Thời điểm ra mắt:</span>
-                                    <div class="import-content-right"><?php echo date($SP_ThoiDiemRaMatSanPham) ?></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+
         </div>
         <div class="content">
             <div class="content-tittle">
@@ -402,13 +158,7 @@ checkAccountStatusAndRedirect($conn); // Gọi hàm kiểm tra trạng thái
                             <div class="right-description-items">
                                 <span class="description-items-tittle">Tình trạng:</span>
                                 <span class="description-items-details">
-                                    <?php
-                                    if (intval($SP_TonKhoSanPham) > 0) {
-                                        echo 'Còn Hàng';
-                                    } else {
-                                        echo 'Hết Hàng';
-                                    }
-                                    ?>
+                               New 100%
                                 </span>
                             </div>
                             <div class="right-description-items">
@@ -490,7 +240,7 @@ checkAccountStatusAndRedirect($conn); // Gọi hàm kiểm tra trạng thái
                     </div>
                     <div class="content-bottom-desciption">
                         <div class="bottom-description">
-                            <div class="content-bottom-desciption-open">Chi tiết</div>
+                            <div style="display: none;" class="content-bottom-desciption-open">Chi tiết</div>
                             <div class="bottom-description--items">
                                 <strong>Revolutionary multi-touch interface.</strong>
                                 <p>iPod touch features the same multi-touch screen technology as iPhone. Pinch to zoom
@@ -535,7 +285,7 @@ checkAccountStatusAndRedirect($conn); // Gọi hàm kiểm tra trạng thái
                                     <i class='bx bxs-star'></i>
                                 </div>
                             </div>
-                            <form action="" class="review-form">
+                            <form class="review-form">
                                 <h5>Viết Bình Luận</h5>
                                 <div class="form-review-content">
                                     <textarea type="text" id="input-content"> </textarea>
@@ -561,71 +311,21 @@ checkAccountStatusAndRedirect($conn); // Gọi hàm kiểm tra trạng thái
                                     </div>
                                     <span class="rating-form-items">Rất Tốt</span>
                                 </div>
-                                <button class="submit-form">Đăng lên</button>
+                                <button type="button" class="submit-form">Đăng lên</button>
                             </form>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="Details__Page__Content__2__Title">
-            SẢN PHẨM LIÊN QUAN
-            <div class="SpecialTrend__Swipper__Navigation">
-                <div class="SpecialTrend__Swipper__Prev"><i class="fa-solid fa-arrow-left"></i></div>
-                <div class="SpecialTrend__Swipper__Next"><i class="fa-solid fa-arrow-right"></i></div>
-            </div>
-        </div>
-        <div class="Details__Page__Content__2__SpecialTrend__Slide">
-            <div class="swiper Details__Page__Content__2__SpecialTrend__Swipper">
-                <div class="swiper-wrapper">
-                    <?php
-                    $relatedProducts = $ProductClass->selectRelatedProducts ($SP_HangSanPham, $SP_IDSanPham);
-                    for ($i = 0; $i < count($relatedProducts); $i++) {
-                        $oldPrice = intval($relatedProducts[$i]['SP_GiaBanSanPham']);
-                        $newPrice = intval($relatedProducts[$i]['SP_GiaBanSanPham']);
-                        $salePrice = intval($relatedProducts[$i]['SP_GiamGiaSanPham']);
-                        if ($salePrice === 0) {
-                            $htmlSalePrice = '';
-                        } else {
-                            $newPrice = $oldPrice - ($newPrice * $salePrice) / 100;
-                            $htmlSalePrice =  '<div class="Details__Page__Content__2__SpecialTrend__Item__OldPrice">'.number_format($oldPrice).'</div>';
-                        }
-                        echo '
-                            <a href="./details.view.php?id-product='.$relatedProducts[$i]['SP_IDSanPham'].'" class="swiper-slide SpecialTrend__Swipper__Slide">
-                                <div class="Details__Page__Content__2__SpecialTrend__Item">
-                                    <div class="Details__Page__Content__2__SpecialTrend__Item__Icon__Group"></div>
-                                    <div class="Details__Page__Content__2__SpecialTrend__Item__Image">
-                                        <img class="Product__SpecialTrend__Item__Image__1" src="../../Controller/admin/'.$relatedProducts[$i]['SP_Image1SanPham'].'" alt="">
-                                        <img class="Product__SpecialTrend__Item__Image__2" src="../../Controller/admin/'.$relatedProducts[$i]['SP_Image2SanPham'].'" alt="">
-                                    </div>
-                                    <div class="Details__Page__Content__2__SpecialTrend__Item__Name">'.$relatedProducts[$i]['SP_TenSanPham'].'</div>
-                                    <div class="Details__Page__Content__2__SpecialTrend__Item__Star">
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                    </div>
-                                    <div class="Details__Page__Content__2__SpecialTrend__Item__Price__Box">
-                                        <div class="Details__Page__Content__2__SpecialTrend__Item__NewPrice">'.number_format($newPrice).'</div>
-                                        '.$htmlSalePrice.'
-                                    </div>
-                                   
-                                </div>
-                            </a>
-                        ';
-                    }
-                    ?>
-                </div>
-            </div>
-        </div>
+
     </div>
     <!-- LOADING -->
     <div class="loading__bg"></div>
-        <div class="loading__box">
+        <!-- <div class="loading__box">
             <p>Đang Thực Hiện...</p>
             <div class="loading"></div>
-        </div>
+        </div> -->
         <!-- ALERT NOTIFY SUCCESS -->
         <div class="alert__notify__box__success">
             <div class="alert__notify__box__success__close"><i class="fa-solid fa-xmark"></i></div>
@@ -658,7 +358,7 @@ checkAccountStatusAndRedirect($conn); // Gọi hàm kiểm tra trạng thái
 </body>
 
 </html>
-<script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+<!-- <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script> -->
 <script src="./details.view.js"></script>
 <script src="../../Controller/class/controller.function.js"></script>
 <script src="../../Controller/class/controller.validate.js"></script>

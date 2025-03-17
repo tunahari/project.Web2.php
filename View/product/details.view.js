@@ -23,53 +23,53 @@ var swiper = new Swiper(".Details__Page__Content__2__SpecialTrend__Swipper", {
   }) 
 
 
-$(document).ready(function() {
-    // Hiện chi tiết sản phẩm
-    $('.content-bottom-desciption-open').click(function() {
-        $('.quickview').addClass('active')
-    })
-    $('.quickview-close').click(function() {
-        $('.quickview').removeClass('active')
-    })
-    $('.quickview-blur').click(function() {
-        $('.quickview').removeClass('active')
-    })
-    $('.bottom-reviews').hide()
-    $('.bottom-tittle-review').removeClass('active')
-    $('.bottom-description').show()
-    $('.bottom-tittle-desc').addClass('active')
-    $('.bottom-tittle-desc').click(function() {
-        $('.bottom-reviews').hide()
-        $('.bottom-description').show()
-        $('.bottom-tittle-desc').addClass('active')
-        $('.bottom-tittle-review').removeClass('active')
-    })
-    $('.bottom-tittle-review').click(function() {
-        $('.bottom-description').hide()
-        $('.bottom-reviews').show()
-        $('.bottom-tittle-review').addClass('active')
-        $('.bottom-tittle-desc').removeClass('active')
-    })
-    $('.review-button').click(function() {
-        $('html, body').animate({
-            scrollTop: $('.content-bottom-desciption').offset().top - 200
-        }, 1000)
-        $('.bottom-description').hide()
-        $('.bottom-reviews').show()
-        $('.bottom-tittle-review').addClass('active')
-        $('.bottom-tittle-desc').removeClass('active')
-    })
+// $(document).ready(function() {
+//     // Hiện chi tiết sản phẩm
+//     $('.content-bottom-desciption-open').click(function() {
+//         $('.quickview').addClass('active')
+//     })
+//     $('.quickview-close').click(function() {
+//         $('.quickview').removeClass('active')
+//     })
+//     $('.quickview-blur').click(function() {
+//         $('.quickview').removeClass('active')
+//     })
+//     $('.bottom-reviews').hide()
+//     $('.bottom-tittle-review').removeClass('active')
+//     $('.bottom-description').show()
+//     $('.bottom-tittle-desc').addClass('active')
+//     $('.bottom-tittle-desc').click(function() {
+//         $('.bottom-reviews').hide()
+//         $('.bottom-description').show()
+//         $('.bottom-tittle-desc').addClass('active')
+//         $('.bottom-tittle-review').removeClass('active')
+//     })
+//     $('.bottom-tittle-review').click(function() {
+//         $('.bottom-description').hide()
+//         $('.bottom-reviews').show()
+//         $('.bottom-tittle-review').addClass('active')
+//         $('.bottom-tittle-desc').removeClass('active')
+//     })
+//     $('.review-button').click(function() {
+//         $('html, body').animate({
+//             scrollTop: $('.content-bottom-desciption').offset().top - 200
+//         }, 1000)
+//         $('.bottom-description').hide()
+//         $('.bottom-reviews').show()
+//         $('.bottom-tittle-review').addClass('active')
+//         $('.bottom-tittle-desc').removeClass('active')
+//     })
 
-    // Slide sản phẩm
-    $('.details-small-img').click(function() {
-        $('.details-small-img').removeClass('active')
-        $(this).addClass('active')
-        $('.details-main-img img').attr('src', $(this).find('img').attr('src'))
-    })
+//     // Slide sản phẩm
+//     $('.details-small-img').click(function() {
+//         $('.details-small-img').removeClass('active')
+//         $(this).addClass('active')
+//         $('.details-main-img img').attr('src', $(this).find('img').attr('src'))
+//     })
 
-    $('.details-small-img').mousemove(function() {
-        $('.details-small-img').removeClass('active')
-        $(this).addClass('active')
-        $('.details-main-img img').attr('src', $(this).find('img').attr('src'))
-    })
-})
+//     $('.details-small-img').mousemove(function() {
+//         $('.details-small-img').removeClass('active')
+//         $(this).addClass('active')
+//         $('.details-main-img img').attr('src', $(this).find('img').attr('src'))
+//     })
+// })

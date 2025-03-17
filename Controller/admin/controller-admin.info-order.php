@@ -57,11 +57,11 @@
             $OrderClass->setDH_TrangThaiDonHang(3);
             $listProductBill = $OrderClass->selectProductBill();
             $flagNumber = 0;
-            for ($i = 0; $i < count($listProductBill); $i++) {
-                if (intval($listProductBill[$i]['SP_TonKhoSanPham']) === 0) {
-                    $flagNumber++;
-                } 
-            }
+            // for ($i = 0; $i < count($listProductBill); $i++) {
+            //     if (intval($listProductBill[$i]['SP_TonKhoSanPham']) === 0) {
+            //         $flagNumber++;
+            //     } 
+            // }
             if ($flagNumber === 0) {
                 if (intval($OrderClass->selectBillStatus()) === 4) {
                     if ($OrderClass->updateBillStatus()) {

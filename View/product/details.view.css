@@ -380,6 +380,8 @@ button.form-cart i {
 }
 
 .content-bottom-desciption {
+    display: flex;
+    flex-direction: column;
     padding: 40px;
     position: relative;
 }

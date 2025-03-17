@@ -1,11 +1,19 @@
 
 
+<?php
+@session_start(); // Bắt đầu session nếu chưa có
+require_once '../../Model/utils.php'; // Đường dẫn đến file utils.php
+require_once '../../Model/database/connectDataBase.php'; // File kết nối database của bạn
+$conn = mysqli_connect('localhost','root','','projectweb2'); // Kết nối database
+// ... phần code còn lại của product.view.php ...
+checkAccountStatusAndRedirect($conn); // Gọi hàm kiểm tra trạng thái
+?>
 <div class="Product__Page__Header">
     <div class="Product__Page__Header__Top">
         <div class="Product__Page__Header__Top__Logo">
             <div class="Product__Page__Header__Top__Logo__Group">
-                <i href="product/product.view.php" class="fa-solid fa-mobile-screen"></i>
-                SB Moible
+                <i href="../product/product.view.php" class="fa-solid fa-mobile-screen"></i>
+                SB Mobile
             </div>
             <div class="Product__Page__Header__Top__Gift">
                 <i class="fa-solid fa-gift"></i>
@@ -142,6 +150,7 @@
         </div>
     </div>
 </div>
+
 <script>
     $(document).ready(function() {
         const ClassFuction = new HandlingFunctions();

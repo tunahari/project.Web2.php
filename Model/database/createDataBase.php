@@ -1,27 +1,4 @@
 <?php
-/**
- * -------------------------------------------------------------------------------------------------------------------------------------------------------
- * 
- * Đừng quan tâm ở code dưới viết những gì, chỉ làm theo hướng dẫn trên này thôi nha :))
- * Vào PHP My Admin, tạo database tên "projectweb2". 
- * Link trang PHP My Admin: http://localhost/phpmyadmin/index.php?route=/server/databases (Mẹo: Ctrl + Click vào link để mở link luôn)
- * 
- * -------------------------------------------------------------------------------------------------------------------------------------------------------
- * 
- * Sau đó copy link này rồi paste vô trình duyệt, nhấn Enter là nó tạo hết tất cả bảng nha
- * Link trang tạo Bảng: http://localhost/projectweb2/Model/database/createDataBase.php
- * 
- * -------------------------------------------------------------------------------------------------------------------------------------------------------
- * 
- * Một số thông tin đăng nhập:
- * - Trang quản trị: TK là NV1 | MK là Thanhdai123@ | Link trang: http://localhost/projectweb2/View/admin/login-admin.php
- * - Trang sản phẩm: TK là thanhdai003@gmail.com | MK là Thanhdai123@ | Link trang: http://localhost/projectweb2/View/product/login.view.php  
- * 
- * -------------------------------------------------------------------------------------------------------------------------------------------------------
- */
-
-
-
 
 include './connectDataBase.php';
 $ConnectDataBase = new ConnectDataBase;
@@ -308,7 +285,7 @@ $sqlEmployee = '
 
 $stmt = $ConnectDataBase->connectDB()->prepare($sqlEmployee);
 if ($stmt->execute()) {{
-    $arrayTenNhanVien = ['Trương Thành Đại', 'Châu Quốc Thanh', 'Phan Thái Hòa', 'Lê Văn Tâm', 'Nguyễn Minh Long', 'Trần Minh Lâm'];
+    $arrayTenNhanVien = ['Hoàng Tuấn Hải', 'Châu Quốc Thanh', 'Phan Thái Hòa', 'Lê Văn Tâm', 'Nguyễn Minh Long', 'Trần Minh Lâm'];
     $arraySoDienThoaiNhanVien  = ['0391111111', '0392222222', '0393333333', '03914444444', '0395555555', '0396666666'];
     $arrayDiaChiNhanVien  = ['Quận 1, TPHCM', 'Quận 2, TPHCM', 'Quận 3, TPHCM', 'Quận 4, TPHCM', 'Quận 5, TPHCM', 'Quận 6, TPHCM', ];
     $arrayEmailNhanVien  = ['admin001@gmail.com', 'admin002@gmail.com', 'admin003@gmail.com', 'admin004@gmail.com', 'admin005@gmail.com', 'admin006@gmail.com'];
@@ -340,7 +317,7 @@ if ($stmt->execute()) {{
             "Chưa cập nhật",
             "Chưa cập nhật",
             "No",
-            "$2y$10$MWpM6xirQA/j7NdwOUSyieot5wz5HQeKFenM1CoQzbWB9CBnwbx/a",
+            "$2a$10$SSbH5dc.IatS.NsK9EoLcugA.3U9tGLrgDUcENSh.fyZg3FOkNcQO",
             "",
             "Đã xác thực",
             "logout",
@@ -381,7 +358,7 @@ if ($stmt->execute()) {
     '0988888888', '0989999999', '0980000000'];
     $arrayDiaChiKhachHang  = ['Bangkok Thái Lan', 'Bangkok Thái Lan', 'Bangkok Thái Lan', 'Bangkok Thái Lan', 'Bangkok Thái Lan', 
     'Bangkok Thái Lan', 'Bangkok Thái Lan', 'Bangkok Thái Lan', 'Bangkok Thái Lan', 'Bangkok Thái Lan'];
-    $arrayEmailKhachHang  = ['thanhdai003@gmail.com', 'thanhdai16378934@gmail.com', 'customer003@gmail.com', 'customer004@gmail.com',
+    $arrayEmailKhachHang  = ['1@1.1', 'test@test.com', 'customer003@gmail.com', 'customer004@gmail.com',
     'customer005@gmail.com', 'customer006@gmail.com', 'customer007@gmail.com', 'customer008@gmail.com', 'customer009@gmail.com', 
     'customer010@gmail.com',];
 
@@ -399,7 +376,7 @@ if ($stmt->execute()) {
         "logout",
         "Chưa cập nhật",
         "2020-07-15",
-        "$2y$10$MWpM6xirQA/j7NdwOUSyieot5wz5HQeKFenM1CoQzbWB9CBnwbx/a",
+        "$2a$10$SSbH5dc.IatS.NsK9EoLcugA.3U9tGLrgDUcENSh.fyZg3FOkNcQO",
         "No",
         "image/avtdefault.png"
         )';
@@ -441,4 +418,5 @@ CREATE TABLE billdetails (
 ';
 $stmt = $ConnectDataBase->connectDB()->prepare($sqlBillDetails);
 $stmt->execute();
+echo "OKEEEEEE CON BÊ...";
 ?>

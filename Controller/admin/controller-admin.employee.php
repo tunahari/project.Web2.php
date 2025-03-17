@@ -1,9 +1,12 @@
+
 <?php
-    require_once '../../Model/admin/model-admin.employee.php';
     require_once '../../Model/database/connectDataBase.php';
+    require_once '../../Model/admin/model-admin.employee.php';
     require_once '../class/controller.validate.php';
     $EmployeeClass = new Employee;
     $ValidateData = new ValidateData;
+    $ConnectDataBase = new ConnectDataBase; 
+
 
     function fetchEmployee ($limitEmployee, $startEmployee, $queryEmployee, $sortIDEmployee, $sortDateEmployee, $sortPositionEmployee) {
         $EmployeeClass = new Employee;
@@ -185,13 +188,15 @@
         print_r(json_encode($dataResponse));
     }
 
-    if (isset($_POST['createEmployee']) &&  $_POST['createEmployee'] === 'create-employee') {
-        if ($EmployeeClass->insertEmployee()) {
-            echo 'create-success';
-        } else {
-            echo 'create-failed';
-        }
-    }
+    // if (isset($_POST['createEmployee']) &&  $_POST['createEmployee'] === 'create-employee') {
+    //     if ($EmployeeClass->insertEmployee()) {
+    //         echo 'create-success';
+    //     } else {
+    //         echo 'create-failed';
+    //     }
+    // }
+
+    
 
     if (isset($_POST['deleteEmployee']) && $_POST['deleteEmployee'] === 'delete-employee') {
         if (isset($_POST['idEmployeeDelete']) && $_POST['idEmployeeDelete'] !== '') {
@@ -203,4 +208,31 @@
             }
         }
     }
+
+    if (isset($_POST['createEmployee']) && $_POST['createEmployee'] === 'create-employee') {
+        header('Content-Type: application/json');
+    
+        try {
+            $conn = new PDO("mysql:host=localhost;dbname=projectweb2", "root", ""); // Thông tin kết nối
+            $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    
+            $EmployeeClass = new Employee();
+            $result = $EmployeeClass->insertEmployee($conn); // Truyền kết nối vào hàm insertEmployee
+    
+            if ($result['status'] === 'success') {
+                echo json_encode(['status' => 'success', 'employeeId' => $result['employeeId']]);
+            } else {
+                error_log("Lỗi thêm nhân viên: " . $result['error']); // Ghi log lỗi
+                echo json_encode(['status' => 'failed', 'error' => $result['error']]);
+            }
+    
+            $conn = null; // Đóng kết nối
+    
+        } catch (PDOException $e) {
+            error_log("Lỗi cơ sở dữ liệu: " . $e->getMessage());
+            echo json_encode(['status' => 'failed', 'error' => 'Lỗi cơ sở dữ liệu: ' . $e->getMessage()]);
+        }
+    }
+
+
 ?>

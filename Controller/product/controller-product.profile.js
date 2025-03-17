@@ -183,35 +183,35 @@ $(document).ready(function () {
     
     /* ======================= Xử lý hủy đơn hàng đã đặt  ======================= */
     $(document).on('click', '#CancelBill', function () {
-        var cancelBillID = $(this).attr('value')
+        var cancelBillID = $(this).attr('value');
+    
         if (cancelBillID !== '') {
-            ClassFuction.getAjaxPost('../../Controller/admin/controller-admin.order.php', 
-            {
-                cancelBill : 'cancel-bill',
-                cancelBillID : cancelBillID
+            if (confirm("Bạn có chắc chắn muốn hủy đơn hàng HD" + cancelBillID + "?")) { // Thêm confirm ở đây
+                ClassFuction.getAjaxPost('../../Controller/admin/controller-admin.order.php', {
+                    cancelBill: 'cancel-bill',
+                    cancelBillID: cancelBillID
+                }).done(function(response) {
+                    response = response.trim();
+                    if (response === 'success') {
+                        $('.loading__box, .loading__bg').show();
+                        setTimeout(function() {
+                            $('.loading__box, .loading__bg').hide();
+                            alertSuccess('Hủy đơn hàng HD' + cancelBillID + ' thành công');
+                            fetchAllBill();
+                        }, 2500);
+                    } else if (response === 'failed') {
+                        $('.loading__box, .loading__bg').show();
+                        setTimeout(function() {
+                            $('.loading__box, .loading__bg').hide();
+                            alertFailed('Hủy đơn hàng HD' + cancelBillID + ' thất bại');
+                            fetchAllBill();
+                        }, 2500);
+                    }
+                });
             }
-            ).done(function(response){
-                response = response.trim()
-                if (response === 'success') {
-                    $('.loading__box, .loading__bg').show()
-                    setTimeout(function() {
-                        $('.loading__box, .loading__bg').hide()
-                        alertSuccess ('Hủy đơn hàng HD' + cancelBillID + ' thành công')
-                        fetchAllBill ()
-                    },2500)
-                } else if (response === 'failed') {
-                    $('.loading__box, .loading__bg').show()
-                    setTimeout(function() {
-                        $('.loading__box, .loading__bg').hide()
-                        alertFailed ('Hủy đơn hàng HD' + cancelBillID + ' thất bại')
-                        fetchAllBill ()
-                    },2500)
-                }
-            })
-        } else {
-
         }
-    })
+    });
+    
 
     /* ======================= Tạo thông báo ======================= */
 

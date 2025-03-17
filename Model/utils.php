@@ -6,6 +6,7 @@ function checkAccountStatusAndRedirect(){
     global $conn; // You need to make your database connection available globally
 
     if (isset($_SESSION['email'])) {
+        //  var_dump($_SESSION);
         // Retrieve the user's ID (How do you get the user ID from email?  You'll need a query for that).
         $sql = "SELECT KH_IDKhachHang, KH_XoaKhachHang FROM customer WHERE KH_EmailKhachHang = ?";
         $stmt = $conn->prepare($sql); // Use prepared statements to prevent SQL injection!
@@ -28,5 +29,6 @@ function checkAccountStatusAndRedirect(){
         }
         $stmt->close();
     }
+
 }
 ?>

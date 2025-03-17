@@ -136,18 +136,32 @@ class Branch {
         }
     }
 
-    function setDeleteStatusBranchByID () {
+    // function setDeleteStatusBranchByID () {
+    //     $ConnectDataBase = new ConnectDataBase;
+    //     $sql = "UPDATE branch SET CN_DeleteStatusChiNhanh = :CN_DeleteStatusChiNhanh WHERE CN_IDChiNhanh = :CN_IDChiNhanh";
+    //     $stmt = $ConnectDataBase->connectDB()->prepare($sql);
+    //     $stmt->bindParam(':CN_DeleteStatusChiNhanh', $this->CN_DeleteStatusChiNhanh);
+    //     $stmt->bindParam(':CN_IDChiNhanh', $this->CN_IDChiNhanh);
+    //     if ($stmt->execute()) {
+    //         return true;
+    //     } else {
+    //         return false;
+    //     }
+    // }
+    function setDeleteStatusBranchByID() {
         $ConnectDataBase = new ConnectDataBase;
-        $sql = "UPDATE branch SET CN_DeleteStatusChiNhanh = :CN_DeleteStatusChiNhanh WHERE CN_IDChiNhanh = :CN_IDChiNhanh";
+        $sql = "DELETE FROM branch WHERE CN_IDChiNhanh = :CN_IDChiNhanh"; // Changed to DELETE
         $stmt = $ConnectDataBase->connectDB()->prepare($sql);
-        $stmt->bindParam(':CN_DeleteStatusChiNhanh', $this->CN_DeleteStatusChiNhanh);
         $stmt->bindParam(':CN_IDChiNhanh', $this->CN_IDChiNhanh);
         if ($stmt->execute()) {
             return true;
         } else {
+            $errorInfo = $ConnectDataBase->connectDB()->errorInfo();
+            error_log("Error deleting branch: " . print_r($errorInfo, true) . " - SQL: " . $sql); // Log the error
             return false;
         }
     }
+    
 
     function updateInfoBranch () {
         $ConnectDataBase = new ConnectDataBase;

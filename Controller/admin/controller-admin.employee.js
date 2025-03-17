@@ -176,32 +176,64 @@ $(document).ready(function() {
         })
     }
 
+    // /* Tạo mới một nhân viên */
+    // $('.Chat__Left__Create__Employee').click(function() {
+    //     var limitEmployee = $('.select__employee__option__selected').text().trim()
+    //     var pageEmployee = $('.pagination__employee__item.active').attr('value')
+    //     var queryEmployee = $('#search__employee__input').val().trim()
+    //     var sortIDEmployee = $('#sort__employee__id').attr('value').trim()
+    //     var sortDateEmployee = $('#sort__employee__date').attr('value').trim()
+    //     var sortPositionEmployee = $('#sort__employee__position').attr('value').trim()
+    //     ClassFuction.getAjaxPost('../../Controller/admin/controller-admin.employee.php', {createEmployee: 'create-employee'}).done(function(response){
+    //         response = response.trim()
+    //         if (response !== '' && response === 'create-success') {
+    //             $('.loading__box').show()
+    //             setTimeout(function() {
+    //                 $('.loading__box').hide()
+    //                 fetchEmployee ('fetch-employee', limitEmployee, pageEmployee, queryEmployee, sortIDEmployee, sortDateEmployee, sortPositionEmployee)
+    //                 alertSuccess ('Thêm mới nhân viên thành công!')
+    //             },2500)
+    //         } else {
+    //             $('.loading__box').show()
+    //             setTimeout(function() {
+    //                 $('.loading__box').hide()
+    //                 alertFailed ('Thêm mới nhân viên thất bại!')
+    //             },2500)
+    //         }
+    //     });
+    // })
+
     /* Tạo mới một nhân viên */
-    $('.Chat__Left__Create__Employee').click(function() {
-        var limitEmployee = $('.select__employee__option__selected').text().trim()
-        var pageEmployee = $('.pagination__employee__item.active').attr('value')
-        var queryEmployee = $('#search__employee__input').val().trim()
-        var sortIDEmployee = $('#sort__employee__id').attr('value').trim()
-        var sortDateEmployee = $('#sort__employee__date').attr('value').trim()
-        var sortPositionEmployee = $('#sort__employee__position').attr('value').trim()
-        ClassFuction.getAjaxPost('../../Controller/admin/controller-admin.employee.php', {createEmployee: 'create-employee'}).done(function(response){
-            response = response.trim()
-            if (response !== '' && response === 'create-success') {
-                $('.loading__box').show()
-                setTimeout(function() {
-                    $('.loading__box').hide()
-                    fetchEmployee ('fetch-employee', limitEmployee, pageEmployee, queryEmployee, sortIDEmployee, sortDateEmployee, sortPositionEmployee)
-                    alertSuccess ('Thêm mới nhân viên thành công!')
-                },2500)
-            } else {
-                $('.loading__box').show()
-                setTimeout(function() {
-                    $('.loading__box').hide()
-                    alertFailed ('Thêm mới nhân viên thất bại!')
-                },2500)
+    $('.Chat__Left__Create__Employee').click(function(e) {
+        e.preventDefault(); // Ngăn chặn hành vi mặc định của nút click
+
+        $.ajax({
+            type: "POST",
+            url: "../../Controller/admin/controller-admin.employee.php",
+            data: { createEmployee: 'create-employee' }, // Chỉ cần gửi tín hiệu tạo mới
+            dataType: "json",
+            beforeSend: function() {
+                $('.loading__box').show();
+            },
+            success: function(response) {
+                if (response && response.status === 'success' && response.employeeId) {
+                    window.location.href = "./employee-info-admin.php?id-employee=" + response.employeeId + "&menu=employee";
+                } else {
+                    let errorMessage = 'Thêm mới nhân viên thất bại!';
+                    if (response && response.error) {
+                        errorMessage += ' Lỗi: ' + response.error;
+                    }
+                    alertFailed(errorMessage);
+                    console.error("AJAX Response Error:", response); // Log the response for debugging
+                }
+            },
+            error: function(xhr, status, error) {
+                $('.loading__box').hide();
+                console.error("AJAX Error:", xhr.responseText, status, error);
+                alertFailed('Thêm mới nhân viên thất bại! Lỗi AJAX: ' + xhr.responseText);
             }
         });
-    })
+    });
 
     /* Xóa bớt một nhân viên */
     $(document).on('click', '.employee__action__delete__button', function(e) {

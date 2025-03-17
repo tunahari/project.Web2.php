@@ -11,6 +11,7 @@
 /* ================================== Cập nhật thông tin sản phẩm ================================== */
 if (isset($_POST['ArraySP'])) {
     $error = '';
+
     if ($_POST['ArraySP'][5] === '0') {
         if ($_POST['ArraySP'][6] !== '') {
             $error = 'errorBH';
@@ -76,7 +77,7 @@ if (isset($_POST['ArraySP'])) {
         $ProductClass->setSP_ChatLieuSanPham($_POST['ArraySP'][43]);  
         $ProductClass->setSP_KichThuocSanPham($_POST['ArraySP'][44]);    
         $ProductClass->setSP_KhoiLuongSanPham($_POST['ArraySP'][45]);   
-        $ProductClass->setSP_ThoiDiemRaMatSanPham($_POST['ArraySP'][46]);     
+        $ProductClass-> setSP_ThoiDiemRaMatSanPham($_POST['ArraySP'][46]);     
         $ProductClass->setSP_HangSanPham($_POST['ArraySP'][47]); 
         $ProductClass->setSP_IDSanPham($_POST['ArraySP'][48]);
         if ($ProductClass->updateInfoProduct()) {

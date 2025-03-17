@@ -58,9 +58,9 @@
                                 Giá Bán<i class="fa-solid fa-arrows-up-down"></i>
                             </div>
                             <div class="table__product__thead__tr__th">Giảm Giá</div>
-                            <div class="table__product__thead__tr__th">Tồn Kho</div>
-                            <div class="table__product__thead__tr__th">Tổng Nhập</div>
-                            <div class="table__product__thead__tr__th">Tổng Bán</div>
+                            <div class="table__product__thead__tr__th">Hãng</div>
+                            <div class="table__product__thead__tr__th">RAM</div>
+                            <div class="table__product__thead__tr__th">ROM</div>
                             <div class="table__product__thead__tr__th" id="sort__product__date" value="ASC">
                                 Ngày Tạo<i class="fa-solid fa-arrows-up-down"></i>
                             </div>

@@ -61,34 +61,36 @@ $(document).ready(function() {
     })
 
     /* =================================== Xủ lý hủy đơn hàng =================================== */
-    $(document).on('click', '#BtnCancel', function () {
-        var idOrder = $(this).attr('data-orderID')
-        var idCustomer = $(this).attr('data-customerID')
-        ClassFuction.getAjaxPost('../../Controller/admin/controller-admin.info-order.php', 
-        {
-            handledCancel : 'handle-cancel',
+ $(document).on('click', '#BtnCancel', function() {
+    var idOrder = $(this).attr('data-orderID');
+    var idCustomer = $(this).attr('data-customerID');
+
+    if (confirm("Bạn có chắc chắn muốn hủy đơn hàng này không?")) { // Thêm xác nhận ở đây
+        ClassFuction.getAjaxPost('../../Controller/admin/controller-admin.info-order.php', {
+            handledCancel: 'handle-cancel',
             idOrder: idOrder,
             idCustomer: idCustomer,
-        }
-        ).done(function(response){
-            response = response.trim()
+        }).done(function(response) {
+            response = response.trim();
             if (response === 'success') {
-                $('.loading__box').show()
+                $('.loading__box').show();
                 setTimeout(function() {
-                    $('.loading__box').hide()
-                    alertSuccess('Hủy đơn hàng thành công')
-                    fetchBtnOrder ();
-                },2000)
+                    $('.loading__box').hide();
+                    alertSuccess('Hủy đơn hàng thành công');
+                    fetchBtnOrder();
+                }, 2000);
             } else if (response === 'failed') {
-                $('.loading__box').show()
+                $('.loading__box').show();
                 setTimeout(function() {
-                    $('.loading__box').hide()
-                    alertFailed('Hủy đơn hàng thất bại')
-                    fetchBtnOrder ();
-                },2000)
+                    $('.loading__box').hide();
+                    alertFailed('Hủy đơn hàng thất bại');
+                    fetchBtnOrder();
+                }, 2000);
             }
-        })
-    })
+        });
+    }
+});
+
 
     /* =================================== Xủ lý xác nhận đơn hàng =================================== */
     $(document).on('click', '#BtnCheck', function () {

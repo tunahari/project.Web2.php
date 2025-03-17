@@ -18,9 +18,9 @@ function fetchProduct ($limitProduct, $startProduct, $queryProduct, $sortIDProdu
                         <div class="table__product__tbody__tr__td">'.$listProduct[$i]['SP_TenSanPham'].'</div>
                         <div class="table__product__tbody__tr__td">'.number_format($listProduct[$i]['SP_GiaBanSanPham']).'</div>
                         <div class="table__product__tbody__tr__td">'.$listProduct[$i]['SP_GiamGiaSanPham'].'%</div>
-                        <div class="table__product__tbody__tr__td">'.$listProduct[$i]['SP_TonKhoSanPham'].'</div>
-                        <div class="table__product__tbody__tr__td">'.$listProduct[$i]['SP_TongNhapSanPham'].'</div>
-                        <div class="table__product__tbody__tr__td">'.$listProduct[$i]['SP_TongBanSanPham'].'</div>
+                        <div class="table__product__tbody__tr__td">'.$listProduct[$i]['SP_HangSanPham'].'</div>
+                        <div class="table__product__tbody__tr__td">'.$listProduct[$i]['SP_RAMSanPham'].' GB</div>
+                        <div class="table__product__tbody__tr__td">'.$listProduct[$i]['SP_ROMSanPham'].' GB</div>
                         <div class="table__product__tbody__tr__td">'.$listProduct[$i]['SP_ThoiGianTaoSanPham'].'</div>
                         <div class="table__product__tbody__tr__td">
                             <div class="product__action__delete__button" value="'.$listProduct[$i]['SP_IDSanPham'].'">

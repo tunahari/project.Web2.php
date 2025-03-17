@@ -122,7 +122,6 @@ if (isset($_GET['id-order']) && isset($_GET['id-customer'])) {
                                     <div class="table__order__thead__tr__th">Giá Bán</div>
                                     <div class="table__order__thead__tr__th">Giá Giảm</div>
                                     <div class="table__order__thead__tr__th">Số Lượng</div>
-                                    <div class="table__order__thead__tr__th">Tình Trạng</div>
                                     <div class="table__order__thead__tr__th">Chi Tiết</div>
                                 </div>
                             </div>
@@ -131,9 +130,7 @@ if (isset($_GET['id-order']) && isset($_GET['id-customer'])) {
                                 $listProductBill = $OrderClass->selectProductBill();
                                 $output = '';
                                 for ($i = 0; $i < count($listProductBill); $i++) {
-                                    if (intval($listProductBill[$i]['SP_TonKhoSanPham']) > 0) {
-                                        $TinhTrangSanPham = 'Còn hàng';
-                                    } else {
+                                    {
                                         $TinhTrangSanPham = 'Hết hàng';
                                     }
                                     if (intval($listProductBill[$i]['SP_GiaBanSanPham']) === intval($listProductBill[$i]['GiamGia'])) {
@@ -148,7 +145,6 @@ if (isset($_GET['id-order']) && isset($_GET['id-customer'])) {
                                             <div class="table__order__tbody__tr__td">'.number_format($listProductBill[$i]['SP_GiaBanSanPham']).'</div>
                                             <div class="table__order__tbody__tr__td">'.$GiamGia.'</div>
                                             <div class="table__order__tbody__tr__td">'.$listProductBill[$i]['CTDH_SLSanPham'].'</div>
-                                            <div class="table__order__tbody__tr__td">'.$TinhTrangSanPham.'</div>
                                             <div class="table__order__tbody__tr__td">
                                                 <a href="./product-info-admin.php?id-product='.$listProductBill[$i]['SP_IDSanPham'].'&menu=product" 
                                                 class="openProductDetails"><i class="fa-solid fa-eye"></i>

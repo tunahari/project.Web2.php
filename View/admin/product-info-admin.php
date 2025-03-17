@@ -1,3 +1,42 @@
+<?php
+$servername = "localhost";
+$username = "root";
+$password = "";
+$database = "projectweb2";
+
+$conn = new mysqli($servername, $username, $password, $database);
+if ($conn->connect_error) {
+    die("Kết nối thất bại: " . $conn->connect_error);
+}
+
+// Xử lý AJAX cập nhật trạng thái mà không cần form
+if (isset($_POST['id']) && isset($_POST['status'])) {
+    $id = intval($_POST['id']);  // Chuyển ID về số nguyên
+    $new_status = $_POST['status'];
+
+    $sql = "UPDATE product SET SP_XoaSanPham = ? WHERE SP_IDSanPham = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("si", $new_status, $id);
+
+    if ($stmt->execute()) {
+        echo "Cập nhật thành công!";
+    } else {
+        echo "Lỗi khi cập nhật!";
+    }
+    $stmt->close();
+    exit();  // Kết thúc script ngay sau khi xử lý AJAX
+}
+
+// Lấy dữ liệu trạng thái từ database
+$product_id = $_GET['id-product'];
+$sql = "SELECT SP_XoaSanPham FROM product WHERE SP_IDSanPham = $product_id";
+$result = $conn->query($sql);
+$product = $result->fetch_assoc();
+$current_status = $product['SP_XoaSanPham']; // Giá trị hiện tại ("Yes" hoặc "No")
+
+$conn->close();
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -14,6 +53,37 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <title>Thông Tin Sản Phẩm</title>
 </head>
+<style>
+    select option:disabled {
+        color: rgba(0, 0, 0, 0.5);
+        /* Màu đen với độ trong suốt 50% */
+    }
+
+    select,
+    input {
+        width: 100%;
+        /* Độ rộng bằng nhau */
+        height: 40px;
+        /* Chiều cao đồng nhất */
+        border: -1px solid #00FA9A;
+        /* Viền xanh lá */
+        border-radius: 5px;
+        /* Bo góc */
+        background-color: #060818;
+        /* Nền đen (theo ảnh) */
+        color: white;
+        /* Chữ trắng */
+        padding: 5px;
+        /* Khoảng cách bên trong */
+        cursor: pointer;
+    }
+
+    /* Căn chỉnh option */
+    option {
+        background-color: white;
+        color: black;
+    }
+</style>
 
 <body>
     <div class="main">
@@ -26,62 +96,62 @@
             if (isset($_GET['id-product']) && !empty($_GET['id-product'])) {
                 $ProductClass = new Product;
                 $ProductClass->setSP_IDSanPham($_GET['id-product']);
-                $SP_IDSanPham = $ProductClass->selectProductByID ()['SP_IDSanPham'];
-                $SP_TenSanPham = $ProductClass->selectProductByID ()['SP_TenSanPham'];
-                $SP_GiaBanSanPham = $ProductClass->selectProductByID ()['SP_GiaBanSanPham'];
-                $SP_GiaNhapSanPham = $ProductClass->selectProductByID ()['SP_GiaNhapSanPham'];
-                $SP_GiamGiaSanPham = $ProductClass->selectProductByID ()['SP_GiamGiaSanPham'];
-                $SP_ThoiGianTaoSanPham = $ProductClass->selectProductByID ()['SP_ThoiGianTaoSanPham'];
-                $SP_TonKhoSanPham = $ProductClass->selectProductByID ()['SP_TonKhoSanPham'];
-                $SP_TongNhapSanPham = $ProductClass->selectProductByID ()['SP_TongNhapSanPham'];
-                $SP_TongBanSanPham = $ProductClass->selectProductByID ()['SP_TongBanSanPham'];
-                $SP_BaoHanhSanPham = $ProductClass->selectProductByID ()['SP_BaoHanhSanPham'];
-                $SP_ThoiHanBaoHanhSanPham = $ProductClass->selectProductByID ()['SP_ThoiHanBaoHanhSanPham'];
-                $SP_CongNgheManHinhSanPham = $ProductClass->selectProductByID ()['SP_CongNgheManHinhSanPham'];
-                $SP_DoPhanGiaiSanPham = $ProductClass->selectProductByID ()['SP_DoPhanGiaiSanPham'];
-                $SP_KichThuocManHinhSanPham = $ProductClass->selectProductByID ()['SP_KichThuocManHinhSanPham'];
-                $SP_DoSangToiDaSanPham = $ProductClass->selectProductByID ()['SP_DoSangToiDaSanPham'];
-                $SP_MatKinhCamUngManHinhSanPham = $ProductClass->selectProductByID ()['SP_MatKinhCamUngManHinhSanPham'];
-                $SP_DoPhanGiaiCMRSauSanPham = $ProductClass->selectProductByID ()['SP_DoPhanGiaiCMRSauSanPham'];
-                $SP_DenFlashSanPham = $ProductClass->selectProductByID ()['SP_DenFlashSanPham'];
-                $SP_MatKinhCamUngCMRSauSanPham = $ProductClass->selectProductByID ()['SP_MatKinhCamUngCMRSauSanPham'];
-                $SP_DoPhanGiaiCMRTruocSanPham = $ProductClass->selectProductByID ()['SP_DoPhanGiaiCMRTruocSanPham'];
-                $SP_HeDieuHanhSanPham = $ProductClass->selectProductByID ()['SP_HeDieuHanhSanPham'];
-                $SP_CPUSanPham = $ProductClass->selectProductByID ()['SP_CPUSanPham'];
-                $SP_TocDoCPUSanPham = $ProductClass->selectProductByID ()['SP_TocDoCPUSanPham'];
-                $SP_GPUSanPham = $ProductClass->selectProductByID ()['SP_GPUSanPham'];
-                $SP_RAMSanPham = $ProductClass->selectProductByID ()['SP_RAMSanPham'];
-                $SP_ROMSanPham = $ProductClass->selectProductByID ()['SP_ROMSanPham'];
-                $SP_BoNhoKhaDungSanPham = $ProductClass->selectProductByID ()['SP_BoNhoKhaDungSanPham'];
-                $SP_DanhBaSanPham = $ProductClass->selectProductByID ()['SP_DanhBaSanPham'];
-                $SP_MangDiDongSanPham = $ProductClass->selectProductByID ()['SP_MangDiDongSanPham'];
-                $SP_SIMSanPham = $ProductClass->selectProductByID ()['SP_SIMSanPham'];
-                $SP_WifiSanPham = $ProductClass->selectProductByID ()['SP_WifiSanPham'];
-                $SP_GPSSanPham = $ProductClass->selectProductByID ()['SP_GPSSanPham'];
-                $SP_BluetoothSanPham = $ProductClass->selectProductByID ()['SP_BluetoothSanPham'];
-                $SP_CongKetNoiSanPham = $ProductClass->selectProductByID ()['SP_CongKetNoiSanPham'];
-                $SP_JackTaiNgheSanPham = $ProductClass->selectProductByID ()['SP_JackTaiNgheSanPham'];
-                $SP_KetNoiKhacSanPham = $ProductClass->selectProductByID ()['SP_KetNoiKhacSanPham'];
-                $SP_DungLuongPinSanPham = $ProductClass->selectProductByID ()['SP_DungLuongPinSanPham'];
-                $SP_LoaiPinSanPham = $ProductClass->selectProductByID ()['SP_LoaiPinSanPham'];
-                $SP_HoTroSacToiDaSanPham = $ProductClass->selectProductByID ()['SP_HoTroSacToiDaSanPham'];
-                $SP_CongNghePinSanPham = $ProductClass->selectProductByID ()['SP_CongNghePinSanPham'];
-                $SP_BaoMatNangCaoSanPham = $ProductClass->selectProductByID ()['SP_BaoMatNangCaoSanPham'];
-                $SP_TinhNangDacBietSanPham = $ProductClass->selectProductByID ()['SP_TinhNangDacBietSanPham'];
-                $SP_KhangNuocBuiSanPham = $ProductClass->selectProductByID ()['SP_KhangNuocBuiSanPham'];
-                $SP_XemPhimSanPham = $ProductClass->selectProductByID ()['SP_XemPhimSanPham'];
-                $SP_GhiAmSanPham = $ProductClass->selectProductByID ()['SP_GhiAmSanPham'];
-                $SP_NgheNhacSanPham = $ProductClass->selectProductByID ()['SP_NgheNhacSanPham'];
-                $SP_ThietKeSanPham = $ProductClass->selectProductByID ()['SP_ThietKeSanPham'];
-                $SP_ChatLieuSanPham = $ProductClass->selectProductByID ()['SP_ChatLieuSanPham'];
-                $SP_KichThuocSanPham = $ProductClass->selectProductByID ()['SP_KichThuocSanPham'];
-                $SP_KhoiLuongSanPham = $ProductClass->selectProductByID ()['SP_KhoiLuongSanPham'];
-                $SP_ThoiDiemRaMatSanPham = $ProductClass->selectProductByID ()['SP_ThoiDiemRaMatSanPham'];
-                $SP_MaChiNhanhSanPham = "CN" . $ProductClass->selectProductByID ()['SP_MaChiNhanhSanPham'];
-                $SP_Image1SanPham = $ProductClass->selectProductByID ()['SP_Image1SanPham'];
-                $SP_Image2SanPham = $ProductClass->selectProductByID ()['SP_Image2SanPham'];
-                $SP_Image3SanPham = $ProductClass->selectProductByID ()['SP_Image3SanPham'];
-                $SP_HangSanPham = $ProductClass->selectProductByID ()['SP_HangSanPham'];
+                $SP_IDSanPham = $ProductClass->selectProductByID()['SP_IDSanPham'];
+                $SP_TenSanPham = $ProductClass->selectProductByID()['SP_TenSanPham'];
+                $SP_GiaBanSanPham = $ProductClass->selectProductByID()['SP_GiaBanSanPham'];
+                $SP_GiaNhapSanPham = $ProductClass->selectProductByID()['SP_GiaNhapSanPham'];
+                $SP_GiamGiaSanPham = $ProductClass->selectProductByID()['SP_GiamGiaSanPham'];
+                $SP_ThoiGianTaoSanPham = $ProductClass->selectProductByID()['SP_ThoiGianTaoSanPham'];
+                $SP_TonKhoSanPham = $ProductClass->selectProductByID()['SP_TonKhoSanPham'];
+                $SP_TongNhapSanPham = $ProductClass->selectProductByID()['SP_TongNhapSanPham'];
+                $SP_TongBanSanPham = $ProductClass->selectProductByID()['SP_TongBanSanPham'];
+                $SP_BaoHanhSanPham = $ProductClass->selectProductByID()['SP_BaoHanhSanPham'];
+                $SP_ThoiHanBaoHanhSanPham = $ProductClass->selectProductByID()['SP_ThoiHanBaoHanhSanPham'];
+                $SP_CongNgheManHinhSanPham = $ProductClass->selectProductByID()['SP_CongNgheManHinhSanPham'];
+                $SP_DoPhanGiaiSanPham = $ProductClass->selectProductByID()['SP_DoPhanGiaiSanPham'];
+                $SP_KichThuocManHinhSanPham = $ProductClass->selectProductByID()['SP_KichThuocManHinhSanPham'];
+                $SP_DoSangToiDaSanPham = $ProductClass->selectProductByID()['SP_DoSangToiDaSanPham'];
+                $SP_MatKinhCamUngManHinhSanPham = $ProductClass->selectProductByID()['SP_MatKinhCamUngManHinhSanPham'];
+                $SP_DoPhanGiaiCMRSauSanPham = $ProductClass->selectProductByID()['SP_DoPhanGiaiCMRSauSanPham'];
+                $SP_DenFlashSanPham = $ProductClass->selectProductByID()['SP_DenFlashSanPham'];
+                $SP_MatKinhCamUngCMRSauSanPham = $ProductClass->selectProductByID()['SP_MatKinhCamUngCMRSauSanPham'];
+                $SP_DoPhanGiaiCMRTruocSanPham = $ProductClass->selectProductByID()['SP_DoPhanGiaiCMRTruocSanPham'];
+                $SP_HeDieuHanhSanPham = $ProductClass->selectProductByID()['SP_HeDieuHanhSanPham'];
+                $SP_CPUSanPham = $ProductClass->selectProductByID()['SP_CPUSanPham'];
+                $SP_TocDoCPUSanPham = $ProductClass->selectProductByID()['SP_TocDoCPUSanPham'];
+                $SP_GPUSanPham = $ProductClass->selectProductByID()['SP_GPUSanPham'];
+                $SP_RAMSanPham = $ProductClass->selectProductByID()['SP_RAMSanPham'];
+                $SP_ROMSanPham = $ProductClass->selectProductByID()['SP_ROMSanPham'];
+                $SP_BoNhoKhaDungSanPham = $ProductClass->selectProductByID()['SP_BoNhoKhaDungSanPham'];
+                $SP_DanhBaSanPham = $ProductClass->selectProductByID()['SP_DanhBaSanPham'];
+                $SP_MangDiDongSanPham = $ProductClass->selectProductByID()['SP_MangDiDongSanPham'];
+                $SP_SIMSanPham = $ProductClass->selectProductByID()['SP_SIMSanPham'];
+                $SP_WifiSanPham = $ProductClass->selectProductByID()['SP_WifiSanPham'];
+                $SP_GPSSanPham = $ProductClass->selectProductByID()['SP_GPSSanPham'];
+                $SP_BluetoothSanPham = $ProductClass->selectProductByID()['SP_BluetoothSanPham'];
+                $SP_CongKetNoiSanPham = $ProductClass->selectProductByID()['SP_CongKetNoiSanPham'];
+                $SP_JackTaiNgheSanPham = $ProductClass->selectProductByID()['SP_JackTaiNgheSanPham'];
+                $SP_KetNoiKhacSanPham = $ProductClass->selectProductByID()['SP_KetNoiKhacSanPham'];
+                $SP_DungLuongPinSanPham = $ProductClass->selectProductByID()['SP_DungLuongPinSanPham'];
+                $SP_LoaiPinSanPham = $ProductClass->selectProductByID()['SP_LoaiPinSanPham'];
+                $SP_HoTroSacToiDaSanPham = $ProductClass->selectProductByID()['SP_HoTroSacToiDaSanPham'];
+                $SP_CongNghePinSanPham = $ProductClass->selectProductByID()['SP_CongNghePinSanPham'];
+                $SP_BaoMatNangCaoSanPham = $ProductClass->selectProductByID()['SP_BaoMatNangCaoSanPham'];
+                $SP_TinhNangDacBietSanPham = $ProductClass->selectProductByID()['SP_TinhNangDacBietSanPham'];
+                $SP_KhangNuocBuiSanPham = $ProductClass->selectProductByID()['SP_KhangNuocBuiSanPham'];
+                $SP_XemPhimSanPham = $ProductClass->selectProductByID()['SP_XemPhimSanPham'];
+                $SP_GhiAmSanPham = $ProductClass->selectProductByID()['SP_GhiAmSanPham'];
+                $SP_NgheNhacSanPham = $ProductClass->selectProductByID()['SP_NgheNhacSanPham'];
+                $SP_ThietKeSanPham = $ProductClass->selectProductByID()['SP_ThietKeSanPham'];
+                $SP_ChatLieuSanPham = $ProductClass->selectProductByID()['SP_ChatLieuSanPham'];
+                $SP_KichThuocSanPham = $ProductClass->selectProductByID()['SP_KichThuocSanPham'];
+                $SP_KhoiLuongSanPham = $ProductClass->selectProductByID()['SP_KhoiLuongSanPham'];
+                $SP_ThoiDiemRaMatSanPham = $ProductClass->selectProductByID()['SP_ThoiDiemRaMatSanPham'];
+                $SP_MaChiNhanhSanPham = "CN" . $ProductClass->selectProductByID()['SP_MaChiNhanhSanPham'];
+                $SP_Image1SanPham = $ProductClass->selectProductByID()['SP_Image1SanPham'];
+                $SP_Image2SanPham = $ProductClass->selectProductByID()['SP_Image2SanPham'];
+                $SP_Image3SanPham = $ProductClass->selectProductByID()['SP_Image3SanPham'];
+                $SP_HangSanPham = $ProductClass->selectProductByID()['SP_HangSanPham'];
             }
             ?>
 
@@ -111,11 +181,11 @@
                                     <button type="button" id="cancelUpdateImage-1">
                                         Hủy bỏ<i class="fa-solid fa-rectangle-xmark"></i>
                                     </button>
-                                </div>  
+                                </div>
                             </div>
                             <!-- =============================== Upload Image 1 =============================== -->
                         </div>
-                        
+
                         <div class="Product__Info__Content__Image__Slide__Box">
                             <!-- Image 2 -->
                             <div class="Product__Info__Content__1__Image__2__Box Product__Info__Content__Image__Box">
@@ -129,7 +199,7 @@
                                 <!-- =============================== Upload Image 2 =============================== -->
                                 <div class="Product__Info__Content__1__Image__2__Update Product__Info__Content__Image__Update">
                                     <label for="inputUpdateImage-2">
-                                    Chọn File <i class="fa-solid fa-cloud-arrow-up"></i>
+                                        Chọn File <i class="fa-solid fa-cloud-arrow-up"></i>
                                     </label>
                                     <input type="file" id="inputUpdateImage-2">
                                     <div class="Product__Info__Content__Image__Update__Button__Group Product__Info__Content__Image__Update__Button__Group-2">
@@ -155,7 +225,7 @@
                                 <!-- =============================== Upload Image 3 =============================== -->
                                 <div class="Product__Info__Content__1__Image__3__Update Product__Info__Content__Image__Update">
                                     <label for="inputUpdateImage-3">
-                                    Chọn File <i class="fa-solid fa-cloud-arrow-up"></i>
+                                        Chọn File <i class="fa-solid fa-cloud-arrow-up"></i>
                                     </label>
                                     <input type="file" id="inputUpdateImage-3">
                                     <div class="Product__Info__Content__Image__Update__Button__Group Product__Info__Content__Image__Update__Button__Group-3">
@@ -170,21 +240,40 @@
                                 <!-- =============================== Upload Image 3 =============================== -->
                             </div>
                         </div>
-                        
+
                         <div class="Update__Quantity__Product__Form">
                             <div class="Update__Quantity__Product__Form__Title">Nhập Thêm Sản Phẩm:</div>
                             <div class="Update__Quantity__Product__Form__Input">
                                 <label for="Update__Input__IDSanPham">ID - Tên Sản Phẩm (*):</label>
                                 <input class="Update__Input__SanPham" id="Update__Input__IDSanPham" type="text" readonly
-                                value="<?php echo 'SP' . $SP_IDSanPham . ' - ' . $SP_TenSanPham; ?>">
+                                    value="<?php echo 'SP' . $SP_IDSanPham . ' - ' . $SP_TenSanPham; ?>">
                             </div>
-                            <div class="Update__Quantity__Product__Form__Input">
-                                <label for="Update__Input__SLSanPham">Số Lượng Nhập Vào:</label>
-                                <input class="Update__Input__SanPham" id="Update__Input__SLSanPham" type="number"
-                                value="0">
-                                <div class="Update__Input__SanPham__Error">Input invalid, please check again</div>
+                            <div style="display: flex; flex-direction: column;" class="Update__Status__Product__Form__Input">
+                                <label style="    color: #32ff7e; font-size: 14px; font-weight: 500;;">Trạng Thái Hiển Thị</label>
+
+                                <div style="display: flex; align-items: center; padding-top: 5px;">
+                                    <input style="width: 7%; ;margin-right: 5px;" id="status-product-true" type="radio" name="delete_status" value="No" <?= ($current_status == "No") ? "checked" : "" ?>>
+                                    <label for="status-product-true">Enalbe</label>
+                                </div>
+                                <div style="display: flex; align-items: center; ">
+                                    <input style="width: 7%;margin-right: 5px;" id="status-product-false" type="radio" name="delete_status" value="Yes" <?= ($current_status == "Yes") ? "checked" : "" ?>>
+                                    <label for="status-product-false">Disable </label>
+                                </div>
+
                             </div>
-                            <div class="Update__Quantity__Product__Save">Lưu Nhập Vào</div>
+                            <div class="Update__Status__Product__Save" style="    border: 1px solid #32ff7e;
+    width: 100%;
+    height: 40px;
+    border-radius: 5px;
+    cursor: pointer;
+    justify-content: center;
+    align-items: center;
+    font-size: 16px;
+    font-weight: 700;
+    align-self: baseline;
+    color: #32ff7e;
+    cursor: pointer;">Lưu trạng thái</div>
+
                         </div>
                     </div>
                     <div class="Product__Info__Content__2 Product__Info__Content">
@@ -201,7 +290,7 @@
                             </div>
                             <div class="Product__Info__Content__2__Input">
                                 <label for="Admin__Input__SP_GiaBanSanPham">Giá bán (VND) (*):</label>
-                                <input class="Admin__Input__SP" id="Admin__Input__SP_GiaBanSanPham" type="number" value="<?php echo $SP_GiaBanSanPham  ?>" >
+                                <input class="Admin__Input__SP" id="Admin__Input__SP_GiaBanSanPham" type="number" value="<?php echo $SP_GiaBanSanPham  ?>">
                                 <div class="Product__Info__Content__2__Input__Error">Input invalid, please check again</div>
                             </div>
                             <div class="Product__Info__Content__2__Input">
@@ -222,16 +311,40 @@
                             </div>
                             <div class="Product__Info__Content__2__Input">
                                 <label for="Admin__Input__SP_MaChiNhanhSanPham">Mã chi nhánh: (CN*)</label>
-                                <input class="Admin__Input__SP" id="Admin__Input__SP_MaChiNhanhSanPham" type="text" value="<?php echo $SP_MaChiNhanhSanPham  ?>">
+                                <select class="Admin__Input__SP" id="Admin__Input__SP_MaChiNhanhSanPham">
+                                    <option disabled selected>Chọn Chi Nhánh</option>
+                                    <?php
+                                    // Kết nối database
+                                    $conn = mysqli_connect('localhost', 'root', '', 'projectweb2');
+                                    if (!$conn) {
+                                        die("Kết nối không thành công: " . mysqli_connect_error());
+                                    }
+
+                                    // Lấy danh sách chi nhánh từ database
+                                    $sql = "SELECT * FROM branch";
+                                    $result = mysqli_query($conn, $sql);
+
+                                    while ($row = mysqli_fetch_assoc($result)) {
+                                        $branch_code_show = "CN" . $row['CN_IDChiNhanh'] . " - " . $row['CN_TenChiNhanh'];
+                                        $branch_code = "CN" . $row['CN_IDChiNhanh']; // Tạo mã chi nhánh CN1, CN2, CN3...
+                                        $selected = ($SP_MaChiNhanhSanPham == $branch_code) ? 'selected' : '';
+                                        echo "<option value='$branch_code' $selected>$branch_code_show</option>";
+                                    }
+
+                                    // Đóng kết nối
+                                    mysqli_close($conn);
+                                    ?>
+                                </select>
+
                                 <div class="Product__Info__Content__2__Input__Error">Input invalid, please check again</div>
                             </div>
                             <div class="Product__Info__Content__2__Input">
-                                <label for="Admin__Input__SP_TonKhoSanPham">Tồn kho:</label>
-                                <input class="Admin__Input__SP_Readonly" id="Admin__Input__SP_TonKhoSanPham" type="text" readonly value="<?php echo $SP_TonKhoSanPham  ?>">
+                                <label for="Admin__Input__SP_TonKhoSanPham">Bảo hành:</label>
+                                <input class="Admin__Input__SP_Readonly" disabled id="Admin__Input__SP_TonKhoSanPham" type="text" readonly value="<?php echo $SP_TonKhoSanPham  ?>">
                                 <div class="Product__Info__Content__2__Input__Error">Input invalid, please check again</div>
                             </div>
                         </div>
-                        <div class="Product__Info__Content__2__Input__Box">
+                        <div style="display: none;" class="Product__Info__Content__2__Input__Box">
                             <div class="Product__Info__Content__2__Input">
                                 <label for="Admin__Input__SP_TongNhapSanPham">Tổng nhập:</label>
                                 <input class="Admin__Input__SP_Readonly" id="Admin__Input__SP_TongNhapSanPham" type="text" readonly value="<?php echo $SP_TongNhapSanPham  ?>">
@@ -252,7 +365,7 @@
                                 <div class="Product__Info__Content__2__Input__Error">Input invalid, please check again</div>
                             </div>
                         </div>
-                        <div class="Product__Info__Content__2__Input__Box">
+                        <div style="display: none;" class="Product__Info__Content__2__Input__Box">
                             <div class="Product__Info__Content__2__Input">
                                 <label for="Admin__Input__SP_CongNgheManHinhSanPham">Công nghệ màn hình:</label>
                                 <input class="Admin__Input__SP" id="Admin__Input__SP_CongNgheManHinhSanPham" type="text" value="<?php echo $SP_CongNgheManHinhSanPham  ?>">
@@ -274,7 +387,7 @@
                                 <div class="Product__Info__Content__2__Input__Error">Input invalid, please check again</div>
                             </div>
                         </div>
-                        <div class="Product__Info__Content__2__Input__Box">
+                        <div style="display: none;" class="Product__Info__Content__2__Input__Box">
                             <div class="Product__Info__Content__2__Input">
                                 <label for="Admin__Input__SP_MatKinhCamUngManHinhSanPham">Mặt kính cảm ứng màn hình:</label>
                                 <input class="Admin__Input__SP" id="Admin__Input__SP_MatKinhCamUngManHinhSanPham" type="text" value="<?php echo $SP_MatKinhCamUngManHinhSanPham  ?>">
@@ -296,7 +409,7 @@
                                 <div class="Product__Info__Content__2__Input__Error">Input invalid, please check again</div>
                             </div>
                         </div>
-                        <div class="Product__Info__Content__2__Input__Box">
+                        <div style="display: none;" class="Product__Info__Content__2__Input__Box">
                             <div class="Product__Info__Content__2__Input">
                                 <label for="Admin__Input__SP_DoPhanGiaiCMRTruocSanPham">Độ phân giải Camera trước:</label>
                                 <input class="Admin__Input__SP" id="Admin__Input__SP_DoPhanGiaiCMRTruocSanPham" type="text" value="<?php echo $SP_DoPhanGiaiCMRTruocSanPham  ?>">
@@ -330,7 +443,7 @@
                                 <div class="Product__Info__Content__2__Input__Error">Input invalid, please check again</div>
                             </div>
                             <div class="Product__Info__Content__2__Input">
-                                <label for="Admin__Input__SP_ROMSanPham">ROM (*)    :</label>
+                                <label for="Admin__Input__SP_ROMSanPham">ROM (*) :</label>
                                 <input class="Admin__Input__SP" id="Admin__Input__SP_ROMSanPham" type="number" value="<?php echo $SP_ROMSanPham  ?>">
                                 <div class="Product__Info__Content__2__Input__Error">Input invalid, please check again</div>
                             </div>
@@ -340,7 +453,7 @@
                                 <div class="Product__Info__Content__2__Input__Error">Input invalid, please check again</div>
                             </div>
                         </div>
-                        <div class="Product__Info__Content__2__Input__Box">
+                        <div style="display: none;" class="Product__Info__Content__2__Input__Box">
                             <div class="Product__Info__Content__2__Input">
                                 <label for="Admin__Input__SP_DanhBaSanPham">Danh bạ:</label>
                                 <input class="Admin__Input__SP" id="Admin__Input__SP_DanhBaSanPham" type="text" value="<?php echo $SP_DanhBaSanPham  ?>">
@@ -362,7 +475,7 @@
                                 <div class="Product__Info__Content__2__Input__Error">Input invalid, please check again</div>
                             </div>
                         </div>
-                        <div class="Product__Info__Content__2__Input__Box">
+                        <div style="display: none;" class="Product__Info__Content__2__Input__Box">
                             <div class="Product__Info__Content__2__Input">
                                 <label for="Admin__Input__SP_GPSSanPham">GPS:</label>
                                 <input class="Admin__Input__SP" id="Admin__Input__SP_GPSSanPham" type="text" value="<?php echo $SP_GPSSanPham  ?>">
@@ -384,7 +497,7 @@
                                 <div class="Product__Info__Content__2__Input__Error">Input invalid, please check again</div>
                             </div>
                         </div>
-                        <div class="Product__Info__Content__2__Input__Box">
+                        <div style="display: none;" class="Product__Info__Content__2__Input__Box">
                             <div class="Product__Info__Content__2__Input">
                                 <label for="Admin__Input__SP_KetNoiKhacSanPham">Kết nối khác:</label>
                                 <input class="Admin__Input__SP" id="Admin__Input__SP_KetNoiKhacSanPham" type="text" value="<?php echo $SP_KetNoiKhacSanPham  ?>">
@@ -406,7 +519,7 @@
                                 <div class="Product__Info__Content__2__Input__Error">Input invalid, please check again</div>
                             </div>
                         </div>
-                        <div class="Product__Info__Content__2__Input__Box">
+                        <div style="display: none;" class="Product__Info__Content__2__Input__Box">
                             <div class="Product__Info__Content__2__Input">
                                 <label for="Admin__Input__SP_CongNghePinSanPham">Công nghệ pin:</label>
                                 <input class="Admin__Input__SP" id="Admin__Input__SP_CongNghePinSanPham" type="text" value="<?php echo $SP_CongNghePinSanPham  ?>">
@@ -428,7 +541,7 @@
                                 <div class="Product__Info__Content__2__Input__Error">Input invalid, please check again</div>
                             </div>
                         </div>
-                        <div class="Product__Info__Content__2__Input__Box">
+                        <div style="display: none;" class="Product__Info__Content__2__Input__Box">
                             <div class="Product__Info__Content__2__Input">
                                 <label for="Admin__Input__SP_XemPhimSanPham">Xem phim:</label>
                                 <input class="Admin__Input__SP" id="Admin__Input__SP_XemPhimSanPham" type="text" value="<?php echo $SP_XemPhimSanPham  ?>">
@@ -451,17 +564,17 @@
                             </div>
                         </div>
                         <div class="Product__Info__Content__2__Input__Box">
-                            <div class="Product__Info__Content__2__Input">
+                            <div style="display: none;" class="Product__Info__Content__2__Input">
                                 <label for="Admin__Input__SP_ChatLieuSanPham">Chất liệu:</label>
                                 <input class="Admin__Input__SP" id="Admin__Input__SP_ChatLieuSanPham" type="text" value="<?php echo $SP_ChatLieuSanPham  ?>">
                                 <div class="Product__Info__Content__2__Input__Error">Input invalid, please check again</div>
                             </div>
-                            <div class="Product__Info__Content__2__Input">
+                            <div style="display: none;" class="Product__Info__Content__2__Input">
                                 <label for="Admin__Input__SP_KichThuocSanPham">Kích thước:</label>
                                 <input class="Admin__Input__SP" id="Admin__Input__SP_KichThuocSanPham" type="text" value="<?php echo $SP_KichThuocSanPham  ?>">
                                 <div class="Product__Info__Content__2__Input__Error">Input invalid, please check again</div>
                             </div>
-                            <div class="Product__Info__Content__2__Input">
+                            <div style="display: none;" class="Product__Info__Content__2__Input">
                                 <label for="Admin__Input__SP_KhoiLuongSanPham">Khối lượng:</label>
                                 <input class="Admin__Input__SP" id="Admin__Input__SP_KhoiLuongSanPham" type="text" value="<?php echo $SP_KhoiLuongSanPham  ?>">
                                 <div class="Product__Info__Content__2__Input__Error">Input invalid, please check again</div>
@@ -471,15 +584,29 @@
                                 <input class="Admin__Input__SP" id="Admin__Input__SP_ThoiDiemRaMatSanPham" type="date" value="<?php echo date($SP_ThoiDiemRaMatSanPham) ?>">
                                 <div class="Product__Info__Content__2__Input__Error">Input invalid, please check again</div>
                             </div>
-                        </div>
+                            <div class="Product__Info__Content__2__Input__Box">
+                                <div class="Product__Info__Content__2__Input">
+                                    <label for="Admin__Input__SP_HangSanPham">Hãng sản phẩm:</label>
 
-                        <div class="Product__Info__Content__2__Input__Box">
-                            <div class="Product__Info__Content__2__Input">
-                                <label for="Admin__Input__SP_HangSanPham">Hãng sản phẩm:</label>
-                                <input class="Admin__Input__SP" id="Admin__Input__SP_HangSanPham" type="text" value="<?php echo $SP_HangSanPham  ?>">
-                                <div class="Product__Info__Content__2__Input__Error">Input invalid, please check again</div>
+                                    <select class="Admin__Input__SP" id="Admin__Input__SP_HangSanPham">
+                                        <option selected disabled>Chọn Hãng</option>
+                                        <?php
+                                        // Danh sách hãng sản phẩm
+                                        $brands = ["Apple", "Samsung", "Xiaomi", "Vivo", "Oppo"];
+
+                                        // Lặp qua danh sách để tạo các <option>
+                                        foreach ($brands as $brand): ?>
+                                            <option value="<?php echo $brand; ?>" <?php echo ($SP_HangSanPham == $brand) ? 'selected' : ''; ?>>
+                                                <?php echo $brand; ?>
+                                            </option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                    <div class="Product__Info__Content__2__Input__Error">Input invalid, please check again</div>
+                                </div>
                             </div>
                         </div>
+
+
                     </div>
                     <div class="Product__Info__Content__3 Product__Info__Content">
                         <div class="Product__Info__Save">Upload </div>
@@ -528,3 +655,31 @@
 <script src="../../Controller/class/controller.function.js"></script>
 <script src="../../Controller/class/controller.validate.js"></script>
 <script src="../../Controller/admin/controller-admin.info-product.js"></script>
+<script>
+    $(document).ready(function() {
+        $(".Update__Status__Product__Save").click(function() {
+            var selectedValue = $("input[name='delete_status']:checked").val();
+            var productId = <?= $product_id ?>; // Lấy ID sản phẩm
+
+            if (!selectedValue) {
+                alert("Vui lòng chọn trạng thái trước khi lưu!");
+                return;
+            }
+
+            $.ajax({
+                url: window.location.href, // Gửi dữ liệu đến chính file PHP này
+                type: "POST",
+                data: {
+                    id: productId,
+                    status: selectedValue
+                },
+                success: function(response) {
+                    alert(response); // Hiển thị thông báo
+                },
+                error: function(xhr, status, error) {
+                    console.error("Lỗi AJAX:", status, error);
+                }
+            });
+        });
+    });
+</script>
