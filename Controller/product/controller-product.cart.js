@@ -110,7 +110,7 @@ $(document).ready(function () {
                               $("#totalPriceBill").html("0 VND");
                               $("#saveBill").remove();
                               window.location.href = "../../View/product/product.view.php";
-                          }, 3000); // Chuyển hướng sau 3 giây
+                          }, 2000); // Chuyển hướng sau 2 giây
                       } else {
                           $(".loading__box, .loading__bg").hide();
                           alertFailed("Đặt hàng thất bại");

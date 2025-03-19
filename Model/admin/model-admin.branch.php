@@ -43,28 +43,66 @@ class Branch {
     }
 
 
-    function insertBranch () {
+    // function insertBranch () {
+    //     $ConnectDataBase = new ConnectDataBase;
+    //     $sql = 'INSERT INTO branch (CN_TenChiNhanh, CN_DiaChiChiNhanh, CN_HotLineChiNhanh, CN_NgayThanhLapChiNhanh, CN_IDQuanLyChiNhanh,
+    //     CN_DeleteStatusChiNhanh, CN_NgayTaoChiNhanh, CN_GhiChuChiNhanh) 
+    //     VALUES (:CN_TenChiNhanh, :CN_DiaChiChiNhanh, :CN_HotLineChiNhanh, :CN_NgayThanhLapChiNhanh, :CN_IDQuanLyChiNhanh, 
+    //     :CN_DeleteStatusChiNhanh, :CN_NgayTaoChiNhanh, :CN_GhiChuChiNhanh)';
+
+    //     $stmt = $ConnectDataBase->connectDB()->prepare($sql);
+    //     $stmt->bindParam(':CN_TenChiNhanh',$this->CN_TenChiNhanh, PDO::PARAM_STR);
+    //     $stmt->bindParam(':CN_DiaChiChiNhanh',$this->CN_DiaChiChiNhanh, PDO::PARAM_STR);
+    //     $stmt->bindParam(':CN_HotLineChiNhanh',$this->CN_HotLineChiNhanh, PDO::PARAM_STR);
+    //     $stmt->bindParam(':CN_NgayThanhLapChiNhanh',$this->CN_NgayThanhLapChiNhanh, PDO::PARAM_STR);
+    //     $stmt->bindParam(':CN_IDQuanLyChiNhanh',$this->CN_IDQuanLyChiNhanh, PDO::PARAM_STR);
+    //     $stmt->bindParam(':CN_DeleteStatusChiNhanh',$this->CN_DeleteStatusChiNhanh, PDO::PARAM_STR);
+    //     $stmt->bindParam(':CN_NgayTaoChiNhanh',$this->CN_NgayTaoChiNhanh, PDO::PARAM_STR);
+    //     $stmt->bindParam(':CN_GhiChuChiNhanh',$this->CN_GhiChuChiNhanh, PDO::PARAM_STR);
+    //     if ($stmt->execute()) {
+    //         return [true,
+    //         'status' => 'success',
+    //         'id' => $ConnectDataBase->connectDB()->lastInsertId() // Lấy ID chi nhánh vừa thêm
+            
+    //     ];
+    //     } else {
+    //         return false;
+    //     }
+    // }
+
+    
+    function insertBranch() {
         $ConnectDataBase = new ConnectDataBase;
+        $conn = $ConnectDataBase->connectDB(); // Lưu kết nối vào biến
+    
         $sql = 'INSERT INTO branch (CN_TenChiNhanh, CN_DiaChiChiNhanh, CN_HotLineChiNhanh, CN_NgayThanhLapChiNhanh, CN_IDQuanLyChiNhanh,
         CN_DeleteStatusChiNhanh, CN_NgayTaoChiNhanh, CN_GhiChuChiNhanh) 
         VALUES (:CN_TenChiNhanh, :CN_DiaChiChiNhanh, :CN_HotLineChiNhanh, :CN_NgayThanhLapChiNhanh, :CN_IDQuanLyChiNhanh, 
         :CN_DeleteStatusChiNhanh, :CN_NgayTaoChiNhanh, :CN_GhiChuChiNhanh)';
-
-        $stmt = $ConnectDataBase->connectDB()->prepare($sql);
-        $stmt->bindParam(':CN_TenChiNhanh',$this->CN_TenChiNhanh, PDO::PARAM_STR);
-        $stmt->bindParam(':CN_DiaChiChiNhanh',$this->CN_DiaChiChiNhanh, PDO::PARAM_STR);
-        $stmt->bindParam(':CN_HotLineChiNhanh',$this->CN_HotLineChiNhanh, PDO::PARAM_STR);
-        $stmt->bindParam(':CN_NgayThanhLapChiNhanh',$this->CN_NgayThanhLapChiNhanh, PDO::PARAM_STR);
-        $stmt->bindParam(':CN_IDQuanLyChiNhanh',$this->CN_IDQuanLyChiNhanh, PDO::PARAM_STR);
-        $stmt->bindParam(':CN_DeleteStatusChiNhanh',$this->CN_DeleteStatusChiNhanh, PDO::PARAM_STR);
-        $stmt->bindParam(':CN_NgayTaoChiNhanh',$this->CN_NgayTaoChiNhanh, PDO::PARAM_STR);
-        $stmt->bindParam(':CN_GhiChuChiNhanh',$this->CN_GhiChuChiNhanh, PDO::PARAM_STR);
+    
+        $stmt = $conn->prepare($sql); // Sử dụng kết nối đã lưu
+        $stmt->bindParam(':CN_TenChiNhanh', $this->CN_TenChiNhanh, PDO::PARAM_STR);
+        $stmt->bindParam(':CN_DiaChiChiNhanh', $this->CN_DiaChiChiNhanh, PDO::PARAM_STR);
+        $stmt->bindParam(':CN_HotLineChiNhanh', $this->CN_HotLineChiNhanh, PDO::PARAM_STR);
+        $stmt->bindParam(':CN_NgayThanhLapChiNhanh', $this->CN_NgayThanhLapChiNhanh, PDO::PARAM_STR);
+        $stmt->bindParam(':CN_IDQuanLyChiNhanh', $this->CN_IDQuanLyChiNhanh, PDO::PARAM_STR);
+        $stmt->bindParam(':CN_DeleteStatusChiNhanh', $this->CN_DeleteStatusChiNhanh, PDO::PARAM_STR);
+        $stmt->bindParam(':CN_NgayTaoChiNhanh', $this->CN_NgayTaoChiNhanh, PDO::PARAM_STR);
+        $stmt->bindParam(':CN_GhiChuChiNhanh', $this->CN_GhiChuChiNhanh, PDO::PARAM_STR);
+    
         if ($stmt->execute()) {
-            return true;
+            return [
+                true,
+                'status' => 'success',
+                'id' => $conn->lastInsertId() // Lấy ID chi nhánh vừa thêm từ cùng một kết nối
+            ];
         } else {
             return false;
         }
     }
+    
+    
+    
 
     function selectAllBranch () {
         $ConnectDataBase = new ConnectDataBase;

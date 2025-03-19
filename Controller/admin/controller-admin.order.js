@@ -13,7 +13,10 @@ $(document).ready(function() {
             queryOrder: queryOrder,
             sortIDOrder: sortIDOrder,
             sortDateOrder: sortDateOrder,
-            sortStatusOrder: sortStatusOrder
+            sortStatusOrder: sortStatusOrder,
+            fromDate: fromDate,
+            toDate: toDate,
+            method: 'POST'
         }
         ).done(function(response){
             response = response.trim()
@@ -21,6 +24,9 @@ $(document).ready(function() {
                 var dataResponse = JSON.parse(response)
                 console.log(dataResponse[2])
                 if (dataResponse[1] !== null) {
+
+                    // $('.pagination__order').html(dataResponse[0]);
+                    // $('.table__order__tbody').html(dataResponse[1]);
                     dataResponse[0].trim().length !== 449 ? $('.pagination__order').html(dataResponse[0]) : $('.pagination__order').html('')
                     $('.table__order__tbody').html(dataResponse[1])
                 } else {
@@ -39,7 +45,30 @@ $(document).ready(function() {
                 console.log('Empty!')
             }
         });
+        
     }
+    $('#filter_date_btn').click(function() {
+        const fromDate = $('#from_date').val();
+        const toDate = $('#to_date').val();
+
+        if (fromDate === '' && toDate === '') {
+            alert('Vui lòng chọn ít nhất một ngày để lọc!');
+            return;
+        }
+
+        if (fromDate !== '' && toDate !== '' && fromDate > toDate) {
+            alert('Ngày bắt đầu không thể lớn hơn ngày kết thúc!');
+            return;
+        }
+
+        fetchOrder('5', '1', '', '', '', '', fromDate, toDate); // Adjust '5', '1', etc. as needed
+    });
+
+    $('#reset_date_btn').click(function() {
+        $('#from_date').val('');
+        $('#to_date').val('');
+        fetchOrder('5', '1', '', '', '', '', '', ''); // Reset to default
+    });
 
     /* Mặc định khi hiển thị */
     fetchOrder ('fetch-order', '5', '1', '', 'DESC', 'ASC', 'ASC')

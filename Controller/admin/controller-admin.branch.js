@@ -143,31 +143,68 @@ $(document).ready(function() {
         })
     }
     
-    /* Tạo mới một chi nhánh */
-    $('.Chat__Left__Create__Branch').click(function() {
-        var limitBranch = $('.select__branch__option__selected').text().trim()
-        var pageBranch = $('.pagination__branch__item.active').attr('value')
-        var queryBranch = $('#search__branch__input').val().trim()
-        var sortIDBranch =  $('#sort__branch__id').attr('value').trim()
-        var sortDateBranch = $('#sort__branch__date').attr('value').trim()
-        ClassFuction.getAjaxPost('../../Controller/admin/controller-admin.branch.php', {createBranch: 'create-branch'}).done(function(response){
-            response = response.trim()
-            if (response !== '' && response === 'create-success') {
-                $('.loading__box').show()
-                setTimeout(function() {
-                    $('.loading__box').hide()
-                    fetchBranch ('fetch-branch', limitBranch, pageBranch, queryBranch, sortIDBranch, sortDateBranch)
-                    alertSuccess ('Thêm mới chi nhánh thành công!')
-                },2500)
-            } else {
-                $('.loading__box').show()
-                setTimeout(function() {
-                    $('.loading__box').hide()
-                    alertFailed ('Thêm mới chi nhánh thất bại!')
-                },2500)
+    // /* Tạo mới một chi nhánh */
+    // $('.Chat__Left__Create__Branch').click(function() {
+    //     var limitBranch = $('.select__branch__option__selected').text().trim()
+    //     var pageBranch = $('.pagination__branch__item.active').attr('value')
+    //     var queryBranch = $('#search__branch__input').val().trim()
+    //     var sortIDBranch =  $('#sort__branch__id').attr('value').trim()
+    //     var sortDateBranch = $('#sort__branch__date').attr('value').trim()
+    //     ClassFuction.getAjaxPost('../../Controller/admin/controller-admin.branch.php', {createBranch: 'create-branch'}).done(function(response){
+    //         response = response.trim()
+    //         if (response !== '' && response === 'create-success') {
+    //             $('.loading__box').show()
+    //             setTimeout(function() {
+    //                 $('.loading__box').hide()
+    //                 fetchBranch ('fetch-branch', limitBranch, pageBranch, queryBranch, sortIDBranch, sortDateBranch)
+    //                 window.location.href = './branch-info-admin.php?id-branch=' + response.id + '&menu=branch';
+                
+    //             })
+    //         } else {
+    //             $('.loading__box').show()
+    //             setTimeout(function() {
+    //                 $('.loading__box').hide()
+    //                 alertFailed ('Thêm mới chi nhánh thất bại!')
+    //             },2500)
+    //         }
+    //     });
+    // })
+
+
+
+    $('.Chat__Left__Create__Branch').click(function(e) {
+        e.preventDefault(); // Ngăn chặn hành vi mặc định của nút click
+
+        $.ajax({
+            type: "POST",
+            url: "../../Controller/admin/controller-admin.branch.php",
+            data: { createBranch: 'create-branch' }, // Chỉ cần gửi tín hiệu tạo mới
+            dataType: "json",
+            beforeSend: function() {
+                $('.loading__box').show();
+            },
+            success: function(response) {
+                if (response && response.status === 'success' && response.id) {
+                    window.location.href = './branch-info-admin.php?id-branch=' + response.id + '&menu=branch';
+                } else {
+                    let errorMessage = 'Thêm mới chi nhánh thất bại!';
+                    if (response && response.error) {
+                        errorMessage += ' Lỗi: ' + response.error;
+                    }
+                    alertFailed(errorMessage);
+                    console.error("AJAX Response Error:", response); // Log the response for debugging
+                }
+            },
+            error: function(xhr, status, error) {
+                $('.loading__box').hide();
+                console.error("AJAX Error:", xhr.responseText, status, error);
+                alertFailed('Lỗi AJAX: ' + xhr.responseText);
             }
+            
         });
-    })
+    });
+
+
 
     /* Xóa bớt một chi nhánh */
     $(document).on('click', '.branch__action__delete__button', function(e) {

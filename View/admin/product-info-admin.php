@@ -312,7 +312,7 @@ $conn->close();
                             <div class="Product__Info__Content__2__Input">
                                 <label for="Admin__Input__SP_MaChiNhanhSanPham">Mã chi nhánh: (CN*)</label>
                                 <select class="Admin__Input__SP" id="Admin__Input__SP_MaChiNhanhSanPham">
-                                    <option disabled selected>Chọn Chi Nhánh</option>
+                                    <option  selected value="" hidden>Chọn Chi Nhánh</option>
                                     <?php
                                     // Kết nối database
                                     $conn = mysqli_connect('localhost', 'root', '', 'projectweb2');

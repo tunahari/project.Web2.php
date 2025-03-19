@@ -111,7 +111,7 @@
 
 
                 </div>
-                <!-- Lọc theo ngày tháng năm
+                Lọc theo ngày tháng năm
                 <div class="date__filter">
                     <div class="date__filter__group">
                         <label for="from_date">Từ ngày:</label>
@@ -125,7 +125,7 @@
                         <button id="filter_date_btn"><i class='bx bx-filter-alt'></i> Lọc</button>
                         <button id="reset_date_btn"><i class='bx bx-reset'></i> Đặt lại</button>
                     </div>
-                </div> -->
+                </div>
 
 
                 <div class="table__order--container">
