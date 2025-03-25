@@ -14,9 +14,6 @@ $(document).ready(function() {
             sortIDOrder: sortIDOrder,
             sortDateOrder: sortDateOrder,
             sortStatusOrder: sortStatusOrder,
-            fromDate: fromDate,
-            toDate: toDate,
-            method: 'POST'
         }
         ).done(function(response){
             response = response.trim()
@@ -47,28 +44,6 @@ $(document).ready(function() {
         });
         
     }
-    $('#filter_date_btn').click(function() {
-        const fromDate = $('#from_date').val();
-        const toDate = $('#to_date').val();
-
-        if (fromDate === '' && toDate === '') {
-            alert('Vui lòng chọn ít nhất một ngày để lọc!');
-            return;
-        }
-
-        if (fromDate !== '' && toDate !== '' && fromDate > toDate) {
-            alert('Ngày bắt đầu không thể lớn hơn ngày kết thúc!');
-            return;
-        }
-
-        fetchOrder('5', '1', '', '', '', '', fromDate, toDate); // Adjust '5', '1', etc. as needed
-    });
-
-    $('#reset_date_btn').click(function() {
-        $('#from_date').val('');
-        $('#to_date').val('');
-        fetchOrder('5', '1', '', '', '', '', '', ''); // Reset to default
-    });
 
     /* Mặc định khi hiển thị */
     fetchOrder ('fetch-order', '5', '1', '', 'DESC', 'ASC', 'ASC')
@@ -169,15 +144,6 @@ $(document).ready(function() {
         fetchOrder ('fetch-order', limitOrder, pageOrder, queryOrder, sortIDOrder, sortDateOrder, sortStatusOrder)
     })
 
-
-
-
-
-
-
-
-
-
 // Thêm vào file JavaScript của bạn (ví dụ admin-order.js)
 
 $(document).ready(function() {
@@ -209,36 +175,36 @@ $(document).ready(function() {
         });
     }
     
-    // Xử lý sự kiện khi nhấn nút lọc
-    $('#filter_date_btn').click(function() {
-        fromDate = $('#from_date').val();
-        toDate = $('#to_date').val();
+    // // Xử lý sự kiện khi nhấn nút lọc
+    // $('#filter_date_btn').click(function() {
+    //     fromDate = $('#from_date').val();
+    //     toDate = $('#to_date').val();
         
-        if (fromDate === '' && toDate === '') {
-            alert('Vui lòng chọn ít nhất một ngày để lọc!');
-            return;
-        }
+    //     if (fromDate === '' && toDate === '') {
+    //         alert('Vui lòng chọn ít nhất một ngày để lọc!');
+    //         return;
+    //     }
         
-        // Kiểm tra ngày hợp lệ
-        if (fromDate !== '' && toDate !== '' && fromDate > toDate) {
-            alert('Ngày bắt đầu không thể lớn hơn ngày kết thúc!');
-            return;
-        }
+    //     // Kiểm tra ngày hợp lệ
+    //     if (fromDate !== '' && toDate !== '' && fromDate > toDate) {
+    //         alert('Ngày bắt đầu không thể lớn hơn ngày kết thúc!');
+    //         return;
+    //     }
         
-        // Tải dữ liệu với bộ lọc ngày
-        loadOrderData('5', '1', '', '', '', '');
-    });
+    //     // Tải dữ liệu với bộ lọc ngày
+    //     loadOrderData('5', '1', '', '', '', '');
+    // });
     
-    // Xử lý sự kiện khi nhấn nút đặt lại
-    $('#reset_date_btn').click(function() {
-        $('#from_date').val('');
-        $('#to_date').val('');
-        fromDate = '';
-        toDate = '';
+    // // Xử lý sự kiện khi nhấn nút đặt lại
+    // $('#reset_date_btn').click(function() {
+    //     $('#from_date').val('');
+    //     $('#to_date').val('');
+    //     fromDate = '';
+    //     toDate = '';
         
-        // Tải lại dữ liệu không có bộ lọc
-        loadOrderData('5', '1', '', '', '', '');
-    });
+    //     // Tải lại dữ liệu không có bộ lọc
+    //     loadOrderData('5', '1', '', '', '', '');
+    // });
     
     // Thêm vào sự kiện phân trang hiện có
     $(document).on('click', '.pagination__order__item', function() {

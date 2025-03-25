@@ -128,6 +128,33 @@ $(document).ready(function () {
                     } 
                 }
             })
+                        // Thêm xử lý upload ảnh vào đây
+                        let uploadPromises = [];
+                        for (let i = 1; i <= 3; i++) {
+                            let fileInput = $('#inputUpdateImage-' + i)[0].files[0];
+                            if (fileInput) {
+                                let promise = ClassFuction.getAjaxFile(`../../Controller/admin/controller-admin.info-product.php?id-update=${$('#Admin__Input__SP_IDSanPham').val().trim()}`,
+                                    $('#inputUpdateImage-' + i), 'uploadImage-' + i);
+                                uploadPromises.push(promise);
+                            }
+                        }
+                        Promise.all(uploadPromises).then(results => {
+                            // Xử lý kết quả upload ảnh sau khi tất cả ảnh đã được upload
+                            results.forEach((result, index) => {
+                                result = result.trim();
+                                if (result !== 'update-file-failed') {
+                                    $('#previewImage-' + (index + 1) + ' img').attr('src', '../../Controller/admin/' + result);
+                                } else {
+                                    // Xử lý lỗi upload ảnh
+                                    alertFailed('Cập nhật ảnh ' + (index + 1) + ' thất bại!');
+                                }
+                            });
+                            // alertSuccess('Cập nhật thông tin và ảnh sản phẩm thành công!');
+                        }).catch(error => {
+                            // Xử lý lỗi chung khi upload ảnh
+                            alertFailed('Có lỗi xảy ra khi cập nhật ảnh!');
+                        });
+                        // $('.Product__Info__Content__Image__Update__Button__Group').remove();
         }
     })
 

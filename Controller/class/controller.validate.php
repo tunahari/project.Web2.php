@@ -36,6 +36,36 @@ class ValidateData {
     /* Xác thực mật khẩu hợp lệ
     - Mật khẩu phải trên 5 ký tự, có chứa ký tự đặt biệt [!,@,#,$,%,&,*], chữ và số
     */ 
+    // function validatePassword ($password) {
+    //     $password = trim($password);
+    //     $error = "";
+    //     $countSpace = 0;
+    //     for ($i = 0; $i < strlen($password); $i++) {
+    //         if (mb_substr($password, $i, 1) === ' ') {
+    //             $countSpace++;
+    //         }
+    //     }
+    //     if (mb_strlen($password) <= 5) {
+    //         $error = "1";
+    //     } else if(!preg_match("#[0-9]+#",$password)) {
+    //         $error = "1";
+    //     } else if(!preg_match("#[A-Z]+#",$password)) {
+    //         $error = "1";
+    //     } else if(!preg_match("#[a-z]+#",$password)) {
+    //         $error = "1";
+    //     } else if(!preg_match("#[\W]+#",$password)) {
+    //         $error = "1";
+    //     } else if ($countSpace > 0) {
+    //         $error = "1";
+    //     } else {
+    //         $error = "";
+    //     }
+    //     if ($error === "") {
+    //         return true;
+    //     } else {
+    //         return false;
+    //     }
+    // }
     function validatePassword ($password) {
         $password = trim($password);
         $error = "";
@@ -45,15 +75,13 @@ class ValidateData {
                 $countSpace++;
             }
         }
-        if (mb_strlen($password) <= 5) {
+        if (mb_strlen($password) < 5) {
             $error = "1";
         } else if(!preg_match("#[0-9]+#",$password)) {
             $error = "1";
         } else if(!preg_match("#[A-Z]+#",$password)) {
             $error = "1";
         } else if(!preg_match("#[a-z]+#",$password)) {
-            $error = "1";
-        } else if(!preg_match("#[\W]+#",$password)) {
             $error = "1";
         } else if ($countSpace > 0) {
             $error = "1";
@@ -66,6 +94,7 @@ class ValidateData {
             return false;
         }
     }
+    
 
     /* Xác thực mật khẩu chính xác
     - Mật khẩu được băm nhỏ phải khớp với mật khẩu xác nhận
@@ -102,14 +131,25 @@ class ValidateData {
     - 10 ký tự phải là số nguyên, không âm
     - Số điện thoại đầu bằng số 0
     */
-    function validatePhoneNumber ($phone) {
+    // function validatePhoneNumber ($phone) {
+    //     $phone = trim($phone);
+    //     if (strlen($phone) === 10 && (is_int($phone) || ctype_digit($phone)) && (int)$phone > 0 && intval(mb_substr($phone, 0, 1)) === 0) {
+    //         return true;
+    //     } else {
+    //         return false;
+    //     }
+    // }
+
+    function validatePhoneNumber($phone) {
+        $regexPhone = "/^\d+$/";
         $phone = trim($phone);
-        if (strlen($phone) === 10 && (is_int($phone) || ctype_digit($phone)) && (int)$phone > 0 && intval(mb_substr($phone, 0, 1)) === 0) {
+        if (strlen($phone) >= 10 && preg_match($regexPhone, $phone)) {
             return true;
         } else {
             return false;
         }
     }
+    
 
     function validateNumber ($number) {
         if ((is_int($number) || ctype_digit($number)) && (int)$number > 0) {

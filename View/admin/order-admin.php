@@ -15,67 +15,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/js/all.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 </head>
-<style>
-    .date__filter {
-        color: black;
-        display: flex;
-        align-items: center;
-        width: 50%;
-        gap: 15px;
-        margin-top: 15px;
-        padding: 10px;
-        background-color: #f8f9fa;
-        border-radius: 5px;
-    }
-
-    .date__filter__group {
-        display: flex;
-        align-items: center;
-        gap: 5px;
-    }
-
-    .date__filter__input {
-        padding: 5px 10px;
-        border: 1px solid #ddd;
-        border-radius: 4px;
-        font-size: 14px;
-    }
-
-    .date__filter__button {
-        display: flex;
-        gap: 10px;
-    }
-
-    .date__filter__button button {
-        padding: 6px 12px;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        gap: 5px;
-        font-size: 14px;
-        transition: all 0.3s;
-    }
-
-    #filter_date_btn {
-        background-color: #4e73df;
-        color: white;
-    }
-
-    #filter_date_btn:hover {
-        background-color: #2e59d9;
-    }
-
-    #reset_date_btn {
-        background-color: #f8f9fa;
-        border: 1px solid #ddd;
-    }
-
-    #reset_date_btn:hover {
-        background-color: #e9ecef;
-    }
-</style>
 
 <body>
     <div class="main">
@@ -110,21 +49,17 @@
                     </div>
 
 
-                </div>
-                Lọc theo ngày tháng năm
-                <div class="date__filter">
-                    <div class="date__filter__group">
-                        <label for="from_date">Từ ngày:</label>
-                        <input type="date" id="from_date" class="date__filter__input">
-                    </div>
-                    <div class="date__filter__group">
-                        <label for="to_date">Đến ngày:</label>
-                        <input type="date" id="to_date" class="date__filter__input">
-                    </div>
-                    <div class="date__filter__button">
-                        <button id="filter_date_btn"><i class='bx bx-filter-alt'></i> Lọc</button>
-                        <button id="reset_date_btn"><i class='bx bx-reset'></i> Đặt lại</button>
-                    </div>
+                    <!-- <div class="select__status">
+                        <select id="select__status__order">
+                            <option value="">Tất cả</option>
+                            <option value="2">Đã hoàn thành</option>
+                            <option value="4">Chờ xử lý</option>
+                            <option value="3">Đã xử lý</option>
+                            <option value="1">Đã hủy</option>
+                        </select>
+                        <button id="filter_btn">Lọc</button>
+                    </div> -->
+
                 </div>
 
 

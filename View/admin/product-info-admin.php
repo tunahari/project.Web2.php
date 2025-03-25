@@ -175,9 +175,9 @@ $conn->close();
                                 </label>
                                 <input type="file" id="inputUpdateImage-1">
                                 <div class="Product__Info__Content__Image__Update__Button__Group Product__Info__Content__Image__Update__Button__Group-1">
-                                    <button type="button" id="submitUpdateImage-1">
+                                    <!-- <button type="button" id="submitUpdateImage-1">
                                         Tải lên<i class="fa-solid fa-cloud-arrow-up"></i>
-                                    </button>
+                                    </button> -->
                                     <button type="button" id="cancelUpdateImage-1">
                                         Hủy bỏ<i class="fa-solid fa-rectangle-xmark"></i>
                                     </button>
@@ -203,9 +203,9 @@ $conn->close();
                                     </label>
                                     <input type="file" id="inputUpdateImage-2">
                                     <div class="Product__Info__Content__Image__Update__Button__Group Product__Info__Content__Image__Update__Button__Group-2">
-                                        <button type="button" id="submitUpdateImage-2">
+                                        <!-- <button type="button" id="submitUpdateImage-2">
                                             Tải lên<i class="fa-solid fa-cloud-arrow-up"></i>
-                                        </button>
+                                        </button> -->
                                         <button type="button" id="cancelUpdateImage-2">
                                             Hủy bỏ<i class="fa-solid fa-rectangle-xmark"></i>
                                         </button>
@@ -229,9 +229,9 @@ $conn->close();
                                     </label>
                                     <input type="file" id="inputUpdateImage-3">
                                     <div class="Product__Info__Content__Image__Update__Button__Group Product__Info__Content__Image__Update__Button__Group-3">
-                                        <button type="button" id="submitUpdateImage-3">
+                                        <!-- <button type="button" id="submitUpdateImage-3">
                                             Tải lên<i class="fa-solid fa-cloud-arrow-up"></i>
-                                        </button>
+                                        </button> -->
                                         <button type="button" id="cancelUpdateImage-3">
                                             Hủy bỏ<i class="fa-solid fa-rectangle-xmark"></i>
                                         </button>

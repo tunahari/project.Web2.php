@@ -24,13 +24,13 @@ if (isset($_POST['verifyAccount']) && $_POST['verifyAccount'] === 'verify-accoun
                         } else {
                             $employeeName = $EmployeeClass->getEmployeeByCodeVerify()[0]['NV_TenNhanVien'];
                         }
-                        $fromEmail = 'thanhdai11733621@gmail.com';
-                        $fromPass = 'ryfwcoruiafszywl';
+                        $fromEmail = 'hai07gaming@gmail.com';
+                        $fromPass = 'wlqr ewrl zwle vpuc';
                         $fromName = 'SB Mobile Xác Thực Tài Khoản';
                         $toName = $employeeName;
                         $toEmail = $emailVerify;
                         $subject = 'Xin chào '.$employeeName.'!';
-                        $body = 'Mã xác thực của bạn là: <h1>'.$codeVerifyEmail.'</h1>';
+                        $body = 'Mã xác thực của bạn là: <h1>'.$codeVerifyEmail.'</h1>';                    
                         if ($HandlingFunctions->sendEmailByPHPMailer ($fromEmail, $fromPass, $fromName, $toName, $toEmail, $subject, $body)) {
                             echo 'check-email-success';
                         } else {

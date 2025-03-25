@@ -1,3 +1,32 @@
+<?php
+$conn = mysqli_connect('localhost', 'root', '', 'projectweb2') or die("Không thể kết nối tới csdl");
+if (!$conn) {
+    echo "Kết nối không thành công. " . mysqli_connect_error();
+    die();
+}
+$IDEmployee = (int) $_GET['id-employee'];
+
+$sql = "SELECT * FROM `employee` WHERE `NV_IDNhanVien` = $IDEmployee";
+$result = mysqli_query($conn, $sql);
+$item = mysqli_fetch_assoc($result);
+
+@$PassNV = trim($_POST['NV_MatKhauNhanVien']);
+$PassWordHashed = password_hash($PassNV, PASSWORD_DEFAULT);
+if (!empty($_POST['NV_MatKhauNhanVien'])) {
+    $sql = "UPDATE `employee` SET `NV_MatKhauNhanVien` = '$PassWordHashed' WHERE `NV_IDNhanVien` = $IDEmployee";
+    $result = mysqli_query($conn, $sql);
+    if ($result) {
+        // echo $PassWordHashed; //This should probably be a JSON response as well for consistency.
+        echo json_encode(["status" => "success", "message" => "Đổi mật khẩu thành công, mật khẩu mới của nhân viên 'NV$item[NV_IDNhanVien]' là: $PassNV"]);
+    } else {
+        echo json_encode(["status" => "error", "message" => "Lỗi cập nhật mật khẩu"]);
+    }
+    exit;
+} else {
+    echo json_encode(["status" => "error", "message" => "Dữ liệu không hợp lệ"]);
+}
+mysqli_close($conn);
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -179,6 +208,16 @@
                                             ?>">Linked In</a>
                             </div>
                         </div>
+                        <form method="post" id="furnishPasswordForm">
+                            <div class="Info__Input__Box__Content__Input__Item">
+                                <label>Đổi mật khẩu nhân viên (Mã hóa Bcrypt)</label>
+                                <label>Chỉ dùng khi NV quên mật khẩu*</label>
+                                <input id="NV_MatKhauNhanVien" name="NV_MatKhauNhanVien" type="text" placeholder="" class="Input__NV__Info"
+                                    value="<?php echo $item['NV_MatKhauNhanVien'] ?>">
+                                <div class="Input__NV__Info__Error">Input invalid, please check again</div>
+                                <input id="submitPass" name="furnishPassWord" type="submit" class="Profile__Save__Pass__Button" value="Đổi Mật Khẩu">
+                            </div>
+                        </form>
                     </div>
                 </div>
                 <div class="Profile__Container__Right">
@@ -261,7 +300,7 @@
                                         <label for="Input_NV_MaChiNhanh">Mã chi nhánh: (CN*)</label>
 
                                         <select class="Admin__Input__SP" id="Input_NV_MaChiNhanh">
-                                            <option disabled selected>Chọn Chi Nhánh</option>
+                                        <option  selected value="" hidden>Chọn Chi Nhánh</option>
                                             <?php
                                             // Kết nối database
                                             $conn = mysqli_connect('localhost', 'root', '', 'projectweb2');
@@ -430,6 +469,29 @@
         </div>
         <div class="alert__notify__box__failed__progress"></div>
     </div>
+    <script>
+        document.getElementById("furnishPasswordForm").addEventListener("submit", function (event) {
+    event.preventDefault(); // Ngăn form reload trang
+
+    let formData = new FormData(this);
+
+    fetch(window.location.href, { // Gửi request đến chính URL hiện tại
+        method: "POST",
+        body: formData
+    })
+    .then(response => response.json()) 
+    .then(data => {
+        if (data.status === "success") {
+            alert(data.message); 
+            location.reload(); // Reload lại trang sau khi nhấn OK
+        } else {
+            alert("Lỗi: " + data.message);
+        }
+    })
+    .catch(error => console.error("Lỗi:", error));
+});
+
+    </script>
 </body>
 
 </html>

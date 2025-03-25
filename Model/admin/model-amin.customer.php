@@ -62,7 +62,7 @@ class Customer
     {
         $this->KH_ConnectIDKhachHang  = $KH_ConnectIDKhachHang;
     }
-
+    
     function insertCustomer()
     {
         $ConnectDataBase = new ConnectDataBase;
@@ -104,6 +104,17 @@ class Customer
 
         return null;
     }
+    public function updateAddressAndPhoneByID()
+    {
+        $sql = "UPDATE `customer` SET `KH_DiaChiKhachHang` = ?, `KH_SDTKhachHang` = ? WHERE `KH_IDKhachHang` = ?";
+        $ConnectDataBase = new ConnectDataBase;
+        $stmt = $ConnectDataBase->connectDB()->prepare($sql);
+        $stmt->bindParam(1, $this->KH_DiaChiKhachHang, PDO::PARAM_STR);
+        $stmt->bindParam(2, $this->KH_SDTKhachHang, PDO::PARAM_STR);
+        $stmt->bindParam(3, $this->KH_IDKhachHang, PDO::PARAM_INT);
+        return $stmt->execute();
+    }
+    
 
     function updateProfileCustomer()
     {

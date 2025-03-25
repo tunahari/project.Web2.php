@@ -753,7 +753,7 @@ span.price-save {
   align-items: flex-start;
   font-size: 14px;
   font-weight: 600;
-  color: #7d5fff;
+  color: #ff0000;
 }
 
 .content-info-logo {
@@ -764,7 +764,7 @@ span.price-save {
 }
 
 .content-info-logo i {
-  color: #7d5fff;
+  color: #ff0000;
 }
 
 .content-info-change {
@@ -873,6 +873,7 @@ span.address {
 }
 
 div#updateInfoCartSubmit {
+  margin-top: 20px;
   font-size: 14px;
   font-weight: 600;
   background-color: #7d5fff;

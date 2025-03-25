@@ -14,7 +14,7 @@
 <body>
     <div class="Login__Admin__Container">
         <div class="Login__Admin__Header">
-            <div class="Login__Admin__Header__Logo">SB MOBILE</div>
+            <a href="./login-admin.php" class="Login__Admin__Header__Logo">SB MOBILE</a>
             <div class="Login__Admin__Header__Info">
                 <div class="Login__Admin__Header__Info__Item">
                     <i class="fa-solid fa-phone-flip"></i>
@@ -26,7 +26,7 @@
                 </div>
                 <div class="Login__Admin__Header__Info__Item">
                     <i class="fa-solid fa-envelope"></i>
-                    TunaHari86@gmial.comcom
+                    TunaHari86@gmail.com
                 </div>
             </div>
         </div>

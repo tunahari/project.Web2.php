@@ -128,7 +128,7 @@ require_once '../../Model/admin/model-amin.customer.php';
                         <div class="Profile__Panel__Item__Profile__Right__Input__Item">
                             <label for="profileNewPassword">Mật khẩu mới <i class="fa-solid fa-pen-to-square"></i></label>
                             <input type="password" id="profileNewPassword">
-                            <div class="Profile__Input__Error">Mật khẩu gồm chữ hoa, thường, số và ký tự đặc biệt</div>
+                            <div class="Profile__Input__Error">Mật khẩu chứa ít nhất 5 ký tự, bao gồm chữ hoa, chữ thường và số</div>
                         </div>
                         <!-- Input item NewPassword -->
 

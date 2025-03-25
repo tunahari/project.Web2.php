@@ -385,12 +385,12 @@ function fetchPhoneAddress()
                     <div class="Update__Info__Input__Box">
                         <label for="updateAddressCart">Địa chỉ:</label>
                         <input type="text" value="' . $KH_DiaChiKhachHang . '" id="updateAddressCart">
-                        <div class="Update__Info__Error">Địa chỉ phải trên 4 ký tự</div>
+                     
                     </div> 
                     <div class="Update__Info__Input__Box">
                         <label for="updatePhoneCart">Số điện thoại:</label>
                         <input type="text" value="' . $KH_SDTKhachHang . '" id="updatePhoneCart">
-                        <div class="Update__Info__Error">Số điện thoại không hợp lệ</div>
+                  
                     </div> 
                     <div id="updateInfoCartSubmit" value="' . $KH_IDKhachHang . '">Cập Nhật</div>
                 </div>
@@ -401,6 +401,34 @@ function fetchPhoneAddress()
         return '';
     }
 }
+
+// Thêm phần xử lý cập nhật thông tin địa chỉ và số điện thoại
+if (isset($_POST['updateInfoCartSubmit']) && $_POST['updateInfoCartSubmit'] === 'update-info-cart') {
+    if (isset($_POST['idCustomer']) && isset($_POST['newAddress']) && isset($_POST['newPhone'])) {
+        $idCustomer = $_POST['idCustomer'];
+        $newAddress = $_POST['newAddress'];
+        $newPhone = $_POST['newPhone'];
+
+        // Sử dụng class Customer để cập nhật thông tin
+        $CustomerClass = new Customer;
+        $CustomerClass->setKH_IDKhachHang($idCustomer);
+        $CustomerClass->setKH_DiaChiKhachHang($newAddress);
+        $CustomerClass->setKH_SDTKhachHang($newPhone);
+
+        if ($CustomerClass->updateAddressAndPhoneByID()) {
+            echo 'success'; // Trả về 'success' nếu cập nhật thành công
+        } else {
+            echo 'failed'; // Trả về 'failed' nếu cập nhật thất bại
+        }
+    } else {
+        echo 'missing_data'; // Trả về 'missing_data' nếu thiếu dữ liệu
+    }
+    exit; // Dừng thực thi sau khi xử lý
+}
+
+
+
+
 
 function getPriceBill()
 {

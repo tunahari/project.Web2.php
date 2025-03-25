@@ -87,7 +87,8 @@ $(document).ready(function () {
                 }
             });
         } else {
-            alertLogin ('Thiếu Thông Tin', 'Vui lòng nhập đầy đủ thông tin đăng nhập!', '', '')
+            // alertLogin ('Thiếu Thông Tin', 'Vui lòng nhập đầy đủ thông tin đăng nhập!', '', '')
+            alert("Vui lòng nhập đầy đủ thông tin đăng nhập! \nNếu là nhân viên mới, vui lòng nhập đúng mã nhân viên với mật khẩu bất kì để kiểm tra trạng thái tài khoản")
         }
     })
 })

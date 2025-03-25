@@ -1,5 +1,5 @@
 <?php
-  if (isset($_GET['code-verify']) && $_GET['code-verify'] !== '') {
+if (isset($_GET['code-verify']) && $_GET['code-verify'] !== '') {
     require_once '../../Model/database/connectDataBase.php';
     require_once '../../Model/admin/model-admin.employee.php';
     $EmployeeClass = new Employee;
@@ -10,9 +10,9 @@
     } else {
         $emailDefault = $EmployeeClass->getEmployeeByCodeVerify ()[0]['NV_EmailNhanVien'];
     }
-    } else {
-        echo 'Không có';
-    }
+} else {
+    echo 'Không có';
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -30,19 +30,19 @@
 <body>
     <div class="Verify__Admin__Container">
         <div class="Verify__Admin__Header">
-            <div class="Verify__Admin__Header__Logo">SB MOBILE</div>
+            <a href="./login-admin.php" class="Verify__Admin__Header__Logo">SB MOBILE</a>
             <div class="Verify__Admin__Header__Info">
                 <div class="Verify__Admin__Header__Info__Item">
                     <i class="fa-solid fa-phone-flip"></i>
-                    0373874418
+                    0369969650
                 </div>
-                    <div class="Verify__Admin__Header__Info__Item">
+                <div class="Verify__Admin__Header__Info__Item">
                     <i class="fa-brands fa-facebook-f"></i>
                     <a href="#">Facebook</a>
                 </div>
                 <div class="Verify__Admin__Header__Info__Item">
                     <i class="fa-solid fa-envelope"></i>
-                    thanhdai11733621@gmail.com
+                    <a  href="./display_code.php?code-verify=<?php echo $codeVerify ?>" target="_blank">Tunahari86@gmail.com</a>
                 </div>
             </div>
         </div>
@@ -64,7 +64,7 @@
                 <div class="Verify__Admin__Input__Item Verify__Admin__Input__Item__Password">
                     <label for="">Mật khẩu mới: </label>
                     <input type="text" id="PassVerify">
-                    <div class="error-pass">Mật khẩu phải gồm chữ hoa, thường, số và ký tự đặc biệt</div>
+                    <div class="error-pass">MK tối thiểu 5 ký tự, bao gồm chữ hoa, thường và số</div>
                 </div>
                 <div class="Verify__Admin__Input__Item Verify__Admin__Input__Item__Password">
                     <label for="">Xác nhận mật khẩu mới: </label>
@@ -79,7 +79,7 @@
     <div class="Verify__Admin__Alert">
         <div class="Verify__Admin__Alert__Top">
             <div class="Verify__Admin__Alert__Top__Icon">
-            <i class="fa-solid fa-triangle-exclamation"></i>
+                <i class="fa-solid fa-triangle-exclamation"></i>
             </div>
         </div>
         <div class="Verify__Admin__Alert__Bottom">

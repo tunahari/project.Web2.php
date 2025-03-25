@@ -236,7 +236,7 @@ if (!isset($_GET['id-product']) || empty($_GET['id-product'])) {
                 <div class="content-details-bottom">
                     <div class="content-bottom-tittle">
                         <span class="bottom-tittle-items bottom-tittle-desc">Chi Tiết Sản Phẩm</span>
-                        <span class="bottom-tittle-items bottom-tittle-review">Bình Luận(1)</span>
+                       
                     </div>
                     <div class="content-bottom-desciption">
                         <div class="bottom-description">
@@ -263,10 +263,13 @@ if (!isset($_GET['id-product']) || empty($_GET['id-product'])) {
                                     built in</p>
                             </div>
                         </div>
+                        <hr style="width: 100%; margin: 15px 0px;">
+   
+                        <span class="bottom-tittle-items bottom-tittle-review">Bình Luận(1)</span>
                         <div class="bottom-reviews">
                             <div class="customer-review">
                                 <div class="customer-review-tittle">
-                                    <span class="customer-name">Trương Thành Đại</span>
+                                    <span class="customer-name">Hoàng Tuấn Hải</span>
                                     <span class="review-date">12:30 15/07/2022</span>
                                 </div>
                                 <div class="review-content">
@@ -286,6 +289,7 @@ if (!isset($_GET['id-product']) || empty($_GET['id-product'])) {
                                 </div>
                             </div>
                             <form class="review-form">
+                                
                                 <h5>Viết Bình Luận</h5>
                                 <div class="form-review-content">
                                     <textarea type="text" id="input-content"> </textarea>

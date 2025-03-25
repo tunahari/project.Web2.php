@@ -26,7 +26,7 @@
             <div class="Account__Register__Right__Input__Box">
                 <div class="Account__Register__Right__Input__Item">
                     <label for="">Tên:</label>
-                    <input type="text" name="" id="registerName" placeholder="Viết tên của bạn vào đây...">
+                    <input type="text" name="" id="registerName" placeholder="Viết tên đầy đủ của bạn vào đây...">
                     <div class="Account__Register__Right__Error Account__Register__Right__Error__Username">
                     Tên chứa ít nhất 5 ký tự
                     </div>
@@ -41,10 +41,10 @@
             </div>
             <div class="Account__Register__Right__Input__Box">
                 <div class="Account__Register__Right__Input__Item">
-                    <label for="">Mật khẩu</label>
+                    <label for="">Mật khẩu </label>
                     <input type="password" name="" id="registerPass" placeholder="Viết mật khẩu của bạn vào đây...">
                     <div class="Account__Register__Right__Error Account__Register__Right__Error__Password">
-                    Mật khẩu chứa ít nhất 5 ký tự, bao gồm chữ hoa, thường, số và ký tự đặc biệt 
+                    MK tối thiểu 5 ký tự, bao gồm chữ hoa, thường và số (VD: "123Aa" hoặc "Hai123")
                     </div>
                 </div>
                 <div class="Account__Register__Right__Input__Item">

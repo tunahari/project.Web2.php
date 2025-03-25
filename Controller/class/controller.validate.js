@@ -20,7 +20,9 @@ class ValidateData {
    */ 
    validatePassword (password) {
        password = password.trim()
-       var passwordRegex = /^(?=\S*[a-z])(?=\S*[A-Z])(?=\S*\d)(?=\S*[^\w\s])\S{5,}$/
+    //    var passwordRegex = /^(?=\S*[a-z])(?=\S*[A-Z])(?=\S*\d)(?=\S*[^\w\s])\S{5,}$/
+    var passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{5,}$/;
+
        if (passwordRegex.test(password)) {
            return true
        } else {
@@ -53,7 +55,7 @@ class ValidateData {
     }
 
    /* Xác thực số điện thoại
-   - Số điện thoại phải đủ 10 ký tự
+   - Số điện thoại phải tối thiểu 10 ký tự
    - 10 ký tự phải là số nguyên, không âm
    - Số điện thoại đầu bằng số 0
    */
@@ -61,16 +63,25 @@ class ValidateData {
    isNumeric(value) {
        return /^\d+$/.test(value);
    }
-
    validatePhoneNumber (phone) {
-       var regexPhone = /^\d+$/
-       phone = phone.trim()
-       if (phone.length === 10 && regexPhone.test(phone) === true) {
-           return true;
-       } else {
-           return false;
-       }
-   }
+    var regexPhone = /^\d+$/; // Biểu thức chính quy kiểm tra số nguyên dương
+    phone = phone.trim(); // Loại bỏ khoảng trắng thừa ở đầu và cuối
+    if (phone.length >= 10 && regexPhone.test(phone)) { // Kiểm tra độ dài >= 10 và chỉ chứa số
+        return true;
+    } else {
+        return false;
+    }
+}
+
+//    validatePhoneNumber (phone) {
+//        var regexPhone = /^\d+$/
+//        phone = phone.trim()
+//        if (phone.length === 10 && regexPhone.test(phone) === true) {
+//            return true;
+//        } else {
+//            return false;
+//        }
+//    }
 
     checkQuantity (quantity) {
         var regexQuantity = /^\d+$/

@@ -18,16 +18,16 @@ $_SESSION['id_customer'] = $IDCustomer;
 @$EmailKhachHang = $_POST['KH_EmailKhachHang'];
 @$LoaiKhachHang = $_POST['KH_LoaiKhachHang'];
 
-/* Cập nhật infor Customer */
-if (isset($_POST['updateInfoCustomer'])) {
-    $sql = "Update `customer` SET 
-    `KH_TenKhachHang` = '$TenKhachHang', 
-    `KH_SDTKhachHang` = '$SDTKhachHang', 
-    `KH_DiaChiKhachHang` = '$DiaChiKhachHang', 
-    `KH_EmailKhachHang` = '$EmailKhachHang' 
-    WHERE `KH_IDKhachHang` = $IDCustomer";
-    $result = mysqli_query($conn, $sql);
-}
+// /* Cập nhật infor Customer */
+// if (isset($_POST['updateInfoCustomer'])) {
+//     $sql = "Update `customer` SET 
+//     `KH_TenKhachHang` = '$TenKhachHang', 
+//     `KH_SDTKhachHang` = '$SDTKhachHang', 
+//     `KH_DiaChiKhachHang` = '$DiaChiKhachHang', 
+//     `KH_EmailKhachHang` = '$EmailKhachHang' 
+//     WHERE `KH_IDKhachHang` = $IDCustomer";
+//     $result = mysqli_query($conn, $sql);
+// }
 /* Lấy dữ liệu khách hàng */
 $sql = "SELECT * FROM `customer` where `KH_IDKhachHang` = $IDCustomer";
 $result = mysqli_query($conn, $sql);
