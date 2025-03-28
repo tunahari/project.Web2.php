@@ -114,13 +114,13 @@ if (!isset($_GET['id-product']) || empty($_GET['id-product'])) {
                 <div class="content-details-top">
                     <div class="details-top-left">
                         <div class="small-img-group">
-                            <div class="details-small-img active">
+                            <div class="details-small-img  active" id="small-img-1">
                                 <img src="../../Controller/admin/<?php echo $SP_Image1SanPham ?>" alt="" class="small-img" srcset="">
                             </div>
-                            <div class="details-small-img">
+                            <div class="details-small-img" id="small-img-2">
                                 <img src="../../Controller/admin/<?php echo $SP_Image2SanPham ?>" alt="" class="small-img" srcset="">
                             </div>
-                            <div class="details-small-img">
+                            <div class="details-small-img" id="small-img-3">
                                 <img src="../../Controller/admin/<?php echo $SP_Image3SanPham ?>" alt="" class="small-img" srcset="">
                             </div>
                         </div>
@@ -326,10 +326,10 @@ if (!isset($_GET['id-product']) || empty($_GET['id-product'])) {
     </div>
     <!-- LOADING -->
     <div class="loading__bg"></div>
-        <!-- <div class="loading__box">
+        <div class="loading__box">
             <p>Đang Thực Hiện...</p>
             <div class="loading"></div>
-        </div> -->
+        </div>
         <!-- ALERT NOTIFY SUCCESS -->
         <div class="alert__notify__box__success">
             <div class="alert__notify__box__success__close"><i class="fa-solid fa-xmark"></i></div>
@@ -359,6 +359,31 @@ if (!isset($_GET['id-product']) || empty($_GET['id-product'])) {
             <div class="alert__notify__box__failed__progress"></div>
         </div>
     <?php include '../include/footer.main.php' ?>
+    <script>
+        // details.view.js
+
+$(document).ready(function() {
+    // Lấy tham chiếu đến ảnh chính và các ảnh nhỏ
+    const mainImg = $('#main-img');
+    const smallImgs = $('.details-small-img');
+
+    // Xử lý sự kiện click cho từng ảnh nhỏ
+    smallImgs.click(function() {
+        // Lấy đường dẫn ảnh (src) của ảnh nhỏ được click
+        const smallImgSrc = $(this).find('img').attr('src');
+
+        // Thay đổi đường dẫn ảnh (src) của ảnh chính
+        mainImg.attr('src', smallImgSrc);
+
+        // Xóa class 'active' khỏi tất cả các ảnh nhỏ
+        smallImgs.removeClass('active');
+
+        // Thêm class 'active' vào ảnh nhỏ được click
+        $(this).addClass('active');
+    });
+});
+
+    </script>
 </body>
 
 </html>

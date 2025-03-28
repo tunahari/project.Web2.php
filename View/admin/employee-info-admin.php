@@ -339,7 +339,7 @@ mysqli_close($conn);
                                         }
                                         ?>
                                         <select class="Input__NV__Info" id="Input_NV_ChucVuNhanVien">
-                                            <option disabled selected hidden>Chọn chức vụ</option>
+                                            <option selected hidden>Chọn chức vụ</option>
                                             <option  disabled value="2" <?= ($infoEmployee['NV_ChucVuNhanVien'] == 2) ? 'selected' : '' ?>>Tổng giám đốc</option>
                                             <option value="0" <?= ($infoEmployee['NV_ChucVuNhanVien'] == 0) ? 'selected' : '' ?>>Nhân viên</option>
                                             <option value="1" <?= ($infoEmployee['NV_ChucVuNhanVien'] == 1) ? 'selected' : '' ?>>Quản lý</option>

@@ -96,7 +96,7 @@
 
                             <label for="CN_IDQuanLyChiNhanh__Input">NV Quản lý chi nhánh</label>
                             <select class="ChiNhanh__Input__Class" id="CN_IDQuanLyChiNhanh__Input">
-                                <option disabled selected>Chọn Nhân Viên</option>
+                                <option selected hidden>Chọn Nhân Viên</option>
                                 <?php
                                 // Kết nối database
                                 $conn = mysqli_connect('localhost', 'root', '', 'projectweb2');

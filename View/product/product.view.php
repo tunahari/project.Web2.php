@@ -19,7 +19,8 @@
     <link rel="stylesheet" href="./product.view.css">
     <title>Product Page</title>
 </head>
-<!-- 
+
+
 <style>
     /* Highlight selected filter items */
     .selected-filter {
@@ -79,7 +80,8 @@
     .Product__Page__Content__Left__Filter__Reset:hover {
         background-color: #e0e0e0;
     }
-</style> -->
+</style>
+
 
 <body>
     <div class="BackGround__Body"></div>
@@ -102,7 +104,7 @@
                         <i class="fa-solid fa-xmark"></i>
                     </div>
 
-                    <!-------------------------- lọc sãn phẩm nâng cao -->
+                    <!-------------------------- lọc sãn phẩm nâng cao ----------------------->
 
 
                     <div class="Product__Page__Content__Left__Title">LỌC SẢN PHẨM</div>
@@ -752,6 +754,7 @@
             const pinItems = document.querySelectorAll('.Product__Page__Content__Left__Filter__Pin__Item');
             const cameraItems = document.querySelectorAll('.Product__Page__Content__Left__Filter__Camera__Item');
 
+            
             // Lưu trữ các tùy chọn lọc
             let selectedFilters = {
                 brand: '',
@@ -838,6 +841,7 @@
 
             // Gọi hàm để hiển thị các lựa chọn đã chọn khi tải trang
             highlightSelected();
+            
 
             // Xử lý sự kiện click vào các mục lọc
             brandItems.forEach(item => {

@@ -589,7 +589,7 @@ $conn->close();
                                     <label for="Admin__Input__SP_HangSanPham">Hãng sản phẩm:</label>
 
                                     <select class="Admin__Input__SP" id="Admin__Input__SP_HangSanPham">
-                                        <option selected disabled>Chọn Hãng</option>
+                                        <option selected hidden>Chọn Hãng</option>
                                         <?php
                                         // Danh sách hãng sản phẩm
                                         $brands = ["Apple", "Samsung", "Xiaomi", "Vivo", "Oppo"];
