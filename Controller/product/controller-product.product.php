@@ -5,11 +5,56 @@ require_once '../../Model/product/model-product.cart.php';
 require_once '../../Model/admin/model-amin.customer.php';
 require_once '../../Model/database/connectDataBase.php';
 require_once '../class/controller.validate.php';
+$conn = mysqli_connect('localhost', 'root', '', 'projectweb2') or die("Không thể kết nối tới csdl");
 
 $CustomerClass = new Customer;
 $ProductClass = new Product;
 $CartClass = new Cart;
 $ValidateData = new ValidateData;
+
+
+
+if (isset($_POST['deleteCart']) && $_POST['deleteCart'] === 'delete-cart') {
+    // Kiểm tra xem người dùng đã đăng nhập chưa
+    if (isset($_SESSION['email'])) {
+        // Lấy ID khách hàng từ session
+        require_once '../../Model/admin/model-amin.customer.php';
+        $CustomerClass = new Customer;
+        $CustomerClass->setKH_EmailKhachHang($_SESSION['email']);
+        $customerID = $CustomerClass->selectCustomerByEmail()['KH_IDKhachHang'];
+
+        // Tạo câu lệnh DELETE
+        $sql = "DELETE FROM cart WHERE GH_IDKhachHang = ?";
+
+        // Chuẩn bị câu lệnh
+        $stmt = mysqli_prepare($conn, $sql);
+
+        // Kiểm tra xem câu lệnh đã được chuẩn bị thành công chưa
+        if ($stmt) {
+            // Gán giá trị cho tham số
+            mysqli_stmt_bind_param($stmt, "i", $customerID);
+
+            // Thực thi câu lệnh
+            if (mysqli_stmt_execute($stmt)) {
+                // Xóa giỏ hàng thành công
+                echo "success";
+            } else {
+                // Xóa giỏ hàng thất bại
+                echo "failed";
+            }
+
+            // Đóng câu lệnh
+            mysqli_stmt_close($stmt);
+        } else {
+            // Lỗi khi chuẩn bị câu lệnh
+            echo "failed";
+        }
+    } else {
+        // Người dùng chưa đăng nhập
+        echo "failed";
+    }
+}
+
 
 function fetchProduct($limitProduct, $startProduct, $queryProduct)
 {

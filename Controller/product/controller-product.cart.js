@@ -61,6 +61,34 @@ $(document).ready(function () {
   }
   /* ================================== Tính toán Tổng Giá và Tổng Số Lượng ================================== */
 
+// Hàm xóa giỏ hàng
+function deleteCartAfterOrder() {
+    $.ajax({
+        url: '../../Controller/product/controller-product.product.php', // Đường dẫn đến file PHP xử lý xóa giỏ hàng
+        type: 'POST',
+        data: {
+            deleteCart: 'delete-cart' // Gửi yêu cầu xóa giỏ hàng
+        },
+        success: function(response) {
+            console.log(response); // In ra phản hồi từ server (có thể dùng để debug)
+            response = response.trim();
+            if (response === 'success') {
+                // Xóa giỏ hàng thành công
+                console.log('Xóa giỏ hàng thành công!');
+                // reload lại trang
+                // location.reload();
+            } else {
+                // Xóa giỏ hàng thất bại
+                console.error('Xóa giỏ hàng thất bại!');
+            }
+        },
+        error: function(xhr, status, error) {
+            console.error(error);
+            console.error('Lỗi khi xóa giỏ hàng!');
+        }
+    });
+}
+
   /* ================================== Tạo đơn hàng ================================== */
   $(document).on("click", "#createBill", function () {
       ClassFuction.getAjaxPost(
@@ -99,6 +127,8 @@ $(document).ready(function () {
                       if (response !== "failed") {
                           $(".loading__box, .loading__bg").hide();
                           alertSuccess("Đặt hàng thành công, đang chuyển hướng về trang chủ");
+                          deleteCartAfterOrder();
+                         
                           setTimeout(function () {
                               fetchCart();
                               fetchQuantityCart();

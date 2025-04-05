@@ -109,6 +109,7 @@
 
                     <div class="Product__Page__Content__Left__Title">LỌC SẢN PHẨM</div>
                     <div class="Product__Page__Content__Left__Filter__Cate">
+                        <input style="width: 100%; border: 1px solid #7860f6; border-radius: 4px; padding: 5px;margin-right: 5px;" value="" placeholder="Nhập từ khóa hoặc tên sản phẩm muốn lọc">
                         <!-- lọc theo hãng -->
                         <div class="Product__Page__Filter__Title">
                             HÃNG
@@ -298,7 +299,7 @@
                             <div class="swiper-slide">
                                 <img src="../image/slide.jpg" alt="">
                             </div>
-                        
+
                         </div>
                     </div>
                     <div class="swiper-pagination"></div>
@@ -548,7 +549,7 @@
         </div>
 
         <div class="Product__Page__Content__2">
-       
+
 
             <div class="Product__Page__Content__2__ShopNow">
                 <?php
@@ -744,7 +745,7 @@
         </div>
         <?php include '../include/footer.main.php' ?>
     </div>
-    <script>
+    <!-- <script>
         document.addEventListener('DOMContentLoaded', function() {
             // Xử lý sự kiện chọn các mục lọc
             const brandItems = document.querySelectorAll('.Product__Page__Content__Left__Filter__Cate__Item');
@@ -754,7 +755,7 @@
             const pinItems = document.querySelectorAll('.Product__Page__Content__Left__Filter__Pin__Item');
             const cameraItems = document.querySelectorAll('.Product__Page__Content__Left__Filter__Camera__Item');
 
-            
+
             // Lưu trữ các tùy chọn lọc
             let selectedFilters = {
                 brand: '',
@@ -841,7 +842,7 @@
 
             // Gọi hàm để hiển thị các lựa chọn đã chọn khi tải trang
             highlightSelected();
-            
+
 
             // Xử lý sự kiện click vào các mục lọc
             brandItems.forEach(item => {
@@ -978,10 +979,10 @@
                 }
 
                 // Giữ lại tham số tìm kiếm nếu có
-                const keyword = urlParams.get('keyword');
-                if (keyword) {
-                    params.push(`keyword=${encodeURIComponent(keyword)}`);
-                }
+                // const keyword = urlParams.get('keyword');
+                // if (keyword) {
+                //     params.push(`keyword=${encodeURIComponent(keyword)}`);
+                // }
 
                 url += params.join('&');
 
@@ -1037,7 +1038,303 @@
                 window.location.href = url;
             });
         });
-    </script>
+    </script> -->
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Xử lý sự kiện chọn các mục lọc
+        const brandItems = document.querySelectorAll('.Product__Page__Content__Left__Filter__Cate__Item');
+        const branchItems = document.querySelectorAll('.Product__Page__Content__Left__Filter__Branch__Item');
+        const ramItems = document.querySelectorAll('.Product__Page__Content__Left__Filter__Ram__Item');
+        const romItems = document.querySelectorAll('.Product__Page__Content__Left__Filter__Rom__Item');
+        const pinItems = document.querySelectorAll('.Product__Page__Content__Left__Filter__Pin__Item');
+        const cameraItems = document.querySelectorAll('.Product__Page__Content__Left__Filter__Camera__Item');
+        //lấy thẻ input keyword
+        const keywordInput = document.querySelector('.Product__Page__Content__Left__Filter__Cate input');
+
+        // Lưu trữ các tùy chọn lọc
+        let selectedFilters = {
+            brand: '',
+            branch: '',
+            ram: '',
+            rom: '',
+            pin: '',
+            camera: '',
+            minPrice: '',
+            maxPrice: '',
+            keyword: '' // Thêm keyword vào đây
+        };
+
+        // Lấy giá trị từ URL nếu có
+        const urlParams = new URLSearchParams(window.location.search);
+        selectedFilters.brand = urlParams.get('brand') || '';
+        selectedFilters.branch = urlParams.get('branch') || '';
+        selectedFilters.ram = urlParams.get('ram') || '';
+        selectedFilters.rom = urlParams.get('rom') || '';
+        selectedFilters.pin = urlParams.get('pin') || '';
+        selectedFilters.camera = urlParams.get('camera') || '';
+        selectedFilters.minPrice = urlParams.get('minPrice') || '';
+        selectedFilters.maxPrice = urlParams.get('maxPrice') || '';
+        selectedFilters.keyword = urlParams.get('keyword') || ''; // Lấy keyword từ URL
+
+        // Hiển thị các lựa chọn đã chọn
+        function highlightSelected() {
+            // Xóa tất cả các lựa chọn hiện tại
+            document.querySelectorAll('.selected-filter').forEach(item => {
+                item.classList.remove('selected-filter');
+            });
+
+            // Đánh dấu các lựa chọn từ URL
+            if (selectedFilters.brand) {
+                brandItems.forEach(item => {
+                    if (item.getAttribute('value') === selectedFilters.brand) {
+                        item.classList.add('selected-filter');
+                    }
+                });
+            }
+
+            if (selectedFilters.branch) {
+                branchItems.forEach(item => {
+                    if (item.getAttribute('value') === selectedFilters.branch) {
+                        item.classList.add('selected-filter');
+                    }
+                });
+            }
+
+            if (selectedFilters.ram) {
+                ramItems.forEach(item => {
+                    if (item.getAttribute('value') === selectedFilters.ram) {
+                        item.classList.add('selected-filter');
+                    }
+                });
+            }
+
+            if (selectedFilters.rom) {
+                romItems.forEach(item => {
+                    if (item.getAttribute('value') === selectedFilters.rom) {
+                        item.classList.add('selected-filter');
+                    }
+                });
+            }
+
+            if (selectedFilters.pin) {
+                pinItems.forEach(item => {
+                    if (item.getAttribute('value') === selectedFilters.pin) {
+                        item.classList.add('selected-filter');
+                    }
+                });
+            }
+
+            if (selectedFilters.camera) {
+                cameraItems.forEach(item => {
+                    if (item.getAttribute('value') === selectedFilters.camera) {
+                        item.classList.add('selected-filter');
+                    }
+                });
+            }
+
+            // Đặt giá trị cho ô nhập giá
+            document.getElementById('minPrice').value = selectedFilters.minPrice;
+            document.getElementById('maxPrice').value = selectedFilters.maxPrice;
+            // Đặt giá trị cho ô nhập từ khóa
+            keywordInput.value = selectedFilters.keyword; // Hiển thị keyword đã nhập
+        }
+
+        // Gọi hàm để hiển thị các lựa chọn đã chọn khi tải trang
+        highlightSelected();
+
+
+        // Xử lý sự kiện click vào các mục lọc
+        brandItems.forEach(item => {
+            item.addEventListener('click', function() {
+                const value = this.getAttribute('value');
+
+                // Toggle selection
+                if (selectedFilters.brand === value) {
+                    selectedFilters.brand = '';
+                    this.classList.remove('selected-filter');
+                } else {
+                    brandItems.forEach(i => i.classList.remove('selected-filter'));
+                    selectedFilters.brand = value;
+                    this.classList.add('selected-filter');
+                }
+            });
+        });
+
+        branchItems.forEach(item => {
+            item.addEventListener('click', function() {
+                const value = this.getAttribute('value');
+
+                if (selectedFilters.branch === value) {
+                    selectedFilters.branch = '';
+                    this.classList.remove('selected-filter');
+                } else {
+                    branchItems.forEach(i => i.classList.remove('selected-filter'));
+                    selectedFilters.branch = value;
+                    this.classList.add('selected-filter');
+                }
+            });
+        });
+
+        ramItems.forEach(item => {
+            item.addEventListener('click', function() {
+                const value = this.getAttribute('value');
+
+                if (selectedFilters.ram === value) {
+                    selectedFilters.ram = '';
+                    this.classList.remove('selected-filter');
+                } else {
+                    ramItems.forEach(i => i.classList.remove('selected-filter'));
+                    selectedFilters.ram = value;
+                    this.classList.add('selected-filter');
+                }
+            });
+        });
+
+        romItems.forEach(item => {
+            item.addEventListener('click', function() {
+                const value = this.getAttribute('value');
+
+                if (selectedFilters.rom === value) {
+                    selectedFilters.rom = '';
+                    this.classList.remove('selected-filter');
+                } else {
+                    romItems.forEach(i => i.classList.remove('selected-filter'));
+                    selectedFilters.rom = value;
+                    this.classList.add('selected-filter');
+                }
+            });
+        });
+
+        pinItems.forEach(item => {
+            item.addEventListener('click', function() {
+                const value = this.getAttribute('value');
+
+                if (selectedFilters.pin === value) {
+                    selectedFilters.pin = '';
+                    this.classList.remove('selected-filter');
+                } else {
+                    pinItems.forEach(i => i.classList.remove('selected-filter'));
+                    selectedFilters.pin = value;
+                    this.classList.add('selected-filter');
+                }
+            });
+        });
+
+        cameraItems.forEach(item => {
+            item.addEventListener('click', function() {
+                const value = this.getAttribute('value');
+
+                if (selectedFilters.camera === value) {
+                    selectedFilters.camera = '';
+                    this.classList.remove('selected-filter');
+                } else {
+                    cameraItems.forEach(i => i.classList.remove('selected-filter'));
+                    selectedFilters.camera = value;
+                    this.classList.add('selected-filter');
+                }
+            });
+        });
+
+        // Xử lý sự kiện nút Lọc
+        document.querySelector('.Product__Page__Content__Left__Filter__Apply').addEventListener('click', function() {
+            // Lấy giá trị giá
+            selectedFilters.minPrice = document.getElementById('minPrice').value;
+            selectedFilters.maxPrice = document.getElementById('maxPrice').value;
+            //lấy giá trị keyword
+            selectedFilters.keyword = keywordInput.value.trim(); // Lấy giá trị từ khóa và loại bỏ khoảng trắng thừa
+
+            // Tạo URL với các tham số lọc
+            let url = './product.view.php?';
+            const params = [];
+
+            if (selectedFilters.brand) {
+                params.push(`brand=${encodeURIComponent(selectedFilters.brand)}`);
+            }
+
+            if (selectedFilters.branch) {
+                params.push(`branch=${encodeURIComponent(selectedFilters.branch)}`);
+            }
+
+            if (selectedFilters.ram) {
+                params.push(`ram=${encodeURIComponent(selectedFilters.ram)}`);
+            }
+
+            if (selectedFilters.rom) {
+                params.push(`rom=${encodeURIComponent(selectedFilters.rom)}`);
+            }
+
+            if (selectedFilters.pin) {
+                params.push(`pin=${encodeURIComponent(selectedFilters.pin)}`);
+            }
+
+            if (selectedFilters.camera) {
+                params.push(`camera=${encodeURIComponent(selectedFilters.camera)}`);
+            }
+
+            if (selectedFilters.minPrice) {
+                params.push(`minPrice=${encodeURIComponent(selectedFilters.minPrice)}`);
+            }
+
+            if (selectedFilters.maxPrice) {
+                params.push(`maxPrice=${encodeURIComponent(selectedFilters.maxPrice)}`);
+            }
+            //thêm keyword vào url
+            if (selectedFilters.keyword) {
+                params.push(`keyword=${encodeURIComponent(selectedFilters.keyword)}`);
+            }
+
+            url += params.join('&');
+
+            // Chuyển hướng đến URL mới
+            window.location.href = url;
+        });
+
+        // Xử lý sự kiện nút Đặt lại
+        document.querySelector('.Product__Page__Content__Left__Filter__Reset').addEventListener('click', function() {
+            // Xóa tất cả các lựa chọn
+            document.querySelectorAll('.selected-filter').forEach(item => {
+                item.classList.remove('selected-filter');
+            });
+
+            // Đặt lại các giá trị
+            document.getElementById('minPrice').value = '';
+            document.getElementById('maxPrice').value = '';
+            //xóa keyword
+            keywordInput.value = '';
+
+            // Đặt lại biến lưu trữ lựa chọn
+            selectedFilters = {
+                brand: '',
+                branch: '',
+                ram: '',
+                rom: '',
+                pin: '',
+                camera: '',
+                minPrice: '',
+                maxPrice: '',
+                keyword: '' // Reset keyword
+            };
+            // Đặt lại giá trị cho ô nhập giá
+            document.getElementById('minPrice').value = '';
+            document.getElementById('maxPrice').value = '';
+
+            //xóa keyword nếu có trong url
+            const urlParams = new URLSearchParams(window.location.search);
+            const keyword = urlParams.get('keyword');
+            if (keyword) {
+                urlParams.delete('keyword')
+
+            }
+            const newUrl = window.location.pathname + '?' + urlParams.toString();
+            window.history.replaceState({}, document.title, newUrl);
+
+            // Chuyển hướng đến trang không có bộ lọc
+            let url = './product.view.php';
+
+            window.location.href = url;
+        });
+    });
+</script>
 </body>
 
 </html>
