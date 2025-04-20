@@ -107,9 +107,13 @@ if (isset($_GET['id-order']) && isset($_GET['id-customer'])) {
                                 </div>
                             </div>
                             <div class="Content__Info__Box__Item Info__Address">
+                                <label for="">Địa Chỉ Giao Hàng (*):</label>
+                                <input type="text"  readonly id="DiaChiKhachHang" value="<?= $listInfoOrder[0]['DH_DiaChiGiaoHang'] ?>">
+                            </div>
+                            <!-- <div class="Content__Info__Box__Item Info__Address">
                                 <label for="">Địa Chỉ Khách Hàng (*):</label>
                                 <input type="text"  readonly id="DiaChiKhachHang" value="<?= $DiaChiKhachHang ?>">
-                            </div>
+                            </div> -->
                         </div>
                     </div>
                     <div class="Order__Info__Content__Bottom">

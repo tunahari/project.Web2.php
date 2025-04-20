@@ -1,4 +1,5 @@
 <?php
+    
 @session_start();
 require_once '../../Model/admin/model-admin.info-product.php';
 require_once '../../Model/product/model-product.cart.php';
@@ -11,50 +12,6 @@ $CustomerClass = new Customer;
 $ProductClass = new Product;
 $CartClass = new Cart;
 $ValidateData = new ValidateData;
-
-
-
-if (isset($_POST['deleteCart']) && $_POST['deleteCart'] === 'delete-cart') {
-    // Kiểm tra xem người dùng đã đăng nhập chưa
-    if (isset($_SESSION['email'])) {
-        // Lấy ID khách hàng từ session
-        require_once '../../Model/admin/model-amin.customer.php';
-        $CustomerClass = new Customer;
-        $CustomerClass->setKH_EmailKhachHang($_SESSION['email']);
-        $customerID = $CustomerClass->selectCustomerByEmail()['KH_IDKhachHang'];
-
-        // Tạo câu lệnh DELETE
-        $sql = "DELETE FROM cart WHERE GH_IDKhachHang = ?";
-
-        // Chuẩn bị câu lệnh
-        $stmt = mysqli_prepare($conn, $sql);
-
-        // Kiểm tra xem câu lệnh đã được chuẩn bị thành công chưa
-        if ($stmt) {
-            // Gán giá trị cho tham số
-            mysqli_stmt_bind_param($stmt, "i", $customerID);
-
-            // Thực thi câu lệnh
-            if (mysqli_stmt_execute($stmt)) {
-                // Xóa giỏ hàng thành công
-                echo "success";
-            } else {
-                // Xóa giỏ hàng thất bại
-                echo "failed";
-            }
-
-            // Đóng câu lệnh
-            mysqli_stmt_close($stmt);
-        } else {
-            // Lỗi khi chuẩn bị câu lệnh
-            echo "failed";
-        }
-    } else {
-        // Người dùng chưa đăng nhập
-        echo "failed";
-    }
-}
-
 
 function fetchProduct($limitProduct, $startProduct, $queryProduct)
 {
@@ -119,7 +76,7 @@ function calculateItemTotalPrice($productID, $quantity)
     $oldPrice = intval($product['SP_GiaBanSanPham']);
     $salePrice = intval($product['SP_GiamGiaSanPham']);
     $newPrice = $oldPrice - ($oldPrice * $salePrice) / 100;
-    $newTotalPrice = $quantity * $newPrice;
+    $newTotalPrice = $quantity *  $product['SP_GiaBanSanPham'];
     return $newTotalPrice;
 }
 
@@ -157,7 +114,7 @@ function renderCartItem($item, $ProductClass)
                     <span>' . $product['SP_RAMSanPham'] . 'GB/' . $product['SP_ROMSanPham'] . 'GB</span>
                 </div>
                 <div class="row-details-items-price">
-                    <span class="row-details-items-sale-price">' . number_format($newPrice) . '</span>
+                    <span class="row-details-items-sale-price">' . number_format($product['SP_GiaBanSanPham']) . '</span>
                     ' . $htmltotalPrice . '
                 </div>
                 <div class="row-details-items-quantity-details">
@@ -172,7 +129,7 @@ function renderCartItem($item, $ProductClass)
         </div>
         <div class="order-row-right">
             <div class="order-right-price">
-                <span class="sale-price">' . number_format($newPrice) . '</span>
+                <span class="sale-price">' . number_format($product['SP_GiaBanSanPham']) . '</span>
                 ' . $htmltotalPrice . '
             </div>
             <div class="order-right-quantity">
@@ -252,11 +209,11 @@ function fetchCartBill()
         $salePrice = intval($ProductClass->selectProductByID()['SP_GiamGiaSanPham']);
         $newPrice = $oldPrice - ($newPrice * $salePrice) / 100;
         $htmlSalePrice =  '<span class="regular-price">' . number_format($oldPrice) . '</span>';
-
-        $totalPrice = $listCart[$i]['GH_SLSanPhamGioHang'] * $newPrice;
+        $product = $ProductClass->selectProductByID();
+        $totalPrice = $listCart[$i]['GH_SLSanPhamGioHang'] *  $product['SP_GiaBanSanPham'];
         $htmltotalPrice =  '<span class="total-price" data-product-id=' . $listCart[$i]['GH_IDSanPham'] . '>' .    number_format($totalPrice) . '</span>';
 
-
+        $product = $ProductClass->selectProductByID();
         $output .= '
     
         <div class="order-row">
@@ -275,7 +232,7 @@ function fetchCartBill()
                         <span>' . $ProductClass->selectProductByID()['SP_RAMSanPham'] . 'GB/' . $ProductClass->selectProductByID()['SP_ROMSanPham'] . 'GB</span>
                     </div>
                     <div class="row-details-items-price">
-                        <span class="row-details-items-sale-price">' . number_format($newPrice) . '</span>
+                        <span class="row-details-items-sale-price">' . number_format($product['SP_GiaBanSanPham']) . '</span>
                         ' . $htmltotalPrice . '
                     </div>
                     <div class="row-details-items-quantity-details">
@@ -286,7 +243,7 @@ function fetchCartBill()
             </div>
             <div class="order-row-right">
                 <div class="order-right-price">
-                    <span class="sale-price">' . number_format($newPrice) . '</span>
+                    <span class="sale-price">' . number_format($product['SP_GiaBanSanPham']) . '</span>
                     ' . $htmltotalPrice . '
                 </div>
                 <div class="order-right-quantity">
@@ -374,6 +331,7 @@ if (isset($_POST['fetchQuantityCart']) && $_POST['fetchQuantityCart'] === 'fetch
 }
 
 if (isset($_POST['deleteCart']) && $_POST['deleteCart'] === 'delete-cart') {
+      // --- TRƯỜNG HỢP 1: CÓ idProduct -> Xóa 1 sản phẩm ---
     if (isset($_POST['idProduct'])) {
         $CartClass = new Cart;
         $CustomerClass = new Customer;
@@ -385,7 +343,37 @@ if (isset($_POST['deleteCart']) && $_POST['deleteCart'] === 'delete-cart') {
         if ($CartClass->deleteProductCart()) {
             echo 'success';
         } else {
-            echo 'failed';
+            echo 'failed'; //chưa đăng nhậpnhập
+        }
+    }
+     // --- TRƯỜNG HỢP 2: KHÔNG CÓ idProduct -> Xóa TOÀN BỘ giỏ hàng ---
+     else {
+        // Code để xóa TOÀN BỘ giỏ hàng (giống code bạn đã xóa trước đó)
+        if (isset($_SESSION['email'])) {
+            // (Đảm bảo $CustomerClass và $conn đã được khởi tạo hoặc global)
+            global $conn; // Cần biến kết nối $conn
+            $CustomerClass = new Customer; // Khởi tạo lại nếu cần
+            $CustomerClass->setKH_EmailKhachHang($_SESSION['email']);
+            $customerID = $CustomerClass->selectCustomerByEmail()['KH_IDKhachHang'];
+
+            // Tạo câu lệnh DELETE toàn bộ giỏ hàng của khách
+            $sql = "DELETE FROM cart WHERE GH_IDKhachHang = ?";
+            $stmt = mysqli_prepare($conn, $sql);
+
+            if ($stmt) {
+                mysqli_stmt_bind_param($stmt, "i", $customerID);
+                if (mysqli_stmt_execute($stmt)) {
+                    echo "success"; // Xóa toàn bộ thành công
+                } else {
+                    echo "failed"; // Xóa toàn bộ thất bại
+                }
+                mysqli_stmt_close($stmt);
+            } else {
+                echo "failed"; // Lỗi chuẩn bị câu lệnh
+            }
+        } else {
+            // Người dùng chưa đăng nhập
+            echo "failed";
         }
     }
 }
@@ -488,20 +476,26 @@ function getPriceBill()
     $salePrice = 0;
     $quantityProduct = 0;
     $totalSalePrice = 0;
-    $VAT = 0.1;
+    $VAT = 0;
     for ($i = 0; $i < count($listCart); $i++) {
 
         $ProductClass->setSP_IDSanPham($listCart[$i]['GH_IDSanPham']);
-        $salePrice = intval($ProductClass->selectProductByID()['SP_GiaBanSanPham']) -
-            (intval($ProductClass->selectProductByID()['SP_GiaBanSanPham']) * intval($ProductClass->selectProductByID()['SP_GiamGiaSanPham']) / 100);
-        $priceBill += $salePrice *  intval($listCart[$i]['GH_SLSanPhamGioHang']);
+        $product = $ProductClass->selectProductByID(); // <-- thêm vào đây
+
+        $salePrice = intval($product['SP_GiaBanSanPham']) -
+            (intval($product['SP_GiaBanSanPham']) * intval($product['SP_GiamGiaSanPham']) / 100);
+
+        $priceBill += $product['SP_GiaBanSanPham'] * intval($listCart[$i]['GH_SLSanPhamGioHang']);
         $quantityProduct += $listCart[$i]['GH_SLSanPhamGioHang'];
-        $totalSalePrice += (intval($ProductClass->selectProductByID()['SP_GiaBanSanPham']) * intval($listCart[$i]['GH_SLSanPhamGioHang']))
+
+        $totalSalePrice += (intval($product['SP_GiaBanSanPham']) * intval($listCart[$i]['GH_SLSanPhamGioHang']))
             - ($salePrice * intval($listCart[$i]['GH_SLSanPhamGioHang']));
     }
+
     $totalPriceBill = $priceBill + ($priceBill * $VAT);
     return [$priceBill, $totalSalePrice, count($listCart), $quantityProduct, $totalPriceBill];
 }
+
 
 if (isset($_POST['createBill']) && $_POST['createBill'] === 'create-bill') {
     $arrayResponse = [

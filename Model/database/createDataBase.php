@@ -337,6 +337,7 @@ $sqlCustomer = '
         KH_TenKhachHang VARCHAR(255) NOT NULL,
         KH_SDTKhachHang VARCHAR(255) NOT NULL,
         KH_DiaChiKhachHang VARCHAR(255) NOT NULL,
+        KH_DiaChiTamThoi VARCHAR(255) DEFAULT NULL,
         KH_LoaiKhachHang VARCHAR(255) NOT NULL,
         KH_EmailKhachHang VARCHAR(255) NOT NULL,
         KH_TrangThaiDangNhapKhachHang VARCHAR(255) NOT NULL,
@@ -402,6 +403,7 @@ CREATE TABLE bill (
     DH_IDDonHang INT(20) NOT NULL AUTO_INCREMENT PRIMARY KEY,
     DH_IDKhachHang VARCHAR(100) NOT NULL,
     DH_NgayDatDonHang DATE NOT NULL,
+    DH_DiaChiGiaoHang VARCHAR(255) DEFAULT NULL,
     DH_TrangThaiDonHang INT(10) NOT NULL
 )
 ';

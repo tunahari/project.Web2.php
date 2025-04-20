@@ -36,6 +36,12 @@ if (!isset($_SESSION['email'])) {
     <link rel="stylesheet" href="./cart.view.css">
     <link rel="stylesheet" href="../include/header.main.css">
     <link rel="stylesheet" href="../include/footer.main.css">
+
+    <!-- <link rel="stylesheet" href="../include/all.min.css" />
+    <script src="../include/all.min.js"></script>
+    <link href='../include/boxicons.min.css' rel='stylesheet'>
+    <script src="../include/jquery.min.js"></script>
+     -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/js/all.min.js"></script>
     <link href='https://unpkg.com/boxicons@2.1.2/css/boxicons.min.css' rel='stylesheet'>
@@ -77,10 +83,10 @@ if (!isset($_SESSION['email'])) {
                                 <span class="summary-price-tittle">tiền đơn hàng</span>
                                 <span class="summary-price-details" id="priceBill">0 VND</span>
                             </div>
-                            <div class="summary-price-items">
+                            <!-- <div class="summary-price-items">
                                 <span class="summary-price-tittle">giảm giá</span>
                                 <span class="summary-price-details" style="color: #ff3838" id="priceSale">0 VND</span>
-                            </div>
+                            </div> -->
                             <div class="summary-price-items">
                                 <span class="summary-price-tittle">số mặt hàng</span>
                                 <span class="summary-price-sale" style="color: #7d5fff" id="numberItem">0</span>
@@ -91,7 +97,7 @@ if (!isset($_SESSION['email'])) {
                             </div>
                             <div class="summary-price-items">
                                 <span class="summary-price-tittle">Thuế VAT, GTGT...</span>
-                                <span class="summary-price-service" style="color:rgb(255, 0, 0)">10%</span>
+                                <span class="summary-price-service" style="color:rgb(255, 0, 0)">0%</span>
                             </div>
                             <div class="summary-price-items">
                                 <span class="summary-price-tittle">tổng cộng</span>
@@ -100,8 +106,11 @@ if (!isset($_SESSION['email'])) {
                         </div>
                         <div class="summary-border"></div>
                         <div class="summary-more">
-                            <div class="order-border order-total">Tổng thanh toán tạm tính ở giỏ hàng</div>
-                            <div class="summary-price-items order-total">
+                            <!-- <div class="order-border order-total">Địa Chỉ giao hàng</div> -->
+                            <!-- <p>Địa chỉ mặc định: <?php echo  $KH_DiaChiKhachHang; ?></p> -->
+                            <label style="padding-top:5px;">Nhập địa chỉ khác (nếu muốn giao tới địa chỉ mới):</label>
+                            <input style="width: 100%;border-radius: 3px; border: 1px solid black; padding: 5px" type="text" id="diachi_tam" name="diachi_tam" placeholder="Để trống nếu muốn giao địa chỉ mặc định">
+                            <!-- <div class="summary-price-items order-total">
                                 <span class="summary-price-tittle">Tổng số sản phẩm: </span>
 
                                 <span class="summary-price-details" id="totalQuantity">0</span>
@@ -111,7 +120,8 @@ if (!isset($_SESSION['email'])) {
                                 <span class="summary-price-tittle">Tổng tiền: </span>
 
                                 <span class="summary-price-details" id="totalPrice">0 VND</span>
-                            </div>
+                            </div> -->
+
                         </div>
                         <div class="summary-save"></div>
 

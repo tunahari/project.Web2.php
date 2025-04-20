@@ -16,7 +16,189 @@ $ProductClass = new Product;
 $EmployeeClass = new Employee;
 $ValidateData = new ValidateData;
 $HandlingFunctions = new HandlingFunctions;
+$ConnectDataBase = new ConnectDataBase(); 
 
+
+
+if (isset($_POST['action']) && $_POST['action'] === 'load_order') {
+    // --- Lấy và Validate dữ liệu đầu vào ---
+    $limitOrder = isset($_POST['limitOrder']) && is_numeric($_POST['limitOrder']) ? intval($_POST['limitOrder']) : 5;
+    $pageOrder = isset($_POST['pageOrder']) && is_numeric($_POST['pageOrder']) ? intval($_POST['pageOrder']) : 1;
+    $queryOrder = isset($_POST['queryOrder']) ? trim($ValidateData->standardizeString($_POST['queryOrder'])) : '';
+    $sortIDOrder = isset($_POST['sortIDOrder']) && in_array(strtoupper($_POST['sortIDOrder']), ['ASC', 'DESC']) ? strtoupper($_POST['sortIDOrder']) : 'DESC';
+    $sortDateOrder = isset($_POST['sortDateOrder']) && in_array(strtoupper($_POST['sortDateOrder']), ['ASC', 'DESC']) ? strtoupper($_POST['sortDateOrder']) : 'ASC';
+    $sortStatusOrder = isset($_POST['sortStatusOrder']) && in_array(strtoupper($_POST['sortStatusOrder']), ['ASC', 'DESC']) ? strtoupper($_POST['sortStatusOrder']) : 'ASC';
+    $filterStatus = isset($_POST['filterStatus']) ? trim($_POST['filterStatus']) : '';
+    if ($filterStatus !== '' && !is_numeric($filterStatus)) {
+        $filterStatus = '';
+    }
+
+    // --- NHẬN VÀ VALIDATE NGÀY THÁNG ---
+    $startDate = isset($_POST['startDate']) ? trim($_POST['startDate']) : '';
+    $endDate = isset($_POST['endDate']) ? trim($_POST['endDate']) : '';
+
+    // Validate định dạng YYYY-MM-DD (hoặc định dạng khác nếu input type khác)
+    $dateFormat = 'Y-m-d';
+    $startDateValid = DateTime::createFromFormat($dateFormat, $startDate);
+    $endDateValid = DateTime::createFromFormat($dateFormat, $endDate);
+
+    // Nếu định dạng không đúng hoặc ngày không hợp lệ, đặt lại thành chuỗi rỗng
+    if (!$startDateValid || $startDateValid->format($dateFormat) !== $startDate) {
+        $startDate = '';
+    }
+     if (!$endDateValid || $endDateValid->format($dateFormat) !== $endDate) {
+        $endDate = '';
+    }
+
+    // Optional: Nếu chỉ muốn lọc khi có cả 2 ngày
+    // if ($startDate === '' || $endDate === '') {
+    //     $startDate = '';
+    //     $endDate = '';
+    // }
+
+    // Optional: Đảm bảo ngày bắt đầu <= ngày kết thúc
+    if ($startDate !== '' && $endDate !== '' && $startDate > $endDate) {
+        // Có thể trả về lỗi hoặc đơn giản là không lọc theo ngày
+        $startDate = '';
+        $endDate = '';
+        // Hoặc: echo json_encode(['error' => 'Ngày bắt đầu không hợp lệ']); exit();
+    }
+
+    // --- Tính toán offset ---
+    $startOrder = ($pageOrder - 1) * $limitOrder;
+
+    // --- Gọi Model (Truyền thêm $startDate, $endDate) ---
+    try {
+        $totalRecords = $OrderClass->countRecordOrder($queryOrder, $filterStatus, $startDate, $endDate); // Thêm ngày
+        $listOrder = $OrderClass->selectLimitOrder($limitOrder, $startOrder, $queryOrder, $sortIDOrder, $sortDateOrder, $sortStatusOrder, $filterStatus, $startDate, $endDate); // Thêm ngày
+    } catch (Exception $e) {
+        // ... (xử lý lỗi DB như cũ) ...
+        error_log("Database error in load_order: " . $e->getMessage());
+        header('Content-Type: application/json');
+        echo json_encode(['tableContent' => '<div class="no-data">Lỗi truy vấn cơ sở dữ liệu.</div>', 'pagination' => '']);
+        exit();
+    }
+
+    // --- Tạo HTML cho bảng (như cũ) ---
+    $tableContent = '';
+    if (!empty($listOrder)) {
+        foreach ($listOrder as $item) {
+            // ... (lấy price, count, status như cũ) ...
+            $OrderClass->setDH_IDDonHang($item['DH_IDDonHang']);
+            $OrderClass->setDH_IDKhachHang($item['DH_IDKhachHang']);
+            $totalPrice = $OrderClass->priceBill();
+            $itemCount = $OrderClass->countItemBill();
+            $productCount = $OrderClass->countProductBill();
+            $statusText = ''; $statusClass = '';
+            switch ($item['DH_TrangThaiDonHang']) { /* ... */
+                case 1: $statusText = 'Đã hủy'; $statusClass = 'status-cancelled'; break;
+                case 2: $statusText = 'Hoàn thành'; $statusClass = 'status-completed'; break;
+                case 3: $statusText = 'Đã xử lý'; $statusClass = 'status-processed'; break;
+                case 4: $statusText = 'Đang xử lý'; $statusClass = 'status-pending'; break;
+                default: $statusText = 'Không xác định'; $statusClass = 'status-unknown';
+            }
+
+            $tableContent .= '
+                <div class="table__order__tbody__tr" data-order-id="' . $item['DH_IDDonHang'] . '" data-customer-id="' . $item['DH_IDKhachHang'] . '" onclick="window.location.href=\'./order-info-admin.php?id-order=' . $item['DH_IDDonHang'] . '&id-customer=' . $item['DH_IDKhachHang'] . '&menu=order\'" style="cursor:pointer;">
+                    <div class="table__order__tbody__tr__td">DH' . htmlspecialchars($item['DH_IDDonHang']) . '</div>
+                    <div class="table__order__tbody__tr__td">' . htmlspecialchars($item['KH_TenKhachHang']) . '</div>
+                    <div class="table__order__tbody__tr__td">' . htmlspecialchars($item['KH_SDTKhachHang']) . '</div>
+                    <div class="table__order__tbody__tr__td">' . number_format($totalPrice ?: 0, 0, ',', '.') . 'đ</div>
+                    <div class="table__order__tbody__tr__td">' . ($itemCount ?: 0) . '</div>
+                    <div class="table__order__tbody__tr__td">' . ($productCount ?: 0) . '</div>
+                    <div class="table__order__tbody__tr__td">
+                        <span class="order__status ' . $statusClass . '">' . $statusText . '</span>
+                    </div>
+                    <div class="table__order__tbody__tr__td">' . date("d/m/Y", strtotime($item['DH_NgayDatDonHang'])) . '</div>
+                </div>';
+        }
+    }
+
+        // --- Tạo HTML cho phân trang (Sử dụng DIV, giống customer) ---
+        $totalPages = ceil($totalRecords / $limitOrder);
+        $paginationHTML = ''; // Khởi tạo chuỗi HTML rỗng
+ 
+        // Chỉ tạo HTML phân trang nếu có nhiều hơn 1 trang
+        if ($totalPages > 1) {
+            // Container div
+            $paginationHTML .= '<div class="pagination__order">'; // Sử dụng class pagination__order
+ 
+            // Nút Previous (Trang trước)
+            $prevDisabled = ($pageOrder <= 1) ? 'disabled' : ''; // Disable nếu đang ở trang 1
+            $prevPage = ($pageOrder > 1) ? $pageOrder - 1 : 1;
+            // Div cho nút Previous, thêm value và class pagination__order__item
+            $paginationHTML .= '<div class="pagination__order__item pagination__order__prev ' . $prevDisabled . '" value="' . $prevPage . '">
+                                   <i class="bx bx-left-arrow-alt"></i>
+                                 </div>';
+ 
+            // Logic tạo các nút số trang (hiển thị giới hạn số nút)
+            $maxVisiblePages = 5; // Giữ nguyên logic giới hạn số nút
+            $startPage = 1;
+            $endPage = $totalPages;
+ 
+            if ($totalPages > $maxVisiblePages) {
+                $halfMax = floor($maxVisiblePages / 2);
+                $startPage = max(1, $pageOrder - $halfMax);
+                $endPage = min($totalPages, $startPage + $maxVisiblePages - 1);
+ 
+                if ($endPage === $totalPages) {
+                    $startPage = max(1, $totalPages - $maxVisiblePages + 1);
+                }
+                else if ($startPage === 1 && ($endPage - $startPage + 1) < $maxVisiblePages) {
+                     $endPage = min($totalPages, $startPage + $maxVisiblePages - 1);
+                }
+            }
+ 
+            // Thêm nút '...' và trang đầu nếu cần
+            if ($startPage > 1) {
+                // Div cho nút trang 1, thêm value và class pagination__order__item
+                $paginationHTML .= '<div class="pagination__order__item" value="1">1</div>';
+                if ($startPage > 2) {
+                    // Div cho dấu ..., thêm class disabled để không click được
+                    $paginationHTML .= '<div class="pagination__order__item pagination__order__dots disabled">...</div>';
+                }
+            }
+ 
+            // Tạo các nút số trang trong khoảng hiển thị
+            for ($i = $startPage; $i <= $endPage; $i++) {
+                $activeClass = ($i == $pageOrder) ? 'active' : ''; // Đánh dấu trang hiện tại
+                // Div cho nút số trang, thêm value và class pagination__order__item
+                $paginationHTML .= '<div class="pagination__order__item ' . $activeClass . '" value="' . $i . '">' . $i . '</div>';
+            }
+ 
+            // Thêm nút '...' và trang cuối nếu cần
+            if ($endPage < $totalPages) {
+                if ($endPage < $totalPages - 1) {
+                     // Div cho dấu ..., thêm class disabled
+                    $paginationHTML .= '<div class="pagination__order__item pagination__order__dots disabled">...</div>';
+                }
+                // Div cho nút trang cuối, thêm value và class pagination__order__item
+                $paginationHTML .= '<div class="pagination__order__item" value="' . $totalPages . '">' . $totalPages . '</div>';
+            }
+            // Kết thúc logic tạo nút số trang
+ 
+            // Nút Next (Trang sau)
+            $nextDisabled = ($pageOrder >= $totalPages) ? 'disabled' : ''; // Disable nếu đang ở trang cuối
+            $nextPage = ($pageOrder < $totalPages) ? $pageOrder + 1 : $totalPages;
+             // Div cho nút Next, thêm value và class pagination__order__item
+            $paginationHTML .= '<div class="pagination__order__item pagination__order__next ' . $nextDisabled . '" value="' . $nextPage . '">
+                                   <i class="bx bx-right-arrow-alt"></i>
+                                 </div>';
+ 
+            $paginationHTML .= '</div>'; // Kết thúc container div
+        } // Kết thúc if ($totalPages > 1)
+ 
+
+
+    // --- Trả về kết quả dạng JSON ---
+    header('Content-Type: application/json');
+    echo json_encode([
+        'tableContent' => $tableContent,
+        'pagination' => $paginationHTML
+    ]);
+    exit(); // <<<--- RẤT QUAN TRỌNG
+
+} 
 function getPriceBill()
 {
     $CustomerClass = new Customer;
@@ -49,13 +231,29 @@ if (isset($_POST['saveBill']) && $_POST['saveBill'] === 'save-bill') {
     $OrderClass->setDH_IDKhachHang($CustomerClass->selectCustomerByEmail()['KH_IDKhachHang']);
     $OrderClass->setDH_NgayDatDonHang(date('Y-m-d'));
     $OrderClass->setDH_TrangThaiDonHang(4);
-    if ($OrderClass->insertBill()) {
+
+   
+    $diaChiTam = isset($_POST['diachi_tam']) ? trim($_POST['diachi_tam']) : '';
+    if ($diaChiTam === '') {
+        // nếu không nhập địa chỉ tạm thì dùng địa chỉ mặc định
+        $CustomerClass->setKH_EmailKhachHang($_SESSION['email']);
+        $diaChiTam = $CustomerClass->selectCustomerByEmail()['KH_DiaChiKhachHang'];
+    }
+    
+    // Gọi insert đơn hàng và truyền địa chỉ giao hàng
+    $OrderClass->insertBill($diaChiTam);
+    $lastBillID = $OrderClass->selectBillNewID(); // Lưu ID đơn hàng vừa tạo để dùng
+
+    if ($lastBillID) {
         $count = 0;
         $CartClass->setGH_IDKhachHang($CustomerClass->selectCustomerByEmail()['KH_IDKhachHang']);
-        for ($i = 0; $i < count($CartClass->selectCartByCustomerID()); $i++) {
-            $OrderClass->setCTDH_IDDonHang($OrderClass->selectBillNewID());
-            $OrderClass->setCTDH_IDSanPham($CartClass->selectCartByCustomerID()[$i]['GH_IDSanPham']);
-            $OrderClass->setCTDH_SLSanPham($CartClass->selectCartByCustomerID()[$i]['GH_SLSanPhamGioHang']);
+    
+        $listCart = $CartClass->selectCartByCustomerID();
+    
+        for ($i = 0; $i < count($listCart); $i++) {
+            $OrderClass->setCTDH_IDDonHang($lastBillID); // Dùng đúng đơn hàng vừa tạo
+            $OrderClass->setCTDH_IDSanPham($listCart[$i]['GH_IDSanPham']);
+            $OrderClass->setCTDH_SLSanPham($listCart[$i]['GH_SLSanPhamGioHang']);
             $OrderClass->insertBillDetals();
         }
 
@@ -162,8 +360,14 @@ if (isset($_POST['saveBill']) && $_POST['saveBill'] === 'save-bill') {
     } else {
         echo 'failed';
     };
-
 }
+
+// $CustomerClass->setKH_EmailKhachHang($_SESSION['email']);
+// $khach = $CustomerClass->selectCustomerByEmail();
+
+// $diaChiGiaoHang = $khach['KH_DiaChiTamThoi'] !== null && $khach['KH_DiaChiTamThoi'] !== ''
+//     ? $khach['KH_DiaChiTamThoi']
+//     : $khach['KH_DiaChiKhachHang'];
 
 if (isset($_POST['fetchBill']) && $_POST['fetchBill'] === 'fetch-bill') {
     $CustomerClass->setKH_EmailKhachHang($_SESSION['email']);
@@ -188,13 +392,16 @@ if (isset($_POST['fetchBill']) && $_POST['fetchBill'] === 'fetch-bill') {
             $CancelDonHang = '';
         }
         for ($j = 0; $j < count($OrderClass->selectProductBill()); $j++) {
+        
             $rowProduct .= '
                 <div class="Bill__Content__Table__Row">
                     <div class="Bill__Content__Table__Column"><img src="../../Controller/admin/' . $OrderClass->selectProductBill()[$j]['SP_Image1SanPham'] . '" alt=""></div>
                     <div class="Bill__Content__Table__Column">' . $OrderClass->selectProductBill()[$j]['SP_TenSanPham'] . '</div>
                     <div class="Bill__Content__Table__Column">' . $OrderClass->selectProductBill()[$j]['CTDH_SLSanPham'] . '</div>
                     <div class="Bill__Content__Table__Column">' . number_format($OrderClass->selectProductBill()[$j]['GiamGia']) . '</div>
+                    <div class="Bill__Content__Table__Column">' . $listBill[$i]['DH_DiaChiGiaoHang']  . '</div>
                     <div class="Bill__Content__Table__Column">' . $OrderClass->selectProductBill()[$j]['DH_NgayDatDonHang'] . '</div>
+              
                 </div>
             ';
         }
@@ -224,7 +431,9 @@ if (isset($_POST['fetchBill']) && $_POST['fetchBill'] === 'fetch-bill') {
                     <div class="Bill__Content__Header__Column">Tên Sản Phẩm</div>
                     <div class="Bill__Content__Header__Column">Số Lượng</div>
                     <div class="Bill__Content__Header__Column">Đơn Giá</div>
+                    <div class="Bill__Content__Header__Column">' . 'Địa chỉ' . '</div>
                     <div class="Bill__Content__Header__Column">Ngày Mua</div>
+
                 </div>
                 <div class="Profile__Panel__Item__Bill__Left__Bill__Content__Table">
                 ' . $rowProduct . '

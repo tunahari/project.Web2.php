@@ -183,8 +183,8 @@ if (!isset($_GET['id-product']) || empty($_GET['id-product'])) {
                                 $htmlSalePrice =  '<span class="price-bfsale">'.number_format($oldPrice).'</span>';
                             }
                             ?>
-                            <span class="price-afsale"><?php echo number_format($newPrice) ?></span>
-                            <?php echo $htmlSalePrice ?>
+                            <span class="price-afsale"><?php echo number_format($oldPrice) ?></span>
+                            <!-- <?php echo $htmlSalePrice ?> -->
                         </div>
                         <div class="top-right-form">
                             <div class="form-quality">

@@ -1,5 +1,11 @@
 <?php
 @session_start(); // Make sure sessions are started
+// global $newPrice;
+// global $oldPrice;
+// global $salePrice;
+
+
+// $newPrice = $oldPrice - ($newPrice * $salePrice) / 100;
 ?>
 
 <!DOCTYPE html>
@@ -710,11 +716,11 @@
         </div>
 
         <!-- LOADING -->
-        <div class="loading__bg"></div>
-        <!-- <div class="loading__box">
+        <div class="loading__bg"></div>`
+        <div class="loading__box">
             <p>Đang Thực Hiện...</p>
             <div class="loading"></div>
-        </div> -->
+        </div>
         <!-- ALERT NOTIFY SUCCESS -->
         <div class="alert__notify__box__success">
             <div class="alert__notify__box__success__close"><i class="fa-solid fa-xmark"></i></div>

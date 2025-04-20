@@ -431,31 +431,31 @@ class Product {
         }
     }
 
-    // function setDeleteStatusProductByID () {
-    //     $ConnectDataBase = new ConnectDataBase;
-    //     $sql = "UPDATE product SET SP_XoaSanPham = 'Yes' WHERE SP_IDSanPham = :SP_IDSanPham";
-    //     $stmt = $ConnectDataBase->connectDB()->prepare($sql);
-    //     $stmt->bindParam(':SP_IDSanPham', $this->SP_IDSanPham);
-    //     if ($stmt->execute()) {
-    //         return true;
-    //     } else {
-    //         return false;
-    //     }
-    // }
-
-    function setDeleteStatusProductByID() {
+    function setDeleteStatusProductByID () {
         $ConnectDataBase = new ConnectDataBase;
-        $sql = "DELETE FROM product WHERE SP_IDSanPham = :SP_IDSanPham"; // Changed to DELETE
+        $sql = "UPDATE product SET SP_XoaSanPham = 'Yes' WHERE SP_IDSanPham = :SP_IDSanPham";
         $stmt = $ConnectDataBase->connectDB()->prepare($sql);
         $stmt->bindParam(':SP_IDSanPham', $this->SP_IDSanPham);
         if ($stmt->execute()) {
             return true;
         } else {
-            $errorInfo = $ConnectDataBase->connectDB()->errorInfo();
-            error_log("Error deleting product: " . print_r($errorInfo, true) . " - SQL: " . $sql); // Log the error
             return false;
         }
     }
+
+    // function setDeleteStatusProductByID() {
+    //     $ConnectDataBase = new ConnectDataBase;
+    //     $sql = "DELETE FROM product WHERE SP_IDSanPham = :SP_IDSanPham"; // Changed to DELETE
+    //     $stmt = $ConnectDataBase->connectDB()->prepare($sql);
+    //     $stmt->bindParam(':SP_IDSanPham', $this->SP_IDSanPham);
+    //     if ($stmt->execute()) {
+    //         return true;
+    //     } else {
+    //         $errorInfo = $ConnectDataBase->connectDB()->errorInfo();
+    //         error_log("Error deleting product: " . print_r($errorInfo, true) . " - SQL: " . $sql); // Log the error
+    //         return false;
+    //     }
+    // }
     
 
     function updateImage_1_ProductByID () {

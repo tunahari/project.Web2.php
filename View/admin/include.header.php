@@ -7,9 +7,10 @@ if (!isset($_SESSION['login'])) {
 <div class="header">
     <div class="nav">
         <div class="nav__left">
-            <div class="nav__left--logo">
+            <a href="./main-admin.php"><div class="nav__left--logo">
                 SB Mobile
-            </div>
+            </div></a>
+            
             <div class="nav__left--menu">
                 <i class='bx bx-menu'></i>
             </div>

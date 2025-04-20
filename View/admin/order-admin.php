@@ -38,9 +38,12 @@
                             </div>
 
                         </div>
-                    </div>
-                    <div class="search__product">
 
+
+                    </div>
+
+
+                    <div class="search__product">
                         <input type="text" placeholder="Tìm kiếm..." id="search__order__input">
                         <div class="search__product__button">
                             <i class='bx bx-search-alt-2'></i>
@@ -49,19 +52,38 @@
                     </div>
 
 
-                    <!-- <div class="select__status">
+                </div>
+                <div class="fillter">
+                    <div class="fillter_date" style="width: 100%;">
+                        <!-- START: Thêm bộ lọc ngày tháng -->
+                        <div class="select__date__filter">
+                            <h4>Từ ngày</h4>
+                            <input type="date" id="filter__start__date">
+                        </div>
+                        <div class="select__date__filter">
+                            <h4>Đến ngày</h4>
+                            <input type="date" id="filter__end__date">
+                        </div>
+                        <button id="filter__date__button" class="btn-filter-date">Lọc</button>
+                        <button id="reset__date__button" class="btn-reset-date">Reset</button>
+
+                        <!-- END: Thêm bộ lọc ngày tháng -->
+                    </div>
+
+                    <!-- START: Thêm bộ lọc trạng thái -->
+                    <div class="select__status__filter">
+                        <h4>Trạng thái</h4>
                         <select id="select__status__order">
                             <option value="">Tất cả</option>
-                            <option value="2">Đã hoàn thành</option>
-                            <option value="4">Chờ xử lý</option>
+                            <option value="4">Đang xử lý</option>
                             <option value="3">Đã xử lý</option>
+                            <option value="2">Hoàn thành</option>
                             <option value="1">Đã hủy</option>
                         </select>
-                        <button id="filter_btn">Lọc</button>
-                    </div> -->
+                    </div>
+                    <!-- END: Thêm bộ lọc trạng thái -->
 
                 </div>
-
 
                 <div class="table__order--container">
                     <div class="table__order__thead">
@@ -123,7 +145,7 @@
     <script src="./script-admin.js"></script>
     <script src="./test-admin.js"></script>
     <script src="./customer-admin.js"></script>
+    <script src="../../Controller/admin/controller-admin.order.js"></script> <!-- Đảm bảo đường dẫn đúng -->
 </body>
 
 </html>
-<script src="../../Controller/admin/controller-admin.order.js"></script>

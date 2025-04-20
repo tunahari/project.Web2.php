@@ -1,97 +1,216 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap");
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Montserrat';
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Montserrat";
 }
-div{
-    display: flex;
+div {
+  display: flex;
 }
-:root{
-    --violet-color: #5c1ac3;
-    --white-color: white;
-    --black-color: black;
-    --bg-color: #060818;
-    --text-color: #f3f5fd;
-    --bl-color: #0e1726;
-    --green-color: #00FA9A;
-    --text-bl-color: #ADD8E6;
-    --red-color: #FF3333;
-    --blue-color: #00CED1;
-    --input-color: #1b2e4b;
-    --chat-color: #66FFFF;
-    --chat-color-ad: #D7F5F5;
+:root {
+  --violet-color: #5c1ac3;
+  --white-color: white;
+  --black-color: black;
+  --bg-color: #060818;
+  --text-color: #f3f5fd;
+  --bl-color: #0e1726;
+  --green-color: #00fa9a;
+  --text-bl-color: #add8e6;
+  --red-color: #ff3333;
+  --blue-color: #00ced1;
+  --input-color: #1b2e4b;
+  --chat-color: #66ffff;
+  --chat-color-ad: #d7f5f5;
 }
 
 ::-webkit-scrollbar {
-    width: 0;
+  width: 0;
 }
 
-a{
-    color: unset;
-    text-decoration: none;
+a {
+  color: unset;
+  text-decoration: none;
 }
-body.dark{
-    --black-color:var(--red-color);
-    --bl-color: #0e1726;
+body.dark {
+  --black-color: var(--red-color);
+  --bl-color: #0e1726;
 }
-.paid{
-    /* background-color: var(--green-color) !important; */
-    border: 2px solid var(--green-color);
-    text-transform: capitalize;
-   
+.paid {
+  /* background-color: var(--green-color) !important; */
+  border: 2px solid var(--green-color);
+  text-transform: capitalize;
 }
-.status{
-    height: fit-content;
-    width: fit-content;
-    padding: 4px 10px;
-    text-transform: capitalize;
-    color: white;
-    border-radius: 4px;
-    font-size: 13px;
+.status {
+  height: fit-content;
+  width: fit-content;
+  padding: 4px 10px;
+  text-transform: capitalize;
+  color: white;
+  border-radius: 4px;
+  font-size: 13px;
 }
-.money__table{
-    font-size: 13px;
+.money__table {
+  font-size: 13px;
 }
-.paid:hover{
-    box-shadow: 0 0 10px var(--green-color);
+.paid:hover {
+  box-shadow: 0 0 10px var(--green-color);
 }
-.shipper:hover{
-    box-shadow: 0 0 10px var(--blue-color);
+.shipper:hover {
+  box-shadow: 0 0 10px var(--blue-color);
 }
-.pending:hover{
-    box-shadow: 0 0 10px var(--red-color);
+.pending:hover {
+  box-shadow: 0 0 10px var(--red-color);
 }
-.shipper{
-    border: 2px solid var(--blue-color);
-    text-transform: capitalize;
+.shipper {
+  border: 2px solid var(--blue-color);
+  text-transform: capitalize;
 }
-.pending{
-    border: 2px solid var(--red-color);
-    text-transform: capitalize;
+.pending {
+  border: 2px solid var(--red-color);
+  text-transform: capitalize;
 }
-.iphone{
-    color: #FF3333;
-    text-transform: capitalize;
+.iphone {
+  color: #ff3333;
+  text-transform: capitalize;
 }
-.vivo{
-    color: #00CED1;
-    text-transform: capitalize;
+.vivo {
+  color: #00ced1;
+  text-transform: capitalize;
 }
-.oppo{
-    color: #5c1ac3;
-    text-transform: capitalize;
+.oppo {
+  color: #5c1ac3;
+  text-transform: capitalize;
 }
-.samsung{
-    color: yellow;
-    text-transform: capitalize;
+.samsung {
+  color: yellow;
+  text-transform: capitalize;
 }
-.xiaomi{
-    color: springgreen;
-    text-transform: capitalize;
+.xiaomi {
+  color: springgreen;
+  text-transform: capitalize;
 }
-.nokia{
-    color: var(--text-bl-color);
-    text-transform: capitalize;
+.nokia {
+  color: var(--text-bl-color);
+  text-transform: capitalize;
 }
+
+
+
+
+
+
+.stats-container {
+margin-bottom: 100px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* 2 div trên mỗi hàng */
+  gap: 20px;
+  width: 100%;
+}
+.dashboard-title {
+  text-align: center;
+  font-size: 35px;
+  font-weight: 800;
+  width: 100%;
+  color: #7d5fff;
+  margin: 20px 0;
+  text-transform: uppercase;
+  position: absolute;
+}
+
+.stat-card {
+  background-color: #fff;
+  border-radius: 8px;
+  /* Giảm bo góc một chút */
+  padding: 25px;
+  /* Tăng padding */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+  /* Bóng đổ nhẹ hơn */
+  display: flex;
+  align-items: center;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  border: 1px solid #e9ecef;
+}
+
+.stat-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.08);
+}
+
+.stat-icon {
+  font-size: 2.1em;
+  /* Điều chỉnh kích thước icon */
+  padding: 16px;
+  /* Điều chỉnh padding icon */
+  border-radius: 50%;
+  margin-right: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  flex-shrink: 0;
+  width: 60px;
+  /* Đặt kích thước cố định cho icon wrapper */
+  height: 60px;
+}
+
+/* Màu nền icon (giữ nguyên) */
+.stat-icon.revenue {
+  background-color: #28a745;
+}
+
+.stat-icon.orders-completed {
+  background-color: #17a2b8;
+}
+
+.stat-icon.orders-pending {
+  background-color: #fd7e14;
+}
+
+.stat-icon.orders-processed {
+  background-color: #6f42c1;
+}
+
+.stat-icon.orders-cancelled {
+  background-color: #6c757d;
+}
+
+.stat-icon.customers {
+  background-color: #ffc107;
+}
+
+.stat-icon.products {
+  background-color: #dc3545;
+}
+
+.stat-info {
+  overflow: hidden;
+}
+
+.stat-info h4 {
+  margin: 0 0 8px 0;
+  /* Tăng nhẹ khoảng cách dưới */
+  color: #6c757d;
+  /* Màu xám nhẹ cho tiêu đề */
+  font-size: 0.85em;
+  /* Giảm kích thước chữ */
+  font-weight: 600;
+  /* Giảm độ đậm */
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  white-space: normal;
+}
+
+.stat-info p {
+  margin: 0;
+  font-size: 1.8em;
+  /* Tăng kích thước số liệu */
+  font-weight: 700;
+  color: #343a40;
+  /* Màu số liệu đậm vừa */
+  line-height: 1.2;
+  /* Đảm bảo không quá sát */
+}
+
+/* CSS cho bảng (nếu dùng - giữ nguyên) */
+/* ... */

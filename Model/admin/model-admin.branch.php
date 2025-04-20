@@ -186,7 +186,9 @@ class Branch {
     //         return false;
     //     }
     // }
-    function setDeleteStatusBranchByID() {
+    
+    //Thay Update thành Delete
+        function setDeleteStatusBranchByID() {
         $ConnectDataBase = new ConnectDataBase;
         $sql = "DELETE FROM branch WHERE CN_IDChiNhanh = :CN_IDChiNhanh"; // Changed to DELETE
         $stmt = $ConnectDataBase->connectDB()->prepare($sql);

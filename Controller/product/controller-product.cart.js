@@ -114,13 +114,15 @@ function deleteCartAfterOrder() {
               );
               $("#createBill").hide();
               $(".order-tittle h4").text("Danh Sách Sản Phẩm Đơn Hàng");
-              alertSuccess("Đã tạo thành công đơn hàng");
+            //   alertSuccess("Đã tạo thành công đơn hàng");
               $("#saveBill").click(function () {
                   $(".loading__box, .loading__bg").show();
+                  let diaChiTam = $("#diachi_tam").val().trim(); // <-- thêm dòng này
                   ClassFuction.getAjaxPost(
                       "../../Controller/admin/controller-admin.order.php",
                       {
                           saveBill: "save-bill",
+                          diachi_tam: diaChiTam,
                       }
                   ).done(function (response) {
                       response = response.trim();

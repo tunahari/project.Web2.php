@@ -9,22 +9,24 @@ class Order {
     public function setDH_IDKhachHang($DH_IDKhachHang) {$this->DH_IDKhachHang  = $DH_IDKhachHang;}
     public function setDH_NgayDatDonHang($DH_NgayDatDonHang) {$this->DH_NgayDatDonHang  = $DH_NgayDatDonHang;}
     public function setDH_TrangThaiDonHang($DH_TrangThaiDonHang) {$this->DH_TrangThaiDonHang  = $DH_TrangThaiDonHang;}
-
+    
     public function setCTDH_IDChiTietDH($CTDH_IDChiTietDH) {$this->CTDH_IDChiTietDH  = $CTDH_IDChiTietDH;}
     public function setCTDH_IDDonHang($CTDH_IDDonHang) {$this->CTDH_IDDonHang  = $CTDH_IDDonHang;}
     public function setCTDH_IDSanPham($CTDH_IDSanPham) {$this->CTDH_IDSanPham  = $CTDH_IDSanPham;}
     public function setCTDH_SLSanPham($CTDH_SLSanPham) {$this->CTDH_SLSanPham  = $CTDH_SLSanPham;}
 
-    function insertBill () {
-        $ConnectDataBase = new ConnectDataBase;
-        $sql = 'INSERT INTO bill (DH_IDKhachHang, DH_NgayDatDonHang, DH_TrangThaiDonHang) 
-        VALUES (:DH_IDKhachHang, :DH_NgayDatDonHang, :DH_TrangThaiDonHang)';
+    public function insertBill($diaChiGiaoHang) {
+        $ConnectDataBase = new ConnectDataBase();
+        $sql = "INSERT INTO bill (DH_IDKhachHang, DH_NgayDatDonHang, DH_TrangThaiDonHang, DH_DiaChiGiaoHang) 
+                VALUES (:DH_IDKhachHang, :DH_NgayDatDonHang, :DH_TrangThaiDonHang, :DH_DiaChiGiaoHang)";
         $stmt = $ConnectDataBase->connectDB()->prepare($sql);
-        $stmt->bindParam(':DH_IDKhachHang', $this->DH_IDKhachHang, PDO::PARAM_STR);
-        $stmt->bindParam(':DH_NgayDatDonHang', $this->DH_NgayDatDonHang, PDO::PARAM_STR);
-        $stmt->bindParam(':DH_TrangThaiDonHang', $this->DH_TrangThaiDonHang, PDO::PARAM_INT);
-        if ($stmt->execute()) {return true;} else {return false;}
+        $stmt->bindParam(':DH_IDKhachHang', $this->DH_IDKhachHang);
+        $stmt->bindParam(':DH_NgayDatDonHang', $this->DH_NgayDatDonHang);
+        $stmt->bindParam(':DH_TrangThaiDonHang', $this->DH_TrangThaiDonHang);
+        $stmt->bindParam(':DH_DiaChiGiaoHang', $diaChiGiaoHang); // Đảm bảo bạn đã truyền giá trị này vào
+        $stmt->execute();
     }
+    
 
     function insertBillDetals () {
         $ConnectDataBase = new ConnectDataBase;
@@ -87,7 +89,7 @@ class Order {
 
     function priceBill () {
         $ConnectDataBase = new ConnectDataBase;
-        $sql = "SELECT SUM((SP_GiaBanSanPham - (SP_GiaBanSanPham * SP_GiamGiaSanPham / 100) + ((SP_GiaBanSanPham - (SP_GiaBanSanPham * SP_GiamGiaSanPham / 100)) * 10 / 100)) * CTDH_SLSanPham) AS PriceBill
+        $sql = "SELECT SUM((SP_GiaBanSanPham) * CTDH_SLSanPham) AS PriceBill
         FROM bill JOIN billdetails ON DH_IDDonHang = CTDH_IDDonHang JOIN product ON CTDH_IDSanPham = SP_IDSanPham 
         WHERE DH_IDKhachHang = :DH_IDKhachHang AND DH_IDDonHang = :DH_IDDonHang ";
         $stmt = $ConnectDataBase->connectDB()->prepare($sql);
@@ -101,7 +103,7 @@ class Order {
 
     function selectProductBill () {
         $ConnectDataBase = new ConnectDataBase;
-        $sql = "SELECT (SP_GiaBanSanPham - (SP_GiaBanSanPham* SP_GiamGiaSanPham) / 100) AS GiamGia, SP_IDSanPham, SP_GiaBanSanPham,
+        $sql = "SELECT (SP_GiaBanSanPham) AS GiamGia, SP_IDSanPham, SP_GiaBanSanPham,
         SP_TenSanPham, CTDH_SLSanPham, DH_NgayDatDonHang, SP_TonKhoSanPham,
         SP_Image1SanPham FROM billdetails JOIN product ON CTDH_IDSanPham = SP_IDSanPham JOIN bill ON CTDH_IDDonHang = DH_IDDonHang
         WHERE DH_IDKhachHang = :DH_IDKhachHang AND DH_IDDonHang = :DH_IDDonHang";
@@ -139,79 +141,184 @@ class Order {
         if (count($result) > 0) {return $result[0]['SLSanPham'];} else {return [];}
     }
 
-    function selectLimitOrder ($limitOrder, $startOrder, $queryOrder, $sortIDOrder, $sortDateOrder, $sortStatusOrder) {
+    function selectLimitOrder ($limitOrder, $startOrder, $queryOrder, $sortIDOrder, $sortDateOrder, $sortStatusOrder, $filterStatus = '', $startDate = '', $endDate = '') {
         $ConnectDataBase = new ConnectDataBase;
-        $sql = "SELECT * FROM bill JOIN customer ON KH_IDKhachHang = DH_IDKhachHang ";
+        $params = [];
+        $sql = "SELECT b.*, c.KH_TenKhachHang, c.KH_SDTKhachHang
+                FROM bill b
+                JOIN customer c ON c.KH_IDKhachHang = b.DH_IDKhachHang ";
+        $whereClauses = [];
+
+        // Xử lý query tìm kiếm (như cũ)
         $arrayReplace = ['dh'];
         $queryOrder = trim(str_replace($arrayReplace, '', strtolower($queryOrder)));
         if ($queryOrder !== '') {
-            $sql .= '
-            WHERE LOWER(KH_TenKhachHang) LIKE "%'.strtolower($queryOrder).'%" 
-            OR LOWER(KH_IDKhachHang)  LIKE "%'.strtolower($queryOrder).'%" 
-            OR LOWER(DH_IDDonHang) LIKE "%'.strtolower($queryOrder).'%"
-            OR LOWER(KH_SDTKhachHang) LIKE "%'.strtolower($queryOrder).'%"
-            OR LOWER(KH_EmailKhachHang) LIKE "%'.strtolower($queryOrder).'%"
-            ';
+            $whereClauses[] = '(LOWER(c.KH_TenKhachHang) LIKE :query OR LOWER(c.KH_IDKhachHang) LIKE :query OR LOWER(b.DH_IDDonHang) LIKE :query OR LOWER(c.KH_SDTKhachHang) LIKE :query OR LOWER(c.KH_EmailKhachHang) LIKE :query)';
+            $params[':query'] = '%' . $queryOrder . '%';
         }
-        if ($sortIDOrder !== '' && $sortDateOrder === '' && $sortStatusOrder === '') {
-            $sql .= 'ORDER BY DH_IDDonHang '.$sortIDOrder.' ';
-        } 
-        if ($sortIDOrder === '' && $sortDateOrder !== '' && $sortStatusOrder === '') {
-            $sql .= 'ORDER BY DH_NgayDatDonHang '.$sortDateOrder.' ';
-        } 
-        if ($sortIDOrder === '' && $sortDateOrder === '' && $sortStatusOrder !== '') {
-            $sql .= 'ORDER BY DH_TrangThaiDonHang '.$sortStatusOrder.' ';
-        } 
-        $sqlOrder =  $sql . 'LIMIT '.$startOrder.', '.$limitOrder.' ';
-        $stmt = $ConnectDataBase->connectDB()->prepare($sqlOrder);
-        $stmt->execute();
-        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        if (count($result) > 0) {
-            return $result;
-        } else {
+
+        // Xử lý filterStatus (như cũ)
+        if ($filterStatus !== '' && is_numeric($filterStatus)) {
+             $whereClauses[] = 'b.DH_TrangThaiDonHang = :filterStatus';
+             $params[':filterStatus'] = intval($filterStatus);
+        }
+
+        // --- SỬA: Xử lý lọc ngày tháng ---
+        if ($startDate !== '' && $endDate !== '') {
+            // Có cả ngày bắt đầu và kết thúc
+            $whereClauses[] = 'b.DH_NgayDatDonHang BETWEEN :startDate AND :endDate';
+            $params[':startDate'] = $startDate;
+            $params[':endDate'] = $endDate;
+        } else if ($startDate !== '' && $endDate === '') {
+            // Chỉ có ngày bắt đầu
+            $whereClauses[] = 'b.DH_NgayDatDonHang >= :startDate';
+            $params[':startDate'] = $startDate;
+        } else if ($startDate === '' && $endDate !== '') {
+            // Chỉ có ngày kết thúc
+            $whereClauses[] = 'b.DH_NgayDatDonHang <= :endDate';
+            $params[':endDate'] = $endDate;
+        }
+        // --- KẾT THÚC SỬA ---
+
+        // Nối các điều kiện WHERE nếu có
+        if (!empty($whereClauses)) {
+            $sql .= ' WHERE ' . implode(' AND ', $whereClauses);
+        }
+
+        // Xử lý ORDER BY (như cũ)
+        $orderBy = '';
+        // ... (logic tạo $orderBy như cũ) ...
+        if ($sortIDOrder !== '' && $sortDateOrder === '' && $sortStatusOrder === '') { $orderBy = 'ORDER BY b.DH_IDDonHang ' . ($sortIDOrder === 'DESC' ? 'DESC' : 'ASC'); }
+        else if ($sortIDOrder === '' && $sortDateOrder !== '' && $sortStatusOrder === '') { $orderBy = 'ORDER BY b.DH_NgayDatDonHang ' . ($sortDateOrder === 'DESC' ? 'DESC' : 'ASC'); }
+        else if ($sortIDOrder === '' && $sortDateOrder === '' && $sortStatusOrder !== '') { $orderBy = 'ORDER BY b.DH_TrangThaiDonHang ' . ($sortStatusOrder === 'DESC' ? 'DESC' : 'ASC'); }
+        else { $orderBy = 'ORDER BY b.DH_IDDonHang DESC'; }
+        $sql .= ' ' . $orderBy;
+
+        // Thêm LIMIT (như cũ)
+        $sql .= ' LIMIT :start, :limit';
+        $params[':start'] = $startOrder;
+        $params[':limit'] = $limitOrder;
+
+        try {
+            $conn = $ConnectDataBase->connectDB();
+            $stmt = $conn->prepare($sql);
+
+            // Bind các tham số động (như cũ)
+            foreach ($params as $key => &$val) {
+                if ($key === ':start' || $key === ':limit' || $key === ':filterStatus') {
+                    $stmt->bindParam($key, $val, PDO::PARAM_INT);
+                } else { // :query, :startDate, :endDate
+                    $stmt->bindParam($key, $val, PDO::PARAM_STR);
+                }
+            }
+
+            $stmt->execute();
+            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            return $result ?: [];
+
+        } catch (PDOException $e) {
+            error_log("SQL Error in selectLimitOrder: " . $e->getMessage() . " SQL: " . $sql . " Params: " . print_r($params, true));
             return [];
         }
     }
 
-    function countRecordOrder ($queryOrder) {
+
+
+
+    // Sửa hàm countRecordOrder
+    function countRecordOrder ($queryOrder, $filterStatus = '', $startDate = '', $endDate = '') {
         $ConnectDataBase = new ConnectDataBase;
-        $sql = "SELECT * FROM bill JOIN customer ON KH_IDKhachHang = DH_IDKhachHang ";
+        $params = [];
+        $sql = "SELECT COUNT(b.DH_IDDonHang) as total
+                FROM bill b
+                JOIN customer c ON c.KH_IDKhachHang = b.DH_IDKhachHang ";
+        $whereClauses = [];
+
+        // Xử lý query tìm kiếm (như cũ)
         $arrayReplace = ['dh'];
         $queryOrder = trim(str_replace($arrayReplace, '', strtolower($queryOrder)));
         if ($queryOrder !== '') {
-            $sql .= '
-            WHERE LOWER(KH_TenKhachHang) LIKE "%'.strtolower($queryOrder).'%" 
-            OR LOWER(KH_IDKhachHang)  LIKE "%'.strtolower($queryOrder).'%" 
-            OR LOWER(DH_IDDonHang) LIKE "%'.strtolower($queryOrder).'%"
-            OR LOWER(KH_SDTKhachHang) LIKE "%'.strtolower($queryOrder).'%"
-            OR LOWER(KH_EmailKhachHang) LIKE "%'.strtolower($queryOrder).'%"
-            ';
+             $whereClauses[] = '(LOWER(c.KH_TenKhachHang) LIKE :query OR LOWER(c.KH_IDKhachHang) LIKE :query OR LOWER(b.DH_IDDonHang) LIKE :query OR LOWER(c.KH_SDTKhachHang) LIKE :query OR LOWER(c.KH_EmailKhachHang) LIKE :query)';
+            $params[':query'] = '%' . $queryOrder . '%';
         }
-        $stmt = $ConnectDataBase->connectDB()->prepare($sql);
-        $stmt->execute();
-        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        return count($result);
+
+        // Xử lý filterStatus (như cũ)
+        if ($filterStatus !== '' && is_numeric($filterStatus)) {
+            $whereClauses[] = 'b.DH_TrangThaiDonHang = :filterStatus';
+            $params[':filterStatus'] = intval($filterStatus);
+        }
+
+        // --- SỬA: Xử lý lọc ngày tháng ---
+        if ($startDate !== '' && $endDate !== '') {
+            // Có cả ngày bắt đầu và kết thúc
+            $whereClauses[] = 'b.DH_NgayDatDonHang BETWEEN :startDate AND :endDate';
+            $params[':startDate'] = $startDate;
+            $params[':endDate'] = $endDate;
+        } else if ($startDate !== '' && $endDate === '') {
+            // Chỉ có ngày bắt đầu
+            $whereClauses[] = 'b.DH_NgayDatDonHang >= :startDate';
+            $params[':startDate'] = $startDate;
+        } else if ($startDate === '' && $endDate !== '') {
+            // Chỉ có ngày kết thúc
+            $whereClauses[] = 'b.DH_NgayDatDonHang <= :endDate';
+            $params[':endDate'] = $endDate;
+        }
+        // --- KẾT THÚC SỬA ---
+
+        // Nối các điều kiện WHERE nếu có
+        if (!empty($whereClauses)) {
+            $sql .= ' WHERE ' . implode(' AND ', $whereClauses);
+        }
+
+        try {
+            $conn = $ConnectDataBase->connectDB();
+            $stmt = $conn->prepare($sql);
+
+            // Bind các tham số động (như cũ)
+            foreach ($params as $key => &$val) {
+                 if ($key === ':filterStatus') {
+                    $stmt->bindParam($key, $val, PDO::PARAM_INT);
+                } else { // :query, :startDate, :endDate
+                    $stmt->bindParam($key, $val, PDO::PARAM_STR);
+                }
+            }
+
+            $stmt->execute();
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+            return $result ? intval($result['total']) : 0;
+
+        } catch (PDOException $e) {
+            error_log("SQL Error in countRecordOrder: " . $e->getMessage() . " SQL: " . $sql . " Params: " . print_r($params, true));
+            return 0;
+        }
     }
 
 
     function selectOrderByCustomerID () {
         $ConnectDataBase = new ConnectDataBase;
-        $sql = "SELECT * FROM bill JOIN customer ON KH_IDKhachHang = DH_IDKhachHang WHERE DH_IDKhachHang = :DH_IDKhachHang
-        AND DH_IDDonHang = :DH_IDDonHang";
+        $sql = "SELECT bill.*, customer.* 
+                FROM bill 
+                JOIN customer ON customer.KH_IDKhachHang = bill.DH_IDKhachHang 
+                WHERE bill.DH_IDKhachHang = :DH_IDKhachHang
+                AND bill.DH_IDDonHang = :DH_IDDonHang";
+        
         $stmt = $ConnectDataBase->connectDB()->prepare($sql);
         $stmt->bindParam(':DH_IDKhachHang', $this->DH_IDKhachHang);
         $stmt->bindParam(':DH_IDDonHang', $this->DH_IDDonHang);
         $stmt->execute();
         $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        
         if (count($result) > 0) {
             return $result;
         } else {
             return [];
         }
     }
+    
 
     
 }
+//aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 ?>
 
 

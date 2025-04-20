@@ -63,6 +63,7 @@ class Customer
         $this->KH_ConnectIDKhachHang  = $KH_ConnectIDKhachHang;
     }
     
+    
     function insertCustomer()
     {
         $ConnectDataBase = new ConnectDataBase;
@@ -91,19 +92,36 @@ class Customer
         }
     }
     // Thêm vào class Customer trong model-amin.customer.php
+    // public function getUserInfoByEmail()
+    // {
+    //     global $conn;
+    //     $email = $this->KH_EmailKhachHang;
+    //     $sql = "SELECT * FROM customer WHERE KH_EmailKhachHang = '$email'";
+    //     $result = mysqli_query($conn, $sql);
+
+    //     if (mysqli_num_rows($result) > 0) {
+    //         return mysqli_fetch_assoc($result);
+    //     }
+
+    //     return null;
+    // }
+
     public function getUserInfoByEmail()
-    {
-        global $conn;
-        $email = $this->KH_EmailKhachHang;
-        $sql = "SELECT * FROM customer WHERE KH_EmailKhachHang = '$email'";
-        $result = mysqli_query($conn, $sql);
+{
+    $ConnectDataBase = new ConnectDataBase;
+    $conn = $ConnectDataBase->connectDB();
 
-        if (mysqli_num_rows($result) > 0) {
-            return mysqli_fetch_assoc($result);
-        }
+    $sql = "SELECT * FROM customer WHERE KH_EmailKhachHang = :email";
+    $stmt = $conn->prepare($sql);
+    $stmt->bindParam(':email', $this->KH_EmailKhachHang, PDO::PARAM_STR);
+    $stmt->execute();
 
-        return null;
+    if ($stmt->rowCount() > 0) {
+        return $stmt->fetch(PDO::FETCH_ASSOC);
     }
+
+    return null;
+}
     public function updateAddressAndPhoneByID()
     {
         $sql = "UPDATE `customer` SET `KH_DiaChiKhachHang` = ?, `KH_SDTKhachHang` = ? WHERE `KH_IDKhachHang` = ?";
@@ -112,6 +130,15 @@ class Customer
         $stmt->bindParam(1, $this->KH_DiaChiKhachHang, PDO::PARAM_STR);
         $stmt->bindParam(2, $this->KH_SDTKhachHang, PDO::PARAM_STR);
         $stmt->bindParam(3, $this->KH_IDKhachHang, PDO::PARAM_INT);
+        return $stmt->execute();
+    }
+    
+    public function updateDiaChiTamThoi($diaChiTamThoi) {
+        $ConnectDataBase = new ConnectDataBase;
+        $sql = "UPDATE customer SET KH_DiaChiTamThoi = :diachi WHERE KH_EmailKhachHang = :email";
+        $stmt = $ConnectDataBase->connectDB()->prepare($sql);
+        $stmt->bindParam(':diachi', $diaChiTamThoi);
+        $stmt->bindParam(':email', $this->KH_EmailKhachHang);
         return $stmt->execute();
     }
     
