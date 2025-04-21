@@ -5,10 +5,10 @@ if (isset($_GET['code-verify']) && $_GET['code-verify'] !== '') {
     $EmployeeClass = new Employee;
     $codeVerify = $_GET['code-verify'];
     $EmployeeClass->setNV_MaChoXacThucNhanVien($codeVerify);
-    if ($EmployeeClass->getEmployeeByCodeVerify ()[0]['NV_EmailNhanVien'] === 'Chưa cập nhật') {
+    if ($EmployeeClass->getEmployeeByCodeVerify()[0]['NV_EmailNhanVien'] === 'Chưa cập nhật') {
         $emailDefault = '';
     } else {
-        $emailDefault = $EmployeeClass->getEmployeeByCodeVerify ()[0]['NV_EmailNhanVien'];
+        $emailDefault = $EmployeeClass->getEmployeeByCodeVerify()[0]['NV_EmailNhanVien'];
     }
 } else {
     echo 'Không có';
@@ -16,17 +16,28 @@ if (isset($_GET['code-verify']) && $_GET['code-verify'] !== '') {
 ?>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Xác thực tài khoản</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
+
+    <link href='../include/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="../include/fontawesome/css/all.min.css" />
+    <script src="../include/jquery.min.js"></script>
+    <script src="../include/fontawesome/js/all.min.js "></script>
+ 
+    <link rel="stylesheet" href="../include/swiper-bundle.min.css" />
+
+    <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/js/all.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script> -->
+    
     <link rel="stylesheet" href="./verify-admin.css">
 </head>
+
 <body>
     <div class="Verify__Admin__Container">
         <div class="Verify__Admin__Header">
@@ -42,7 +53,7 @@ if (isset($_GET['code-verify']) && $_GET['code-verify'] !== '') {
                 </div>
                 <div class="Verify__Admin__Header__Info__Item">
                     <i class="fa-solid fa-envelope"></i>
-                    <a  href="./display_code.php?code-verify=<?php echo $codeVerify ?>" target="_blank">Tunahari86@gmail.com</a>
+                    <a href="./display_code.php?code-verify=<?php echo $codeVerify ?>" target="_blank">Tunahari86@gmail.com</a>
                 </div>
             </div>
         </div>
@@ -95,6 +106,7 @@ if (isset($_GET['code-verify']) && $_GET['code-verify'] !== '') {
         <div class="loading"></div>
     </div>
 </body>
+
 </html>
 <script src="../../Controller/class/controller.function.js"></script>
 <script src="../../Controller/class/controller.validate.js"></script>

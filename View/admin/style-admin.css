@@ -197,7 +197,10 @@ body::-webkit-scrollbar {
 .img__user {
     padding: 0 7px;
 }
-
+.dashboard-content{
+    display: flex;
+    flex-direction: column;
+}
 .user__profile, .user__logout {
     width: -webkit-fill-available;
     align-items: center;

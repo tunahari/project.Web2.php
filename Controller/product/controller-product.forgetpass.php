@@ -33,7 +33,7 @@ $url = "https://gatewayapi.com/rest/mtsms";
 $api_token = "hfAIl941SfOkiQdRJeGYDvYnUhqLWyWdJlIZ1TXPxhpRj1ISBOte_yyMv0jQM0at";
 
 //Set SMS recipients and content
-$recipients = [84396028423];
+$recipients = [84369969650];
 $json = [
     'sender' => 'SB Mobile',
     'message' => 'Hello world',

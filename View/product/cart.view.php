@@ -37,15 +37,17 @@ if (!isset($_SESSION['email'])) {
     <link rel="stylesheet" href="../include/header.main.css">
     <link rel="stylesheet" href="../include/footer.main.css">
 
-    <!-- <link rel="stylesheet" href="../include/all.min.css" />
-    <script src="../include/all.min.js"></script>
     <link href='../include/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="../include/fontawesome/css/all.min.css" />
     <script src="../include/jquery.min.js"></script>
-     -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" />
+    <script src="../include/fontawesome/js/all.min.js "></script>
+ 
+    <link rel="stylesheet" href="../include/swiper-bundle.min.css" />
+    
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/js/all.min.js"></script>
     <link href='https://unpkg.com/boxicons@2.1.2/css/boxicons.min.css' rel='stylesheet'>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script> -->
     <title>Cart Page</title>
 </head>
 

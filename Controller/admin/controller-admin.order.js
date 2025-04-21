@@ -236,8 +236,8 @@ $(document).ready(function() {
         currentStartDate = $('#filter__start__date').val();
         currentEndDate = $('#filter__end__date').val();
         if (currentStartDate && currentEndDate && currentStartDate > currentEndDate) {
-             // Có thể không báo lỗi mà chỉ không lọc
-            return;
+            alertFailed('Ngày bắt đầu không được lớn hơn ngày kết thúc.');
+            return; // Ngăn không gọi fetchOrder
         }
         currentPage = 1;
         currentQuery = $('#search__order__input').val().trim();

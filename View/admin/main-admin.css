@@ -94,24 +94,27 @@ body.dark {
   color: var(--text-bl-color);
   text-transform: capitalize;
 }
-
-
-
-
-
+.table-customers-section{
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  color: black;
+}
 
 .stats-container {
-margin-bottom: 100px;
+  margin-top: 150px;
   display: grid;
   grid-template-columns: repeat(2, 1fr); /* 2 div trên mỗi hàng */
   gap: 20px;
   width: 100%;
 }
+
 .dashboard-title {
+  top: 130px;
   text-align: center;
   font-size: 35px;
   font-weight: 800;
-  width: 100%;
+  width: 80%;
   color: #7d5fff;
   margin: 20px 0;
   text-transform: uppercase;
@@ -185,10 +188,15 @@ margin-bottom: 100px;
 
 .stat-info {
   overflow: hidden;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  justify-content: space-between;
 }
 
 .stat-info h4 {
-  margin: 0 0 8px 0;
+  margin: 0 25px 8px 0;
   /* Tăng nhẹ khoảng cách dưới */
   color: #6c757d;
   /* Màu xám nhẹ cho tiêu đề */
@@ -202,6 +210,7 @@ margin-bottom: 100px;
 }
 
 .stat-info p {
+  padding: 0 25px;
   margin: 0;
   font-size: 1.8em;
   /* Tăng kích thước số liệu */
