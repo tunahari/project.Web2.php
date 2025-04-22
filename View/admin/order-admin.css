@@ -144,7 +144,7 @@
 .order__status.status-completed {
   /* Hoàn thành (2) */
   background-color: #28a745; /* Màu xanh lá */
-  width: 85%;
+  width: 90%;
 }
 
 .order__status.status-cancelled {

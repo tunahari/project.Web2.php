@@ -1,5 +1,3 @@
-
-
 <?php
 @session_start(); // Bắt đầu session nếu chưa có
 require_once '../../Model/utils.php'; // Đường dẫn đến file utils.php

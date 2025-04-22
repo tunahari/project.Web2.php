@@ -2,6 +2,7 @@
 @session_start();
 if (!isset($_SESSION['login'])) {
     header('location: ./login-admin.php');
+    exit;
 }
 ?>
 <div class="header">

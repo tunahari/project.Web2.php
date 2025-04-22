@@ -1,7 +1,7 @@
 <?php
 // Đặt session_start() lên đầu tiên, trước mọi output HTML
 @session_start(); // Sử dụng @ để tạm thời ẩn cảnh báo nếu session đã được start ở file khác, nhưng tốt nhất là đảm bảo nó chỉ được gọi một lần.
-
+include './include.header.php';
 // Kiểm tra xem HandlingFunctions đã được include chưa (nếu cần thiết ở đây)
 // include_once '../../path/to/HandlingFunctions.php'; // Ví dụ đường dẫn
 ?>
@@ -23,11 +23,6 @@
     <script src="../include/fontawesome/js/all.min.js "></script>
 
     <link rel="stylesheet" href="../include/swiper-bundle.min.css" />
-
-    <!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> -->
-
-    <!-- Không cần link main-admin.css lần nữa nếu đã link ở trên -->
-    <!-- <link rel="stylesheet" href="./main-admin.css"> -->
 
     <style>
         /* CSS cho form lọc và danh sách top khách hàng (Phần mới) */
@@ -218,9 +213,7 @@
 
 <body>
     <div class="main">
-        <?php
-        include './include.header.php';
-        ?>
+       
         <div class="containers">
             <?php
             include './include.menu.php';
@@ -482,7 +475,7 @@
     </div> <!-- Kết thúc .main -->
 
     <!-- Các script hiện có -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.1/dist/chart.min.js"></script>
+    <script src="../include/chart.min.js"></script>
     <script src="./chart-admin.js"></script>
     <script src="./script-admin.js"></script>
     <!-- <script src="./test-admin.js"></script> -->
@@ -662,6 +655,27 @@
 
         });
     </script>
+    <script>
+    $(document).ready(function() {
+        const Fuction = new HandlingFunctions();
+        function checkPower () {
+            Fuction.getAjaxPost('../../Controller/admin/controller-admin.checkpower.php', {
+                checkPower: 'check-power'
+            }).done(function(response){
+               if (response.trim() === '-1' || response.trim() === '0') {
+                    Fuction.getAjaxPost('../../Controller/admin/controller-admin.logout.php', {
+                        logoutAdmin: 'log-out-admin'
+                    }).done(function(response){
+                        if (response.trim() === 'logout-success') {
+                            window.location = './login-admin.php'
+                        }
+                    });
+               }
+            });
+        }
+        checkPower()
+    })
+</script>
 </body>
 
 </html>
